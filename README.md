@@ -1,34 +1,26 @@
 # Introduction
 
-This thesis is part of my siv.ing. degree project at the Dept. of
-Informatics, the University of Oslo. Apart from an introduction to
-the Q-Morph algorithm, as described in the paper
-"Advancing Front Quadrilateral Meshing Using Triangle Transformations"
-by S.J. Owen, M.L. Staten, S.A. Canann, and S. Saigal,
-the thesis consists of important background material, discussions of
-every little aspect of the implementation, important results are
-stated, figures of some of the example meshes, references, etc.
+This project is part of my siv.ing. degree at the Dept. of Informatics, the University of Oslo, 2002.
+
+The paper contains an introduction to the Q-Morph algorithm, as described in the paper _"Advancing Front Quadrilateral Meshing Using Triangle Transformations"_ by S.J. Owen, M.L. Staten, S.A. Canann, and S. Saigal, as well as important background material, discussions of aspects of the implementation, important results, figures of example meshes, references, etc.
+
+The project also includes a Java implementation of the Q-Morph algorithm with a GUI I have called 'MeshDitor'. This was my first Java project.
 
 # Directory structure
 
-The thesis is found in the `docs/` directory.
-
-The project also includes a Java implementation of the Q-Morph
-algorithm with a GUI called MeshDitor.
+The paper is found in the `docs/` directory.
 
 The source code is found in the `src/` directory.
 
 Source code documentation can be generated with `javadoc`.
 
-To ensure that the implementation works as described, it has been
-tested on a number of different meshes. A discussion of these and
-figures illustrating some of them are found in the thesis.
+To ensure that the implementation works as described, it has been tested on a number of different meshes. Illustrations for some of the meshes are found in the paper, including discussion.
 
-The meshes are found in the examples/ directory.
+The meshes are found in the `examples/` directory.
 
 # Building and running
 
-Run `make` to build the source, source documentation and the thesis.
+Run `make` to build the source code and documentation.
 
 To start the MeshDitor code, run `java -jar meshditor.jar` in the `bin/`
 directory, or simply run
