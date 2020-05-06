@@ -19,7 +19,7 @@ public class AboutDialog extends Dialog implements ItemListener {
     Button ok;
     TextArea textArea;
     String text= ""+
-	"                           -=¤#[ MeshDitor ]#¤=-\n"+ 
+	"                           -=<#[ MeshDitor ]#>=-\n"+ 
 	"\n"+
 	"             The Q-Morph algorithm was developed by\n"+
 	"    Steven J. Owen, Mathew L. Staten, Scott A. Canann, and Sunil Saigal.\n"+
@@ -38,7 +38,7 @@ public class AboutDialog extends Dialog implements ItemListener {
     GridBagLayout gridbag;
 
     public AboutDialog(Frame f) {
-	super(f, "About MeshDitor", true); 
+	super(f, "About MeshDitor", true);
 
 	gridbag = new GridBagLayout();
 	GridBagConstraints c = new GridBagConstraints();
@@ -54,7 +54,7 @@ public class AboutDialog extends Dialog implements ItemListener {
 	textArea.setEditable(false);
 	textArea.setBackground(Color.black);
 	textArea.setForeground(Color.yellow);
-	textArea.setFont(new Font("Monospaced", Font.PLAIN, 10));	
+	textArea.setFont(new Font("Monospaced", Font.PLAIN, 10));
 	c.gridwidth = GridBagConstraints.REMAINDER; //end row
 	gridbag.setConstraints(textArea, c);
 

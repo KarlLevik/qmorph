@@ -14,8 +14,8 @@ public class Node extends Constants {
 	this.x= x;
 	this.y= y;
 	edgeList= new ArrayList();
-    } 	
-    
+    }
+
     public boolean equals(Object elem) {
 	if (!(elem instanceof Node))
 	    return false;
@@ -36,14 +36,14 @@ public class Node extends Constants {
     /** @return a new node with the same position as this. */
     public Node copyXY() {
 	return new Node(x, y);
-    } 	
-    
-    /** Relocate this node to the same position as n. */ 
+    }
+
+    /** Relocate this node to the same position as n. */
     public void setXY(Node n) {
 	x= n.x;
 	y= n.y;
     }
-    
+
     /** Relocate this node to position (x,y) */
     public void setXY(double x, double y) {
 	this.x= x;
@@ -55,7 +55,7 @@ public class Node extends Constants {
 	updateEdgeLengths();
 	updateAngles();
     }
-    
+
     public void updateLRinEdgeList() {
 	boolean btemp;
 	Edge e, temp;
@@ -92,23 +92,23 @@ public class Node extends Constants {
 	    }
 	}
     }
-    
+
     /** Change the position of the node to position (x,y) */
     public void moveToPos(double x, double y) {
 	this.x= x;
 	this.y= y;
-	
+
 	updateLRinEdgeList();
     }
 
-    /** Change the position of the node to the position of the specified node */    
+    /** Change the position of the node to the position of the specified node */
     public void moveTo(Node n) {
 	x= n.x;
 	y= n.y;
-	
+
 	updateLRinEdgeList();
     }
-    
+
     /** Update all lengths of edges around this Node */
     public void updateEdgeLengths() {
 	Edge e;
@@ -117,12 +117,12 @@ public class Node extends Constants {
 	    e.len= e.computeLength();
 	}
     }
-    
+
     public void updateState() {
-	
+
     }
 
-    /** Update (almost) all angles in all elements adjacent to this Node. Note: still 
+    /** Update (almost) all angles in all elements adjacent to this Node. Note: still
 	experimental, not tested thoroughly. */
     public void updateAngles() {
 	Msg.debug("Entering Node.updateAngles()");
@@ -139,11 +139,11 @@ public class Node extends Constants {
 		list.add(e.element1);
 		ne= e.element1.neighborEdge(this, e);
 		Msg.debug("...getting other1:  (elem1)");
-		other1= e.otherNode(this);		
+		other1= e.otherNode(this);
 		Msg.debug("...getting other2:  (elem1)");
-		
-		other2= ne.otherNode(this);		
-		
+
+		other2= ne.otherNode(this);
+
 		if (e.element1 instanceof Triangle)
 		    e.element1.updateAngles();
 		else {
@@ -155,10 +155,10 @@ public class Node extends Constants {
 		list.add(e.element2);
 		ne= e.element2.neighborEdge(this, e);
 		Msg.debug("...getting other1:  (elem2)");
-		other1= e.otherNode(this);		
+		other1= e.otherNode(this);
 		Msg.debug("...getting other2:  (elem2)");
-		
-		other2= ne.otherNode(this);		
+
+		other2= ne.otherNode(this);
 
 		if (e.element2 instanceof Triangle)
 		    e.element2.updateAngles();
@@ -173,8 +173,8 @@ public class Node extends Constants {
 
 
 
-    /** Update all lengths of edges and angles between edges around the node. 
-     * @deprecated This is the old version. 
+    /** Update all lengths of edges and angles between edges around the node.
+     * @deprecated This is the old version.
      */
     public void oldupdateEdgeLengthsAndAngles() {
 	Edge curEdge= (Edge)edgeList.get(0);
@@ -182,28 +182,28 @@ public class Node extends Constants {
 	Edge nextEdge= curElem.neighborEdge(this, curEdge);
 	Edge otherEdge;
 	Node otherNode;
-	
+
 	// Parse all edges connected to this node:
 	do {
 	    // Set computed lenghts:
 	    curEdge.len= curEdge.computeLength();
 	    nextEdge.len= nextEdge.computeLength();
-	    
+
 	    // Set computed angle between current and next edge:
 	    curElem.ang[curElem.angleIndex(curEdge, nextEdge)]=
 		curEdge.computePosAngle(nextEdge, this);
-	    
+
 	    // Set the two other affected angles in current element:
 	    otherNode= curEdge.otherNode(this);
 	    otherEdge= curElem.neighborEdge(otherNode, curEdge);
 	    curElem.ang[curElem.angleIndex(curEdge, otherEdge)]=
 		curEdge.computePosAngle(otherEdge, otherNode);
-	    
+
 	    otherNode= nextEdge.otherNode(this);
 	    otherEdge= curElem.neighborEdge(otherNode, nextEdge);
 	    curElem.ang[curElem.angleIndex(nextEdge, otherEdge)]=
 		nextEdge.computePosAngle(otherEdge, otherNode);
-	    
+
 	    // Prepare for next element:
 	    curElem= curElem.neighbor(nextEdge);
 	    curEdge= nextEdge;
@@ -211,13 +211,13 @@ public class Node extends Constants {
 	}
 	while (curElem!= null && curEdge!= (Edge)edgeList.get(0));
     }
-    
-    
+
+
     public double cross(Node n) {
 	return x*n.y - n.x*y;
     }
-    
-    
+
+
     public void connectToEdge(Edge edge) {
 	if (!edgeList.contains(edge))
 	    edgeList.add(edge);
@@ -236,19 +236,19 @@ public class Node extends Constants {
 	    e= (Edge)edgeList.get(i);
 	    v= e.getVector(this);
 	    v.edge= e;
-	    
+
 	    if (e.boundaryEdge())
 		boundaryVectors.add(v);
 	    else
 		vectors.add(v);
 	}
-		
-	
-	// If the edgeList contains boundary edges, then select the vector of most CW 
-	// of these. 
+
+
+	// If the edgeList contains boundary edges, then select the vector of most CW
+	// of these.
 	// Else select the vector of an arbitrary edge.
 	// The selected vector is put into v0.
-	// Sets elem to the element that is ccw to v0 around this Node 
+	// Sets elem to the element that is ccw to v0 around this Node
 
 	if (boundaryVectors.size()> 0) {	// this size is always 0 or 2
 	    Msg.debug("...boundaryVectors yeah!");
@@ -289,7 +289,7 @@ public class Node extends Constants {
 
 	Msg.debug("Node.ccwSortedVectorList(..): 0: "+v0.edge.descr());
 
-	// Sort vectors in ccw order starting with v0. 
+	// Sort vectors in ccw order starting with v0.
 	// Uses the fact that elem initially is the element ccw to v0 around this Node.
 	ArrayList VS= new ArrayList();
 	e= v0.edge;
@@ -303,7 +303,7 @@ public class Node extends Constants {
 
 	    e= elem.neighborEdge(this, e);
 	    elem= elem.neighbor(e);
-	} 
+	}
 	while (elem!= start && elem!= null);
 
 	if (elem== null) {
@@ -317,7 +317,7 @@ public class Node extends Constants {
     }
     /*
   // b1: First boundary edge
-  // b2: Second boundary edge    
+  // b2: Second boundary edge
     public ArrayList ccwSortedVectorList(Edge b0, Edge b1) {
 	Msg.debug("Entering Node.ccwSortedVectorList(Edge b0, Edge b1)");
 	Msg.debug("b0: "+b0.descr());
@@ -326,7 +326,7 @@ public class Node extends Constants {
 	MyVector v, v0, v1;
 	Edge e;
 	ArrayList vectors= new ArrayList();
-	
+
 	for (int i= 0; i< edgeList.size(); i++) {
 	    e= (Edge)edgeList.get(i);
 	    if (e!= b0 && e!= b1) {
@@ -335,7 +335,7 @@ public class Node extends Constants {
 	      vectors.add(v);
 	    }
 	}
-		
+
 	v0= b0.getVector(this);
 	v0.edge= b0;
 	v1= b1.getVector(this);
@@ -354,7 +354,7 @@ public class Node extends Constants {
 	}
 	Msg.debug("Node.ccwSortedVectorList(Edge, Edge): 0: "+v0.edge.descr());
 
-	// Sort vectors in ccw order starting with v0. 
+	// Sort vectors in ccw order starting with v0.
 	// Uses the fact that elem initially is the element ccw to v0 around this Node.
 	ArrayList VS= new ArrayList();
 	e= v0.edge;
@@ -368,22 +368,22 @@ public class Node extends Constants {
 
 	    e= elem.neighborEdge(this, e);
 	    elem= elem.neighbor(e);
-	} 
+	}
 	while (elem!= start && elem!= null);
 
 	return VS;
     }
-*/   
+*/
 
-    /** Assumes: b0 and b1 form a convex boundary, but not neccessarily *strictly* 
-     * convex 
+    /** Assumes: b0 and b1 form a convex boundary, but not neccessarily *strictly*
+     * convex
      *	@param b1 First boundary edge
-     *  @param b2 Second boundary edge */ 
+     *  @param b2 Second boundary edge */
     public ArrayList calcCCWSortedEdgeList(Edge b0, Edge b1) {
 	MyVector v, v0, v1;
 	Edge e;
 	ArrayList vectors= new ArrayList();
-	
+
 	for (int i= 0; i< edgeList.size(); i++) {
 	    e= (Edge)edgeList.get(i);
 	    if (e!= b0 && e!= b1) {
@@ -392,9 +392,9 @@ public class Node extends Constants {
 	      vectors.add(v);
 	    }
 	}
-		
+
 	// Initially put the two vectors of b0 and b1 in list.
-	// Select the most CW boundary edge to be first in list. 
+	// Select the most CW boundary edge to be first in list.
 
 	ArrayList VS= new ArrayList();
 	v0= b0.getVector(this);
@@ -415,23 +415,23 @@ public class Node extends Constants {
 	    VS.add(v1);
 	    VS.add(v0);
 	}
-	
+
 	Msg.debug("Node.calcCCWSortedEdgeList(..): 0: "+v0.edge.descr());
 	Msg.debug("Node.calcCCWSortedEdgeList(..): 1: "+v1.edge.descr());
-	
-	
+
+
 	// Sort vectors in ccw order. I will not move the vector that lies first in VS.
 	Msg.debug("...vectors.size()= "+vectors.size());
 	for (int i= 0; i< vectors.size(); i++) {
 	    v= (MyVector)vectors.get(i);
-	    
+
 	    for (int j=0; j< VS.size(); j++) {
 		v0= (MyVector)VS.get(j);
 		if (j+1== VS.size())
 		    v1=  (MyVector)VS.get(0);
 		else
 		    v1= (MyVector)VS.get(j+1);
-		
+
 		if (!v.isCWto(v0) && v.isCWto(v1)) {
 		    VS.add(j+1, v);
 		    Msg.debug("Node.calcCCWSortedEdgeList(..):"+(j+1)+": "+v.edge.descr());
@@ -441,7 +441,7 @@ public class Node extends Constants {
 	}
 
 	ArrayList edges= new ArrayList(VS.size());
-	for (int i= 0; i< VS.size(); i++) { 
+	for (int i= 0; i< VS.size(); i++) {
 	    v= (MyVector)VS.get(i);
 	    edges.add(v.edge);
 	}
@@ -479,8 +479,8 @@ public class Node extends Constants {
 	    e= elem.neighborEdge(this, b[0].edge);
 	    v1= e.getVector(this);
 	    v1.edge= e;
-	    
-	    if (b[0].isCWto(v1)) 
+
+	    if (b[0].isCWto(v1))
 		v0= b[0];
 	    else {
 		v0= b[1];   // that is, the other boundary vector
@@ -490,7 +490,7 @@ public class Node extends Constants {
 	else {
 	    // Failing to find any boundary edges, we
 	    // select the vector of an arbitrary edge to be v0.
-	    // Sets elem to the element that is ccw to v0 around this Node 
+	    // Sets elem to the element that is ccw to v0 around this Node
 	    e= (Edge)edgeList.get(0);
 	    v0= e.getVector(this);
 	    v0.edge= e;
@@ -498,14 +498,14 @@ public class Node extends Constants {
 	    e= elem.neighborEdge(this, e);
 	    v1= e.getVector(this);
 	    v1.edge= e;
-	    
-	    if (v0.isCWto(v1)) 
+
+	    if (v0.isCWto(v1))
 		v0= v0;
 	    else
 		v0= v1;
 	}
 
-	// Sort nodes in ccw order starting with otherNode of v0 edge. 
+	// Sort nodes in ccw order starting with otherNode of v0 edge.
 	// Uses the fact that elem initially is the element ccw to v0 around this Node.
 	Node [] ccwNodeList= new Node[edgeList.size()*2];
 	Element start= elem;
@@ -516,7 +516,7 @@ public class Node extends Constants {
 	int i= 0;
 	do {
 	    ccwNodeList[i++]= e.otherNode(this);
-	    if (!(elem instanceof Quad)) 
+	    if (!(elem instanceof Quad))
 		return null;
 	    q= (Quad) elem;
 	    ccwNodeList[i++]= q.oppositeNode(this);
@@ -524,7 +524,7 @@ public class Node extends Constants {
 	    elem= elem.neighbor(e);
 	}
 	while (elem!= start && elem!= null);
-	
+
 	if (elem== null)
 	    ccwNodeList[i++]= e.otherNode(this);
 
@@ -537,7 +537,7 @@ public class Node extends Constants {
     public double meanNeighborEdgeLength() {
 	Edge e;
 	double sumLengths= 0.0, len, j= 0;
-	
+
 	for (int i= 0; i< edgeList.size(); i++) {
 	    e= (Edge)edgeList.get(i);
 	    len= e.length();
@@ -548,16 +548,16 @@ public class Node extends Constants {
 	}
 	return sumLengths/j;
     }
-    
+
     public int nrOfAdjElements() {
 	ArrayList list= adjElements();
 	return list.size();
     }
-    
+
     public ArrayList adjElements() {
 	Edge e;
 	ArrayList list= new ArrayList();
-	
+
 	for (int i= 0; i< edgeList.size(); i++) {
 	    e= (Edge)edgeList.get(i);
 	    if (!list.contains(e.element1))
@@ -567,109 +567,109 @@ public class Node extends Constants {
 	}
 	return list;
     }
-    
+
     public int nrOfAdjQuads() {
 	ArrayList list= adjQuads();
 	return list.size();
     }
-    
+
     public ArrayList adjQuads() {
 	Edge e;
 	ArrayList list= new ArrayList();
-	
+
 	for (int i= 0; i< edgeList.size(); i++) {
 	    e= (Edge)edgeList.get(i);
 	    if (e.element1 instanceof Quad && !list.contains(e.element1))
 		list.add(e.element1);
-	    else if (e.element2!= null && e.element2 instanceof Quad && 
-		     !list.contains(e.element2))
-		list.add(e.element2);
-	}
-	return list;
-    }
-    
-    public int nrOfAdjTriangles() {
-	ArrayList list= adjTriangles();
-	return list.size();
-    }
-    
-    // Hmm. Should I include fake quads as well?
-    public ArrayList adjTriangles() {
-	Edge e;
-	ArrayList list= new ArrayList();
-	
-	for (int i= 0; i< edgeList.size(); i++) {
-	    e= (Edge)edgeList.get(i);
-	    if (e.element1 instanceof Triangle && !list.contains(e.element1))
-		list.add(e.element1);
-	    else if (e.element2!= null && e.element2 instanceof Triangle && 
+	    else if (e.element2!= null && e.element2 instanceof Quad &&
 		     !list.contains(e.element2))
 		list.add(e.element2);
 	}
 	return list;
     }
 
-    /** Classic Laplacian smooth. Of course, to be run on internal nodes only. 
+    public int nrOfAdjTriangles() {
+	ArrayList list= adjTriangles();
+	return list.size();
+    }
+
+    // Hmm. Should I include fake quads as well?
+    public ArrayList adjTriangles() {
+	Edge e;
+	ArrayList list= new ArrayList();
+
+	for (int i= 0; i< edgeList.size(); i++) {
+	    e= (Edge)edgeList.get(i);
+	    if (e.element1 instanceof Triangle && !list.contains(e.element1))
+		list.add(e.element1);
+	    else if (e.element2!= null && e.element2 instanceof Triangle &&
+		     !list.contains(e.element2))
+		list.add(e.element2);
+	}
+	return list;
+    }
+
+    /** Classic Laplacian smooth. Of course, to be run on internal nodes only.
      * @return the vector from the old to the new position. */
     public MyVector laplacianMoveVector() {
 	MyVector c, cJSum= new MyVector(origin, origin);
 	Edge e;
 	Node nJ;
-	
+
 	int n= edgeList.size();
 	for (int i= 0; i< n; i++) {
 	    e= (Edge)edgeList.get(i);
 	    nJ= e.otherNode(this);
 	    c= new MyVector(this, nJ);
-	    cJSum= cJSum.plus(c); 
+	    cJSum= cJSum.plus(c);
 	}
 	cJSum= cJSum.div((double)n);
 	return cJSum;
     }
 
-    /** Classic Laplacian smooth. Of course, to be run on internal nodes only. 
+    /** Classic Laplacian smooth. Of course, to be run on internal nodes only.
      * @return the new position of node */
     public Node laplacianSmooth() {
 	MyVector c, cJSum= new MyVector(origin, origin);
 	Edge e;
 	Node nJ;
-	
+
 	int n= edgeList.size();
 	for (int i= 0; i< n; i++) {
 	    e= (Edge)edgeList.get(i);
 	    nJ= e.otherNode(this);
 	    c= new MyVector(this, nJ);
-	    cJSum= cJSum.plus(c); 
+	    cJSum= cJSum.plus(c);
 	}
 	cJSum= cJSum.div((double)n);
 	return new Node(x+cJSum.x, y+cJSum.y);
     }
 
 
-    /** Classic Laplacian smooth, but exclude the given neighbor node from the 
-     * calculation. Of course, to be run on internal nodes only. 
+    /** Classic Laplacian smooth, but exclude the given neighbor node from the
+     * calculation. Of course, to be run on internal nodes only.
      * @param node the node to be excluded
      * @return the new position of node */
     public Node laplacianSmoothExclude(Node node) {
 	MyVector c, cJSum= new MyVector(origin, origin);
 	Edge e;
 	Node nJ;
-	
-	int n= edgeList.size(); 
+
+	int n= edgeList.size();
 	for (int i= 0; i< n; i++) {
 	    e= (Edge)edgeList.get(i);
 	    nJ= e.otherNode(this);
 	    if (nJ!= node) {
 		c= new MyVector(this, nJ);
-		cJSum= cJSum.plus(c); 
+		cJSum= cJSum.plus(c);
 	    }
 	}
 	cJSum= cJSum.div((double)(n-1)); // -1 because node is excluded
 	return new Node(x+cJSum.x, y+cJSum.y);
     }
-    
-    /** Run this on internal nodes (not part of the boundary or front) 
-     * Does a modified length weighted Laplacian smooth. 
+
+    /** Run this on internal nodes (not part of the boundary or front)
+     * Does a modified length weighted Laplacian smooth.
      * @return a new node with the smoothed position. */
     public Node modifiedLWLaplacianSmooth() {
 	Msg.debug("Entering Node.modifiedLWLaplacianSmooth()...");
@@ -698,25 +698,25 @@ public class Node extends Constants {
 		    Msg.debug("bEdge2==null");
 		else
 		    Msg.debug("bEdge2: "+bEdge2.descr());
-		
+
 		// This should be correct:
 		deltaCj= nJ.angularSmoothnessAdjustment(this,bEdge1,bEdge2, e.length());
 		Msg.debug("c= "+c.descr());
-		c= c.plus(deltaCj); 
+		c= c.plus(deltaCj);
 		Msg.debug("c+deltaCj= "+c.descr());
 	    }
-	    
-	    len= c.length(); 
+
+	    len= c.length();
 	    c= c.mul(len);
-	    cJLengthMulcJSum= cJLengthMulcJSum.plus(c); 
-	    cJLengthSum+= len;			
+	    cJLengthMulcJSum= cJLengthMulcJSum.plus(c);
+	    cJLengthSum+= len;
 	}
 	Msg.debug("...cJLengthSum: "+cJLengthSum);
 	Msg.debug("...cJLengthMulcJSum: x: "+cJLengthMulcJSum.x+
 		  ", y: "+cJLengthMulcJSum.y);
 
 	deltaI= cJLengthMulcJSum.div(cJLengthSum);
-	
+
 	Node node= new Node(x+deltaI.x, y+deltaI.y);
 	Msg.debug("Leaving Node.modifiedLWLaplacianSmooth()... returns node= "+
 		  node.descr());
@@ -734,7 +734,7 @@ public class Node extends Constants {
 	return fronts;
     }
 
-    
+
     /** An implementation of an algorithm described in a paper by Blacker & Stephenson.
      * @param nJ the other node that lies behind this node (not on the front/boundary)
      * @param ld length from this to nJ
@@ -743,13 +743,13 @@ public class Node extends Constants {
      * @return a new node (with a smoothed positing) that can replace this node. */
     public Node blackerSmooth(Node nJ, Edge front1, Edge front2, double ld) {
 	Msg.debug("Entering blackerSmooth(..)...");
-	
+
 	Node nI= this;
 	Node origin= new Node(0,0);
 	Node n1, n2, n3, n4;
 	Quad q;
 	ArrayList adjQuads= adjQuads();
-	
+
 	// Step 1, the isoparametric smooth:
 	Msg.debug("...step 1...");
 	MyVector vI= new MyVector(origin, nI);
@@ -757,15 +757,15 @@ public class Node extends Constants {
 	MyVector vMJ;
 	MyVector vMK;
 	MyVector vML;
-	
+
 	for (int i= 0; i< adjQuads.size(); i++) {
-	    q= (Quad)adjQuads.get(i); 
-	    
+	    q= (Quad)adjQuads.get(i);
+
 	    n1= q.edgeList[base].leftNode;
 	    n2= q.edgeList[base].rightNode;
 	    n3= q.edgeList[left].otherNode(q.edgeList[base].leftNode);
 	    n4= q.edgeList[right].otherNode(q.edgeList[base].rightNode);
-	    
+
 	    // Sorting vMJ, vMK, and vML in ccw order:
 	    if (nI== n1) {
 		vMJ= new MyVector(origin, n2);
@@ -782,23 +782,23 @@ public class Node extends Constants {
 		vMK= new MyVector(origin, n2);
 		vML= new MyVector(origin, n4);
 	    }
-	    else { //if (nI==n4) { 
+	    else { //if (nI==n4) {
 		vMJ= new MyVector(origin, n3);
 		vMK= new MyVector(origin, n1);
 		vML= new MyVector(origin, n2);
 	    }
-	    
+
 	    vMXsum= vMXsum.plus(vMJ);
 	    vMXsum= vMXsum.plus(vML);
-	    vMXsum= vMXsum.minus(vMK);			
+	    vMXsum= vMXsum.minus(vMK);
 	}
-	
+
 	MyVector vImarked= vMXsum.div((double)adjQuads.size());
 	MyVector deltaA= vImarked.minus(vI);
-		
+
 	if (adjQuads.size()!= 2 || nrOfFrontEdges()> 2) {
 	    Msg.debug("Leaving blackerSmooth(..)...");
-	    return new Node(x+ deltaA.x, y+ deltaA.y);			
+	    return new Node(x+ deltaA.x, y+ deltaA.y);
 	}
 	// Step 2, length adjustment:
 	else {
@@ -806,24 +806,24 @@ public class Node extends Constants {
 	    MyVector vJ= new MyVector(origin, nJ);
 	    MyVector vIJ= new MyVector(nJ, vImarked.x, vImarked.y);
 	    double la= vIJ.length();
-	    
+
 	    MyVector deltaB=deltaA.plus(vI);
 	    deltaB= deltaB.minus(vJ);
 	    deltaB= deltaB.mul(ld/la);
 	    deltaB= deltaB.plus(vJ);
 	    deltaB= deltaB.minus(vI);
-	    
+
 	    // Step 3, angular smoothness:
 	    Msg.debug("...step 3...");
 	    MyVector deltaC= angularSmoothnessAdjustment(nJ, front1, front2, ld);
 	    MyVector deltaI= deltaB.plus(deltaC);
 	    deltaI= deltaI.mul(0.5);
 	    Msg.debug("Leaving blackerSmooth(..)...");
-	    return new Node(x+ deltaI.x, y+ deltaI.y);	
+	    return new Node(x+ deltaI.x, y+ deltaI.y);
 	}
     }
-    
-    /** Performs an angular smoothness adjustment as described in the paper by Blacker 
+
+    /** Performs an angular smoothness adjustment as described in the paper by Blacker
      * and Stephenson. Assumes that this is a node that lies on the front/boundary.
      * @param nJ the node connected to this, that lies behind the front/boundary
      * @param f1 front/boundary neighbor edge to this
@@ -834,35 +834,35 @@ public class Node extends Constants {
 	Node nI= this;
 	Msg.debug("nI= "+nI.descr());
 	Msg.debug("nJ= "+nJ.descr());
-	
+
 	if (Double.isNaN(ld))
 	    Msg.error("ld is NaN!!!");
-	
+
 	if (f2.length()== 0)
 	    Msg.error("f2.length()== 0");
-	
+
 	Msg.debug("f1= "+f1.descr());
 	Msg.debug("f2= "+f2.descr());
-	
+
 	Node nIm1= f1.otherNode(nI);
 	Node nIp1= f2.otherNode(nI);
-	
+
 	Msg.debug("nIp1= "+nIp1.descr());
-	
+
 	if (nIm1.equals(nI))
 	    Msg.error("nIm1.equals(nI)");
-	
+
 	if (nIp1.equals(nI))
 	    Msg.error("nIp1.equals(nI)");
-	
+
 	// if (nIm1.equals(nIp1))
 	// this should be okay, in fact...
 	// Msg.error("nIm1.equals(nIp1)");
-	
+
 	MyVector pI1= new MyVector(nJ, nIm1);
 	MyVector pI= new MyVector(nJ, nI);
 	MyVector pI2= new MyVector(nJ, nIp1);
-	
+
 	double pI1Angle= pI1.posAngle();
 	double pI2Angle= pI2.posAngle();
 	double pIp1Angle= Math.max(pI1Angle, pI2Angle);
@@ -873,14 +873,14 @@ public class Node extends Constants {
 	    pIm1p1Angle= PIx2-pIp1Angle+pIm1Angle;
 	else
 	    pIm1p1Angle= pIp1Angle-pIm1Angle;
-	
+
 	Msg.debug("pIAngle= "+Math.toDegrees(pIAngle));
 	Msg.debug("pIp1Angle= "+Math.toDegrees(pIp1Angle));
 	Msg.debug("pIm1Angle= "+Math.toDegrees(pIm1Angle));
-	
-	
+
+
 	// Check if the sum of angles between pIp1 and pI and the angle between pIm1 and
-	// PI is greater or equal to 180 degrees. If so, I choose ld as the length of 
+	// PI is greater or equal to 180 degrees. If so, I choose ld as the length of
 	// pB2.
 	if (pIm1p1Angle> Math.PI) {
 	    Msg.debug("okei, we're in there..");
@@ -901,14 +901,14 @@ public class Node extends Constants {
 	    Msg.debug("Leaving angularSmoothnessAdjustment(..) returns "+deltaC.descr());
 	    return deltaC;
 	}
-	
-	
+
+
 	Msg.debug("pI1= "+pI1.descr());
 	Msg.debug("pI2= "+pI2.descr());
-	
+
 	MyVector line= new MyVector(nIp1, nIm1);
 	Msg.debug("line= "+line.descr());
-	
+
 	// pB1 should be the halved angle between pIp1 and pIm1, in the direction of pI:
 	double pB1Angle= pIm1Angle + 0.5*(pIp1Angle- pIm1Angle);
 	if (pIp1Angle- pIm1Angle > Math.PI)
@@ -917,30 +917,30 @@ public class Node extends Constants {
 	if (Double.isNaN(pB1Angle))
 	    Msg.error("pB1Angle is NaN!!!");
 	Msg.debug("pB1Angle= "+Math.toDegrees(pB1Angle));
-	
+
 	double pB1pIMax= Math.max(pB1Angle, pIAngle);
 	double pB1pIMin= Math.min(pB1Angle, pIAngle);
 	Msg.debug("pB1pIMax= "+Math.toDegrees(pB1pIMax));
 	Msg.debug("pB1pIMin= "+Math.toDegrees(pB1pIMin));
-	
+
 	double pB2Angle= pB1pIMin + 0.5*(pB1pIMax- pB1pIMin);
 	if (pB1pIMax- pB1pIMin > Math.PI)
 	    pB2Angle += Math.PI;
-	
+
 	if (Double.isNaN(pB2Angle))
 	    Msg.error("pB2Angle is NaN!!!");
 	Msg.debug("pB2Angle= "+Math.toDegrees(pB2Angle));
-	
+
 	Ray pB2Ray= new Ray(nJ, pB2Angle);
 	//MyVector pB2= new MyVector(pB2Angle, 100.0, nJ);
-	
+
 	Msg.debug("pB2Ray= "+pB2Ray.descr());
 	Msg.debug("pB2Ray= "+pB2Ray.values());
 	Node q= pB2Ray.pointIntersectsAt(line);
 	double lq= q.length(nJ);
 	if (Double.isNaN(lq))
 	    Msg.error("lq is NaN!!!");
-	
+
 	MyVector pB2;
 	if (ld> lq)
 	    pB2= new MyVector(pB2Ray, (lq+ld)*0.5);
@@ -949,22 +949,18 @@ public class Node extends Constants {
 	    pB2= new MyVector(pB2Ray, ld);
 	//pB2.setLengthAndAngle(ld, pB2Angle);
 	
-	
-	// jobber her også...
-	
-	
 	MyVector deltaC= pB2.minus(pI);
 	Msg.debug("Leaving angularSmoothnessAdjustment(..) returns "+deltaC.descr());
 	return deltaC;
     }
-    
+
     /** Test whether any of the adjacent elements has become inverted or their areas are zero.
      * @param elements the list of elements to parse
-     * @return true if the movement of a node has caused any of it's adjacent elements 
+     * @return true if the movement of a node has caused any of it's adjacent elements
      * to become inverted or get an area of size zero. */
     public boolean invertedOrZeroAreaElements(ArrayList elements) {
 	Element elem;
-	
+
 	for (int i= 0; i< elements.size(); i++) {
 	    elem= (Element)elements.get(i);
 	    if (elem.invertedOrZeroArea()) {
@@ -975,10 +971,10 @@ public class Node extends Constants {
 	}
 	return false;
     }
-    
+
     /** Incrementally adjust the location of the node (along a vector) until none of
      * it's neighboring elements are inverted. Use increments of size vector component
-     * divided by 50 in each direction, unless ONE of these increments is less 
+     * divided by 50 in each direction, unless ONE of these increments is less
      * than a given lower limit. If so, the increments in the direction of the shortest
      * component should be equal to that limit, while the other direction is dictated
      * by the first, of course.
@@ -988,7 +984,7 @@ public class Node extends Constants {
 	Msg.debug("Entering incrAdjustUntilNotInvertedOrZeroArea(..)");
 	Msg.debug("..this: "+descr());
 	Msg.debug("..old: "+old.descr());
-	
+
 	MyVector back= new MyVector(this, old);
 	double startX= x, startY= y;
 	double xstep= back.x/50.0, ystep= back.y/50.0;
@@ -996,7 +992,7 @@ public class Node extends Constants {
 	int steps, i;
 
 	if (Math.abs(xstep)< COINCTOL || Math.abs(ystep)< COINCTOL) {
-	    
+
 	    if (COINCTOL< Math.abs(back.x) && COINCTOL< Math.abs(back.y)) {// && or || ?
 		Msg.debug("...ok, resorting to use of minimum increment");
 		if (Math.abs(back.x) < Math.abs(back.y)) {
@@ -1033,7 +1029,7 @@ public class Node extends Constants {
 		for (i=1; i<= steps; i++) {
 		    x= startX + xinc*i;
 		    y= startY + yinc*i;
-		    
+
 		    if (!invertedOrZeroAreaElements(elements)) {
 			Msg.debug("Leaving incrAdjustUntilNotInvertedOrZeroArea(..)");
 			return true;
@@ -1045,7 +1041,7 @@ public class Node extends Constants {
 	    for (i= 1; i<= 49; i++) {
 		x= startX + back.x*i/50.0;
 		y= startY + back.y*i/50.0;
-		
+
 		if (!invertedOrZeroAreaElements(elements)) {
 		    Msg.debug("Leaving incrAdjustUntilNotInvertedOrZeroArea(..)");
 		    return true;
@@ -1062,7 +1058,7 @@ public class Node extends Constants {
 	Msg.debug("Leaving incrAdjustUntilNotInvertedOrZeroArea(..)");
 	return false;
     }
-    
+
     /** @return true if the node is part of the boundary of the mesh. */
     public boolean boundaryNode() {
 	Edge e;
@@ -1096,7 +1092,7 @@ public class Node extends Constants {
 	return false;
     }
 
-    /** @param known is the front edge that is already known. (Use null if no such 
+    /** @param known is the front edge that is already known. (Use null if no such
      * edge is known.)
      @return a front edge found in this node's edgelist. */
     public Edge anotherFrontEdge(Edge known) {
@@ -1109,7 +1105,7 @@ public class Node extends Constants {
 	return null;
     }
 
-    /** @param known is the boundary edge that is already known. (Use null if no such 
+    /** @param known is the boundary edge that is already known. (Use null if no such
      * edge is known.)
      * @return a boundary edge found in this node's edgelist. */
     public Edge anotherBoundaryEdge(Edge known) {
@@ -1156,15 +1152,15 @@ public class Node extends Constants {
       else
 	return false;
     }
-    
-    /** Determine if a node is in a given halfplane. The method is based on the 
-     * determinant as described in Schewchuk's paper. 
+
+    /** Determine if a node is in a given halfplane. The method is based on the
+     * determinant as described in Schewchuk's paper.
      * @return 1 if this Node is in the halfplane defined by Triangle t and Edge e,
      * 0 if the Node is on Edge e,
      * -1 if the node is not in the halfplane defined by Triangle t and Edge e.*/
     public int inHalfplane(Triangle t, Edge e) {
       return inHalfplane(e.leftNode, e.rightNode, t.oppositeOfEdge(e));
-    }    
+    }
 
     // @return 1 if this Node is on the same side of Edge e as Node n is,
     // 0 if this Node is on the line that extends Edge e, and
@@ -1199,7 +1195,7 @@ public class Node extends Constants {
 	Msg.debug("Leaving Node.inHalfplane(..)");
 	return 0;
       }
- 
+
       BigDecimal det2= l_cross_r.subtract(xdiff.multiply(y4)).add(ydiff.multiply(x4));
       int eval2= det2.compareTo(zero);
       Msg.debug("Leaving Node.inHalfplane(..)");
@@ -1209,37 +1205,37 @@ public class Node extends Constants {
 	return -1;
     }
 
-    
-    /** Test to see if this Node lies in the plane bounded by the two parallel lines 
+
+    /** Test to see if this Node lies in the plane bounded by the two parallel lines
      * intersecting the Nodes of Edge e that are normal to Edge e. */
     public boolean inBoundedPlane(Edge e) {
 	Edge normal1= e.unitNormalAt(e.leftNode);
 	Edge normal2= e.unitNormalAt(e.rightNode);
-	
+
 	int a= inHalfplane(normal1, e.rightNode);
 	int b= inHalfplane(normal2, e.leftNode);
 
 	Msg.debug("Node.inBoundedPlane(..): a: "+a+", b: "+b);
 
-	if ((a==1 || a==0) && (b==1 || b==0)) 
+	if ((a==1 || a==0) && (b==1 || b==0))
 	  { Msg.debug("Node.inBoundedPlane(..): returns true");   return true;}
 	else
 	  { Msg.debug("Node.inBoundedPlane(..): returns false");   return false;}
     }
 
     /** Return true if the circle intersecting the Nodes p1, p2, and p3 contains
-     * this Node in its interior. p1, p2, p3, and p4 are ccw sorted. 
+     * this Node in its interior. p1, p2, p3, and p4 are ccw sorted.
      * Note that testing for convexity of the quad should not be necessary. */
     public boolean inCircle(Node p1, Node p2, Node p3) {
-	Msg.debug("Entering inCircle(..)");	
+	Msg.debug("Entering inCircle(..)");
 
 	/*
 	  a * b = a_1*b_1 + a_2*b_2      Scalar product
-	  a x b = (a_1*b_2 - b_1*a_2)    Vector product 
+	  a x b = (a_1*b_2 - b_1*a_2)    Vector product
 
-	  e_3 is the unit vector (0,0,1). All the points are defined in 3D space, 
-	  with z-values equal to 0. The v_i vectors are unit vectors. 
-	  The points are ccw ordered.  
+	  e_3 is the unit vector (0,0,1). All the points are defined in 3D space,
+	  with z-values equal to 0. The v_i vectors are unit vectors.
+	  The points are ccw ordered.
 
 	  sin(alpha) = (v_1 x v_2) * e_3= x3y1 -x3y2 -x2y1 -y3x1 +y3x2 +y2x1
 	  sin(beta)  = (v_3 x v_4) * e_3= y3x1 -x1y4 -x4y3 -x3y1 +y1x4 +y4x3
@@ -1273,9 +1269,9 @@ public class Node extends Constants {
 	}
     }
 
-    /** Pretending this and n has the same location, copy the edges in n's edgelist 
+    /** Pretending this and n has the same location, copy the edges in n's edgelist
      * that this node doesn't already have, and put them into this node's edgeList.
-     * If this and n have any common edges, these must be removed. */ 
+     * If this and n have any common edges, these must be removed. */
     public void merge(Node n) {
 	Node oldN= n.copyXY();
 	Edge e;
@@ -1288,7 +1284,7 @@ public class Node extends Constants {
 		e.replaceNode(n, this);
 		edgeList.add(e);
 	    }
-	    else { // collapsed edges must be removed   
+	    else { // collapsed edges must be removed
 	      if (e.leftNode== e.rightNode)
 		edgeList.remove(ind);
 	    }
@@ -1307,7 +1303,7 @@ public class Node extends Constants {
 	return list;
     }
 
-    /** Parse the edgeList to look for Edge e. 
+    /** Parse the edgeList to look for Edge e.
      * @return true if found, else false */
     public boolean hasEdge(Edge e) {
 	Edge curEdge;
@@ -1334,13 +1330,13 @@ public class Node extends Constants {
  		return (byte)(temp+2);
 	    else if (ang< PIx5div4) // PIx3div2
 		return (byte)(temp+1);
-	    else 
+	    else
 		return (byte)(temp);
 
 	    /*
-	    if (Math.abs(ang- PIdiv2) < Math.abs(ang- Math.PI)) 
+	    if (Math.abs(ang- PIdiv2) < Math.abs(ang- Math.PI))
 		return (byte)(temp+2);
-	    else if (Math.abs(ang- Math.PI) < Math.abs(ang- PIx2)) 
+	    else if (Math.abs(ang- Math.PI) < Math.abs(ang- PIx2))
 		return (byte)(temp+1);
 	    else
 		return temp;
@@ -1355,7 +1351,7 @@ public class Node extends Constants {
 	if (j>= 128)
 	    Msg.error("Number of edges adjacent node "+descr()+" was greater than expected ("+
 		      edgeList.size()+"-2 >= 64)");
-	byte ccwNodesSize= (byte)j; 
+	byte ccwNodesSize= (byte)j;
 	pattern= new byte[ccwNodesSize + 2]; // +2 for size and c.valence()
 	pattern[0]= (byte)(ccwNodesSize +2);
 	pattern[1]= valence();
@@ -1379,7 +1375,7 @@ public class Node extends Constants {
 	Msg.debug("Leaving Node.createValencePattern(byte, Node [])");
     }
 
-    /** Return # of irregular nodes in the valence pattern (nodes whose valence!= 4) 
+    /** Return # of irregular nodes in the valence pattern (nodes whose valence!= 4)
      * Note that calcMyValencePattern() must be called before calling this method. */
     public int irregNeighborNodes() {
 	int count= 0;
@@ -1389,28 +1385,28 @@ public class Node extends Constants {
 	return count;
     }
 
-    /** Compare the valence pattern of this node to the special pattern in pattern2. 
+    /** Compare the valence pattern of this node to the special pattern in pattern2.
      * In pattern2, the following codes apply:<br>
      <ul>14 means 4- (4 or less)
      <li>24 means 4+ (4 or more)
      <li>5 means 5 or more
      <li>0 means any number
      </ul>
-     * Note that the length of the patterns must be an even number. Also note that the 
-     * patterns have to be aligned in a 2-byte fashion. (This means that the index 
+     * Note that the length of the patterns must be an even number. Also note that the
+     * patterns have to be aligned in a 2-byte fashion. (This means that the index
      * into the node's pattern where they start matching have to be an even number.)
      * @param pattern2 A valence pattern
-     * @return If they match then return the index of the valence value in the node's 
-     * pattern that corresponds to the first valence value in pattern2, otherwise 
+     * @return If they match then return the index of the valence value in the node's
+     * pattern that corresponds to the first valence value in pattern2, otherwise
      * return -1.
-     * Note that calcMyValencePattern() must be called before calling this method. 
+     * Note that calcMyValencePattern() must be called before calling this method.
      */
     public int patternMatch(byte [] pattern2) {
 	Msg.debug("Entering patternMatch(..)");
 	if (pattern[0]!= pattern2[0] || pattern[1]!= pattern2[1]) {
 	    Msg.debug("Leaving patternMatch(..): mismatch");
-	    return -1;   // Different length or different valence of central node 
-	}	
+	    return -1;   // Different length or different valence of central node
+	}
 
 	int i, j, jstart= 2, matches= 0;
 
@@ -1433,7 +1429,7 @@ public class Node extends Constants {
 		}
 		else if (pattern[j]== 3 &&
 			 (pattern2[2]==3 || pattern2[2]==14 || pattern2[2]==0)) {
-		    
+
 		    matches= 1;
 		    jstart= j;
 		    Msg.debug("... rolling pattern...");
@@ -1442,9 +1438,9 @@ public class Node extends Constants {
 		    break;
 		}
 		else if (pattern[j]== 4 &&
-			 (pattern2[2]==4 || pattern2[2]==14 || pattern2[2]==24 || 
+			 (pattern2[2]==4 || pattern2[2]==14 || pattern2[2]==24 ||
 			pattern2[2]==0)) {
-			
+
 		    matches= 1;
 		    jstart= j;
 		    Msg.debug("... rolling pattern...");
@@ -1454,7 +1450,7 @@ public class Node extends Constants {
 		}
 		else if (pattern[j]>= 5 &&
 			 (pattern2[2]==5 || pattern2[2]==24 || pattern2[2]==0)) {
-			
+
 		    matches= 1;
 		    jstart= j;
 		    Msg.debug("... rolling pattern...");
@@ -1463,12 +1459,12 @@ public class Node extends Constants {
 		    break;
 		}
 	    }
-	    
+
 	    if (matches== 0) {
 		Msg.debug("Leaving patternMatch(..): mismatch");
-		return -1;   // Search completed, patterns don't match 
+		return -1;   // Search completed, patterns don't match
 	    }
-	    
+
 	    if (jstart== pattern[0]-1)
 		j= 1;
 	    else
@@ -1488,9 +1484,9 @@ public class Node extends Constants {
 			      ", pattern["+j+"]: "+pattern[j]);
 		}
 		else if (pattern[j]== 4 &&
-			 (pattern2[i]==4 || pattern2[i]==14 || pattern2[i]==24 || 
+			 (pattern2[i]==4 || pattern2[i]==14 || pattern2[i]==24 ||
 			pattern2[i]==0)) {
-		    matches++;			
+		    matches++;
 		    Msg.debug("...pattern2["+i+"]: "+pattern2[i]+
 			      ", pattern["+j+"]: "+pattern[j]);
 		}
@@ -1522,7 +1518,7 @@ public class Node extends Constants {
 	    }
 	    if (matches== pattern2[0]-2) {
 		Msg.debug("Leaving patternMatch(..): match, returns: "+jstart);
-		return jstart;   // Search completed, patterns match 
+		return jstart;   // Search completed, patterns match
 	    }
 	    jstart+= 2;
 	}
@@ -1532,7 +1528,7 @@ public class Node extends Constants {
 
 
     /** Compare the valence pattern of this node to the special pattern in pattern2.
-     * Also make sure that the tagged nodes in vertexPat are vertices. (That is, the 
+     * Also make sure that the tagged nodes in vertexPat are vertices. (That is, the
      * interior angles must be greater than any other interior angles around this node.)
      * In pattern2, the following codes apply:<br>
      <ul>14 means 4- (4 or less)
@@ -1540,21 +1536,21 @@ public class Node extends Constants {
      <li>5 means 5 or more
      <li>0 means any number
      </ul>
-     * Note that the length of the patterns must be an even number. Also note that the 
-     * patterns have to be aligned in a 2-byte fashion. (This means that the index 
+     * Note that the length of the patterns must be an even number. Also note that the
+     * patterns have to be aligned in a 2-byte fashion. (This means that the index
      * into the node's pattern where they start matching have to be an even number.)
      * @param pattern2 A valence pattern
-     * @return If they match then return the index of the valence value in the node's 
-     * pattern that corresponds to the first valence value in pattern2, otherwise 
+     * @return If they match then return the index of the valence value in the node's
+     * pattern that corresponds to the first valence value in pattern2, otherwise
      * return -1.
-     * Note that calcMyValencePattern() must be called before calling this method. 
+     * Note that calcMyValencePattern() must be called before calling this method.
      */
     public int patternMatch(byte [] pattern2, boolean [] vertexPat, double [] angles) {
 	Msg.debug("Entering patternMatch(byte [], boolean [], double [])");
 	if (pattern[0]!= pattern2[0] || pattern[1]!= pattern2[1]) {
 	    Msg.debug("Leaving patternMatch(byte [], boolean [], double []): mismatch");
-	    return -1;   // Different length or different valence of central node 
-	}	
+	    return -1;   // Different length or different valence of central node
+	}
 
 	int i, j, jstart= 2, matches= 0;
 
@@ -1589,7 +1585,7 @@ public class Node extends Constants {
 		    }
 		}
 		else if (pattern[j]== 4 &&
-			 (pattern2[2]==4 || pattern2[2]==14 || pattern2[2]==24 || 
+			 (pattern2[2]==4 || pattern2[2]==14 || pattern2[2]==24 ||
 			  pattern2[2]==0)) {
 		    if (fitsVertexPat((byte)(j-2), angles, vertexPat, pattern[0]-2)) {
 			matches= 1;
@@ -1612,10 +1608,10 @@ public class Node extends Constants {
 		    }
 		}
 	    }
-	    
+
 	    if (matches== 0) {
 		Msg.debug("Leaving patternMatch(byte [], boolean [], double []): mismatch");
-		return -1;   // Search completed, patterns don't match 
+		return -1;   // Search completed, patterns don't match
 	    }
 	    Msg.debug("...broken out of loop!!");
 	    if (jstart== pattern[0]-1)
@@ -1638,9 +1634,9 @@ public class Node extends Constants {
 			      ", pattern["+j+"]: "+pattern[j]);
 		}
 		else if (pattern[j]== 4 &&
-			 (pattern2[i]==4 || pattern2[i]==14 || pattern2[i]==24 || 
+			 (pattern2[i]==4 || pattern2[i]==14 || pattern2[i]==24 ||
 			pattern2[i]==0)) {
-		    matches++;			
+		    matches++;
 		    Msg.debug("...pattern2["+i+"]: "+pattern2[i]+
 			      ", pattern["+j+"]: "+pattern[j]);
 		}
@@ -1660,7 +1656,7 @@ public class Node extends Constants {
 	    }
 	    if (matches== pattern2[0]-2) {
 		Msg.debug("Leaving patternMatch(byte [], boolean [], double []): match, returns: "+jstart);
-		return jstart;   // Search completed, patterns match 
+		return jstart;   // Search completed, patterns match
 	    }
 	    jstart+= 2;
 	}
@@ -1671,8 +1667,8 @@ public class Node extends Constants {
     /** Confirm whether the nodes having the given interior angles have the correct
      * vertex pattern.
      * @param start start index for the ang array
-     * @param ang an array of interior angles 
-     * @param vertexPat a boolean array indicating which angles are at actual vertices 
+     * @param ang an array of interior angles
+     * @param vertexPat a boolean array indicating which angles are at actual vertices
      * @param len the length of the two arrays
      * @return True if the pattern matches. Otherwise false.
     */
@@ -1716,11 +1712,11 @@ public class Node extends Constants {
 
 	Msg.debug("Leaving Node.fitsVertexPat(..): true");
 	return true;
-    } 
+    }
 
-    /** Fill the angles array with the angles at the opposite nodes. 
+    /** Fill the angles array with the angles at the opposite nodes.
      * @param ccwNeighbors the surrounding nodes in ccw order
-     * @param len the length of 
+     * @param len the length of
      * @return an array of doubles
      */
     public double [] surroundingAngles(Node [] ccwNeighbors, int len) {
@@ -1737,7 +1733,7 @@ public class Node extends Constants {
 		    np= ccwNeighbors[i-1];
 		else
 		    np= ccwNeighbors[len-1];
-		
+
 		if (i+1< len)
 		    nn= ccwNeighbors[i+1];
 		else
@@ -1746,10 +1742,10 @@ public class Node extends Constants {
 		ep= commonEdge(np);
 		en= commonEdge(nn);
 		q= (Quad)ep.commonElement(en);
-		
+
 		no= q.oppositeNode(this);
 		angles[i]= q.ang[q.angleIndex(no)];
-	    }	
+	    }
 	    else {
 		no= e.otherNode(this);
 		qa= (Quad)e.element1;
@@ -1764,30 +1760,30 @@ public class Node extends Constants {
 
 
 
-    /** Compare the valence pattern of this boundary node to the special pattern in 
-     * pattern2. 
+    /** Compare the valence pattern of this boundary node to the special pattern in
+     * pattern2.
      * In pattern2, the following codes apply:<br>
      <ul>14 means 4- (4 or less)
      <li>24 means 4+ (4 or more)
      <li>5 means 5 or more
      <li>0 means any number
      </ul>
-     * Note that calcMyValencePattern() must be called before calling this method. 
+     * Note that calcMyValencePattern() must be called before calling this method.
      * @param pattern2 A valence pattern
      * @param bpat a boolean pattern indicating which nodes are located on the boundary
      * @return If they match then return the true, otherwise return false.
      */
-    public boolean boundaryPatternMatch(byte [] pattern2, boolean [] bpat, 
+    public boolean boundaryPatternMatch(byte [] pattern2, boolean [] bpat,
 					Node [] ccwNeighbors) {
 	Msg.debug("Entering boundaryPatternMatch(..)");
 
-	if (pattern[0]!= pattern2[0] || pattern[1]!= pattern2[1] 
+	if (pattern[0]!= pattern2[0] || pattern[1]!= pattern2[1]
 	    || bpat[0]!= boundaryNode()) {
 	    Msg.debug("Leaving boundaryPatternMatch(..): mismatch");
 	    return false;
 	}
 	int i;
-  
+
 	for (i= 2; i< pattern[0]; i++) {
 	    if (pattern[i]== 2 &&
 		(pattern2[i]==2 || pattern2[i]==14 || pattern2[i]==0)) {
@@ -1805,7 +1801,7 @@ public class Node extends Constants {
 			  ", pattern["+i+"]: "+pattern[i]);
 	    }
 	    else if (pattern[i]== 4 &&
-		     (pattern2[i]==4 || pattern2[i]==14 || pattern2[i]==24 || 
+		     (pattern2[i]==4 || pattern2[i]==14 || pattern2[i]==24 ||
 		      pattern2[i]==0)) {
 		if (bpat[i-1] && !ccwNeighbors[i-2].boundaryNode())
 		    return false;
@@ -1828,27 +1824,27 @@ public class Node extends Constants {
 	return true;
     }
 
-    /** Compare the valence pattern of this internal node to the special pattern in 
-     * pattern2. The boundary pattern must also fit. 
+    /** Compare the valence pattern of this internal node to the special pattern in
+     * pattern2. The boundary pattern must also fit.
      * In pattern2, the following codes apply:<br>
      <ul>14 means 4- (4 or less)
      <li>24 means 4+ (4 or more)
      <li>5 means 5 or more
      <li>0 means any number
      </ul>
-     * Note that calcMyValencePattern() must be called before calling this method. 
+     * Note that calcMyValencePattern() must be called before calling this method.
      * @param pattern2 A valence pattern
      * @param bpat a boolean pattern indicating which nodes are located on the boundary
      * @param ccwNeighbors the neighbor nodes in ccw order
      * @return If they match then return the true, otherwise return false.
      */
 
-    public int boundaryPatternMatchSpecial(byte [] pattern2, boolean [] bpat, 
+    public int boundaryPatternMatchSpecial(byte [] pattern2, boolean [] bpat,
 					Node [] ccwNeighbors) {
 
 	Msg.debug("Entering boundaryPatternMatchSpecial(..)");
 
-	if (pattern[0]!= pattern2[0] || pattern[1]!= pattern2[1] 
+	if (pattern[0]!= pattern2[0] || pattern[1]!= pattern2[1]
 	    || bpat[0]!= boundaryNode()) {
 	    Msg.debug("Leaving boundaryPatternMatchSpecial(..): mismatch");
 	    return -1;
@@ -1859,11 +1855,11 @@ public class Node extends Constants {
 	Msg.debug("...entering the for loop");
 
 	for (k= 2; k< pattern[0]; k++) {
-	    
+
 	    Msg.debug("...k== "+k);
 	    j= k;
 	    match= true;
-	    
+
 	    for (i= 2; i< pattern[0]; i++) {
 		Msg.debug("...i== "+i);
 
@@ -1889,7 +1885,7 @@ public class Node extends Constants {
 			      ", pattern["+j+"]: "+pattern[j]);
 		}
 		else if (pattern[j]== 4 &&
-			 (pattern2[i]==4 || pattern2[i]==14 || pattern2[i]==24 || 
+			 (pattern2[i]==4 || pattern2[i]==14 || pattern2[i]==24 ||
 			  pattern2[i]==0)) {
 		    if (bpat[i-1] && !ccwNeighbors[j-2].boundaryNode()) {
 			match= false;
@@ -1904,7 +1900,7 @@ public class Node extends Constants {
 			Msg.debug("bpat["+(i-1)+"] is true");
 		    else
 			Msg.debug("bpat["+(i-1)+"] is false");
-		    
+
 		    if (ccwNeighbors[j-2].boundaryNode())
 			Msg.debug("ccwNeighbors["+(j-2)+"].boundaryNode()]) is true");
 		    else
@@ -1956,22 +1952,22 @@ public class Node extends Constants {
     /** Give a string representation of the node.
      * @return a string representation of the node. */
     public String descr() {
-	return "("+x+", "+y+")";		
+	return "("+x+", "+y+")";
     }
 
     public String valDescr() {
 	String s= ""+pattern[1]+"-";
 	for (int i= 2; i< pattern[0]; i++)
 	    s= s+pattern[i];
-	
+
 	return s;
     }
- 
+
     /** Output a string representation of the node. */
     public void printMe() {
 	System.out.println(descr());
     }
-    
+
     /** Boolean indicating whether the node has been moved by the OBS */
     public boolean movedByOBS= false;  // Used by the smoother
     /** The coordinates */
