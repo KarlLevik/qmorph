@@ -1,8 +1,16 @@
 package com.github.karllevik.qmorph;
 
-public class TestMyVector extends GeomBasics {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-	public static void main(String[] args) {
+import org.junit.jupiter.api.Test;
+
+class TestMyVector {
+
+	@Test
+	void testPointIntersectsAt() {
 		Node p0 = new Node(0, 0);
 		Node p1 = new Node(0, 1);
 
@@ -10,181 +18,97 @@ public class TestMyVector extends GeomBasics {
 		MyVector d1 = new MyVector(p1, 10, 0);
 
 		Node poi = d0.pointIntersectsAt(d1);
-		if (poi != null) {
-			poi.printMe();
-		} else {
-			Msg.debug("poi is null!");
-		}
+		assertNotNull(poi, "poi should not be null");
+	}
 
-		// ----- Test boolean isCWto(MyVector v) ----- //
+	@Test
+	void testIsCWto() {
+		Node p0 = new Node(0, 0);
 
-		// Same quadrant (1st)
+		// Test 1: Same quadrant (1st)
 		MyVector v0 = new MyVector(p0, 10, 10);
 		MyVector v1 = new MyVector(p0, 10, 9);
+		assertTrue(v1.isCWto(v0), "v1 should be clockwise to v0");
 
-		if (v1.isCWto(v0)) {
-			Msg.debug("isCWto test1: riktig!");
-		} else {
-			Msg.debug("isCWto test1: galt!");
-		}
-
-		// Opposite quadrants (this in third, v in 1st)
+		// Test 2: Opposite quadrants (this in third, v in 1st)
 		MyVector v2 = new MyVector(p0, 10, 10);
 		MyVector v3 = new MyVector(p0, -9, -10);
+		assertTrue(v3.isCWto(v2), "v3 should be clockwise to v2");
 
-		if (v3.isCWto(v2)) {
-			Msg.debug("isCWto test2: riktig!");
-		} else {
-			Msg.debug("isCWto test2: galt!");
-		}
-
-		// Opposite quadrants (this in second, v in fourth)
+		// Test 3: Opposite quadrants (this in second, v in fourth)
 		MyVector v4 = new MyVector(p0, 10, -10);
 		MyVector v5 = new MyVector(p0, -11, 10);
+		assertTrue(v5.isCWto(v4), "v5 should be clockwise to v4");
 
-		if (v5.isCWto(v4)) {
-			Msg.debug("isCWto test3: riktig!");
-		} else {
-			Msg.debug("isCWto test3: galt!");
-		}
-
-		// Opposite quadrants (this in third, v in 1st)
-		MyVector v6 = new MyVector(p0, 10, 10);
+		// Test 4: Same vector
 		MyVector v7 = new MyVector(p0, -9, -10);
+		assertFalse(v7.isCWto(v7), "v7 should not be clockwise to itself");
 
-		if (v7.isCWto(v6)) {
-			Msg.debug("isCWto test4: riktig!");
-		} else {
-			Msg.debug("isCWto test4: galt!");
-		}
-
-		// Same vector
-		if (v7.isCWto(v7)) {
-			Msg.debug("isCWto test5: v7.isCWto(v7)");
-		} else {
-			Msg.debug("isCWto test5: ikke v7.isCWto(v7)");
-		}
-
-		//
+		// Test 5: Special case
 		MyVector v8 = new MyVector(p0, -9, 0);
 		MyVector v9 = new MyVector(p0, 0, -9);
-		if (v8.isCWto(v9)) {
-			Msg.debug("isCWto test6: riktig!");
-		} else {
-			Msg.debug("isCWto test6: galt!");
-		}
+		assertTrue(v8.isCWto(v9), "v8 should be clockwise to v9");
 
+		// Test 6: Special case with small difference
 		MyVector v10 = new MyVector(p0, 0.01, -9);
-		if (v9.isCWto(v10)) {
-			Msg.debug("isCWto test7: riktig!");
-		} else {
-			Msg.debug("isCWto test7: galt!");
-		}
+		assertTrue(v9.isCWto(v10), "v9 should be clockwise to v10");
+	}
 
-		Msg.debug("----- Special tests of isCWto(MyVector v) -----");
-		Node nC = new Node(-0.3, 1.2);
-		Node nD = new Node(-0.3, 0.3);
-		Node nK = new Node(-1.7538203106994033, 1.2016864852680453);
-		Node nKp1 = new Node(-0.2, 0.7);
-
-		MyVector vS = new MyVector(nC, nD);
-		MyVector vK = new MyVector(nC, nK);
-		MyVector vKp1 = new MyVector(nC, nKp1);
-
-		if (!vS.isCWto(vK) && vS.isCWto(vKp1)) {
-			Msg.debug("isCWto test8: riktig!");
-		} else {
-			Msg.debug("isCWto test8: galt!");
-		}
-
-		nC = new Node(-0.4289644776132451, 1.2568646152466634);
-		nD = new Node(-0.3, 0.30000000000000004);
-
-		nK = new Node(-0.5924654806651178, 0.8719787380936597);
-		nKp1 = new Node(0.8, 1.0);
-
-		vS = new MyVector(nC, nD);
-		vK = new MyVector(nC, nK);
-		vKp1 = new MyVector(nC, nKp1);
-
-		if (!vS.isCWto(vK) && vS.isCWto(vKp1)) {
-			Msg.debug("isCWto test9: riktig!");
-		} else {
-			Msg.debug("isCWto test9: galt!");
-		}
-
-		nC = new Node(-0.3, 1.2);
-		nD = new Node(-0.3, 0.30000000000000004);
-		nK = new Node(-1.3, 1.2);
-		nKp1 = new Node(-0.2, 0.7);
-		vS = new MyVector(nC, nD);
-		vK = new MyVector(nC, nK);
-		vKp1 = new MyVector(nC, nKp1);
-
-		if (!vS.isCWto(vK) && vS.isCWto(vKp1)) {
-			Msg.debug("yeah, seems to work!!");
-		} else {
-			Msg.debug("naaah, something wrong, yeah...");
-		}
-
-		// ----- Test double computeAngle(MyVector v) ----- //
-		Msg.debug("----- Test double computeAngle(MyVector v) -----");
+	@Test
+	void testComputeAngle() {
+		Node p0 = new Node(0, 0);
 
 		MyVector va = new MyVector(p0, 1, 0);
 		MyVector vb = new MyVector(p0, 0, 1);
 
 		double angle0 = vb.computeAngle(vb);
-		Msg.debug("Skal v�re 0:  " + Math.toDegrees(angle0));
+		assertEquals(0, Math.toDegrees(angle0), 0.001, "Angle should be 0 degrees");
 
 		double angle1 = vb.computeAngle(va);
-		Msg.debug("Skal v�re -90:  " + Math.toDegrees(angle1));
+		assertEquals(-90, Math.toDegrees(angle1), 0.001, "Angle should be -90 degrees");
 
 		MyVector vc = new MyVector(p0, -1, -1);
 		double angle2 = vb.computeAngle(vc);
-		Msg.debug("Skal v�re 135:  " + Math.toDegrees(angle2));
+		assertEquals(135, Math.toDegrees(angle2), 0.001, "Angle should be 135 degrees");
 
 		MyVector vd = new MyVector(p0, 1, 1.1);
 		double angle3 = vd.computeAngle(vc);
-		Msg.debug("Skal v�re n�r opptil 180:  " + Math.toDegrees(angle3));
+		assertTrue(Math.toDegrees(angle3) > 170, "Angle should be near 180 degrees");
 
 		double angle4 = vc.computeAngle(vd);
-		Msg.debug("Skal v�re n�r nedtil -180:  " + Math.toDegrees(angle4));
+		assertTrue(Math.toDegrees(angle4) < -170, "Angle should be near -180 degrees");
 
 		MyVector ve = new MyVector(p0, 1, 1);
 		double angle5 = ve.computeAngle(vd);
-		Msg.debug("Skal v�re ganske lite, pos.:  " + Math.toDegrees(angle5));
-
-		// ----- Test double dot(MyVector v) ----- //
-		Msg.debug("----- Test double dot(MyVector v) -----");
-
-		double dot0 = va.dot(va);
-		Msg.debug("Skal v�re 1:  " + dot0);
-
-		double dot1 = vb.dot(va);
-		Msg.debug("Skal v�re 0:  " + dot1);
-
-		double dot2 = vb.dot(vc);
-		Msg.debug("Skal v�re negativt:  " + dot2);
-
-		double dot3 = vd.dot(vc);
-		Msg.debug("Skal v�re negativt:  " + dot3);
-
-		double dot4 = vc.dot(vd);
-		Msg.debug("Skal v�re n�r negativt:  " + dot4);
-
-		double dot5 = ve.dot(vd);
-		Msg.debug("Skal v�re n�r positivt:  " + dot5);
-
-		Msg.debug("cos(0)= " + Math.cos(0));
-		Msg.debug("cos(PI)= " + Math.cos(Math.PI));
-		Msg.debug("cos(PI/2)= " + Math.cos(Math.PI / 2));
-
-		Msg.debug("cos(" + angle1 + ")= " + Math.cos(angle1));
-		Msg.debug("cos(" + angle2 + ")= " + Math.cos(angle2));
-		Msg.debug("cos(" + angle3 + ")= " + Math.cos(angle3));
-		Msg.debug("cos(" + angle4 + ")= " + Math.cos(angle4));
-		Msg.debug("cos(" + angle5 + ")= " + Math.cos(angle5));
-
+		assertTrue(Math.toDegrees(angle5) < 10, "Angle should be a small positive value");
 	}
 
+	@Test
+	void testDot() {
+		Node p0 = new Node(0, 0);
+
+		MyVector va = new MyVector(p0, 1, 0);
+		MyVector vb = new MyVector(p0, 0, 1);
+		MyVector vc = new MyVector(p0, -1, -1);
+		MyVector vd = new MyVector(p0, 1, 1.1);
+		MyVector ve = new MyVector(p0, 1, 1);
+
+		double dot0 = va.dot(va);
+		assertEquals(1, dot0, 0.001, "Dot product should be 1");
+
+		double dot1 = vb.dot(va);
+		assertEquals(0, dot1, 0.001, "Dot product should be 0");
+
+		double dot2 = vb.dot(vc);
+		assertTrue(dot2 < 0, "Dot product should be negative");
+
+		double dot3 = vd.dot(vc);
+		assertTrue(dot3 < 0, "Dot product should be negative");
+
+		double dot4 = vc.dot(vd);
+		assertTrue(dot4 < 0, "Dot product should be near negative");
+
+		double dot5 = ve.dot(vd);
+		assertTrue(dot5 > 0, "Dot product should be near positive");
+	}
 }

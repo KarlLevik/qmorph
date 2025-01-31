@@ -1,10 +1,6 @@
 package com.github.karllevik.qmorph;
 
-/*
-import Triangle;
-import Constants;
-import Msg;
-*/
+import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -13,6 +9,21 @@ import java.util.ArrayList;
  */
 
 public class Edge extends Constants {
+
+	Node leftNode, rightNode; // This Edge has these two nodes
+	Element element1 = null, element2 = null; // Belongs to these Elements (Quads/Triangles)
+	Edge leftFrontNeighbor, rightFrontNeighbor;
+	int level;
+
+	boolean frontEdge = false;
+	boolean swappable = true;
+	boolean selectable = true;
+	// Edge leftSide= null, rightSide= null; // Side edges when building a quad
+	boolean leftSide = false, rightSide = false; // Indicates if frontNeighbor is
+													// to be used as side edge in quad
+	double len; // length of this edge
+	Color color = Color.green;
+
 	public Edge(Node node1, Node node2) {
 		if ((node1.x < node2.x) || (node1.x == node2.x && node1.y > node2.y)) {
 			leftNode = node1;
@@ -1358,18 +1369,9 @@ public class Edge extends Constants {
 
 		return curEdge;
 	}
-
-	Node leftNode, rightNode; // This Edge has these two nodes
-	Element element1 = null, element2 = null; // Belongs to these Elements (Quads/Triangles)
-	Edge leftFrontNeighbor, rightFrontNeighbor;
-	int level;
-
-	boolean frontEdge = false;
-	boolean swappable = true;
-	boolean selectable = true;
-	// Edge leftSide= null, rightSide= null; // Side edges when building a quad
-	boolean leftSide = false, rightSide = false; // Indicates if frontNeighbor is
-													// to be used as side edge in quad
-	double len; // length of this edge
-	java.awt.Color color = java.awt.Color.green;
+	
+	@Override
+	public String toString() {
+		return descr();
+	}
 }

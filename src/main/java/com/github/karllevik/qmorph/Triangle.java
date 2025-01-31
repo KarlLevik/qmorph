@@ -6,6 +6,21 @@ package com.github.karllevik.qmorph;
  */
 
 public class Triangle extends Element {
+	
+	/**
+	 * Creates a triangle (vertices are orientated CCW).
+	 * @param edge1
+	 * @param edge2
+	 * @param edge3
+	 * @param len1
+	 * @param len2
+	 * @param len3
+	 * @param ang1
+	 * @param ang2
+	 * @param ang3
+	 * @param lengthsOpt
+	 * @param anglesOpt
+	 */
 	public Triangle(Edge edge1, Edge edge2, Edge edge3, double len1, double len2, double len3, double ang1, double ang2, double ang3, boolean lengthsOpt,
 			boolean anglesOpt) {
 		edgeList = new Edge[3];
@@ -804,5 +819,10 @@ public class Triangle extends Element {
 			System.out.println(descr() + ", not inverted");
 		}
 
+	}
+	
+	@Override
+	public String toString() {
+		return descr();
 	}
 }

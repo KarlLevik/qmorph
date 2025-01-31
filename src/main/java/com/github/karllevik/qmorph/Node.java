@@ -9,6 +9,17 @@ import java.util.ArrayList;
  */
 
 public class Node extends Constants {
+
+	/** Boolean indicating whether the node has been moved by the OBS */
+	public boolean movedByOBS = false; // Used by the smoother
+	/** The coordinates */
+	public double x, y;
+	/** A valence pattern for this node */
+	public byte[] pattern;
+	// byte state= 0; // For front Nodes only
+	ArrayList edgeList;
+	java.awt.Color color = java.awt.Color.cyan;
+
 	/** Create new node with position (x,y). */
 	public Node(double x, double y) {
 		this.x = x;
@@ -1962,14 +1973,9 @@ public class Node extends Constants {
 	public void printMe() {
 		System.out.println(descr());
 	}
-
-	/** Boolean indicating whether the node has been moved by the OBS */
-	public boolean movedByOBS = false; // Used by the smoother
-	/** The coordinates */
-	public double x, y;
-	/** A valence pattern for this node */
-	public byte[] pattern;
-	// byte state= 0; // For front Nodes only
-	ArrayList edgeList;
-	java.awt.Color color = java.awt.Color.cyan;
+	
+	@Override
+	public String toString() {
+		return descr();
+	}
 }

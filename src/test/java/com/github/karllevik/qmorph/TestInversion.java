@@ -1,6 +1,6 @@
 package com.github.karllevik.qmorph;
 
-public class TestInvertion extends Constants {
+class TestInversion {
 
 	public static void main(String[] args) {
 		Node n1 = new Node(0.0, 0.0);

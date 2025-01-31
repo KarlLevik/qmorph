@@ -269,6 +269,9 @@ public class MyVector extends Constants {
 	 * @return a boolean indicating whether this vector is clockwise (cw) to v
 	 */
 	public boolean isCWto(MyVector v) {
+	    if (this.equals(v)) {
+	        return false; // A vector cannot be CW to itself
+	    }
 		double thisR, vR;
 
 		if (x != 0) {
