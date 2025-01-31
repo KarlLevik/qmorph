@@ -2,6 +2,11 @@ package com.github.karllevik.qmorph;
 
 import java.util.ArrayList;
 
+import com.github.karllevik.qmorph.geom.Edge;
+import com.github.karllevik.qmorph.geom.MyVector;
+import com.github.karllevik.qmorph.geom.Quad;
+import com.github.karllevik.qmorph.geom.Triangle;
+
 /**
  * This class offers methods for incrementally constructing Delaunay triangle
  * meshes.

@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.geom;
 
 /*
 import Ray;
@@ -7,12 +7,21 @@ import Msg;
 */
 import java.math.BigDecimal;
 
+import com.github.karllevik.qmorph.Constants;
+import com.github.karllevik.qmorph.Msg;
+import com.github.karllevik.qmorph.Node;
+
 /**
  * This class holds information for vectors, and has methods for dealing with
  * vector-related issues.
  */
 
 public class MyVector extends Constants {
+	
+	public final Node origin;
+	public double x, y;
+	public Edge edge;
+	
 	/**
 	 * @param origin the origin of the vector
 	 * @param x      the x component
@@ -545,7 +554,4 @@ public class MyVector extends Constants {
 		System.out.println(descr());
 	}
 
-	Node origin;
-	double x, y;
-	Edge edge;
 }

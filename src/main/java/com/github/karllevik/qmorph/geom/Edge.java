@@ -1,7 +1,11 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.geom;
 
 import java.awt.Color;
 import java.util.ArrayList;
+
+import com.github.karllevik.qmorph.Constants;
+import com.github.karllevik.qmorph.Msg;
+import com.github.karllevik.qmorph.Node;
 
 /**
  * This class holds information for edges, and has methods for handling issues
@@ -10,19 +14,21 @@ import java.util.ArrayList;
 
 public class Edge extends Constants {
 
-	Node leftNode, rightNode; // This Edge has these two nodes
-	Element element1 = null, element2 = null; // Belongs to these Elements (Quads/Triangles)
-	Edge leftFrontNeighbor, rightFrontNeighbor;
-	int level;
+	public Node leftNode, rightNode; // This Edge has these two nodes
+	public Element element1 = null, element2 = null; // Belongs to these Elements (Quads/Triangles)
+	public Edge leftFrontNeighbor, rightFrontNeighbor;
+	public int level;
+	
+	public static ArrayList[] stateList = new ArrayList[3];
 
-	boolean frontEdge = false;
-	boolean swappable = true;
-	boolean selectable = true;
+	public boolean frontEdge = false;
+	public boolean swappable = true;
+	public boolean selectable = true;
 	// Edge leftSide= null, rightSide= null; // Side edges when building a quad
-	boolean leftSide = false, rightSide = false; // Indicates if frontNeighbor is
+	public boolean leftSide = false, rightSide = false; // Indicates if frontNeighbor is
 													// to be used as side edge in quad
-	double len; // length of this edge
-	Color color = Color.green;
+	public double len; // length of this edge
+	public Color color = Color.green;
 
 	public Edge(Node node1, Node node2) {
 		if ((node1.x < node2.x) || (node1.x == node2.x && node1.y > node2.y)) {
@@ -61,12 +67,10 @@ public class Edge extends Constants {
 		return new Edge(this);
 	}
 
-	static ArrayList[] stateList = new ArrayList[3];
-
 	public static void clearStateList() {
-		stateList[0] = new ArrayList();
-		stateList[1] = new ArrayList();
-		stateList[2] = new ArrayList();
+		stateList[0] = new ArrayList<>();
+		stateList[1] = new ArrayList<>();
+		stateList[2] = new ArrayList<>();
 	}
 
 	// Removes an Edge from the stateLists

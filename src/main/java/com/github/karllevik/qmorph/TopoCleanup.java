@@ -2,6 +2,12 @@ package com.github.karllevik.qmorph;
 
 import java.util.ArrayList;
 
+import com.github.karllevik.qmorph.geom.Dart;
+import com.github.karllevik.qmorph.geom.Edge;
+import com.github.karllevik.qmorph.geom.Element;
+import com.github.karllevik.qmorph.geom.Quad;
+import com.github.karllevik.qmorph.geom.Triangle;
+
 // ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ----
 /**
  * This class constitutes a simple implementation of the cleanup process as

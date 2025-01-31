@@ -1,7 +1,15 @@
 package com.github.karllevik.qmorph;
 
+import java.awt.Color;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+
+import com.github.karllevik.qmorph.geom.Edge;
+import com.github.karllevik.qmorph.geom.Element;
+import com.github.karllevik.qmorph.geom.MyVector;
+import com.github.karllevik.qmorph.geom.Quad;
+import com.github.karllevik.qmorph.geom.Ray;
+import com.github.karllevik.qmorph.geom.Triangle;
 
 /**
  * This class holds information for nodes, and has methods for the management of
@@ -17,14 +25,14 @@ public class Node extends Constants {
 	/** A valence pattern for this node */
 	public byte[] pattern;
 	// byte state= 0; // For front Nodes only
-	ArrayList edgeList;
-	java.awt.Color color = java.awt.Color.cyan;
+	public ArrayList<Edge> edgeList;
+	public Color color = Color.cyan;
 
 	/** Create new node with position (x,y). */
 	public Node(double x, double y) {
 		this.x = x;
 		this.y = y;
-		edgeList = new ArrayList();
+		edgeList = new ArrayList<>();
 	}
 
 	@Override
@@ -43,7 +51,7 @@ public class Node extends Constants {
 	/** @return a "real" copy of this node with a shallow copy of its edgeList. */
 	public Node copy() {
 		Node n = new Node(x, y);
-		n.edgeList = (ArrayList) edgeList.clone();
+		n.edgeList = (ArrayList<Edge>) edgeList.clone();
 		return n;
 	}
 
@@ -146,7 +154,7 @@ public class Node extends Constants {
 		Edge e, ne;
 		Node other1, other2;
 		Quad q;
-		ArrayList list = new ArrayList();
+		ArrayList<Element> list = new ArrayList<Element>();
 
 		for (int i = 0; i < edgeList.size(); i++) {
 			e = (Edge) edgeList.get(i);
@@ -238,12 +246,12 @@ public class Node extends Constants {
 
 	// Rewrite of ccwSortedEdgeList().
 	// We use vector representations instead of the edges directly.
-	public ArrayList ccwSortedVectorList() {
+	public ArrayList<MyVector> ccwSortedVectorList() {
 		Element elem, start;
 		MyVector v, v0, v1;
 		Edge e;
-		ArrayList boundaryVectors = new ArrayList();
-		ArrayList vectors = new ArrayList();
+		ArrayList<MyVector> boundaryVectors = new ArrayList<MyVector>();
+		ArrayList<MyVector> vectors = new ArrayList<MyVector>();
 		double ang;
 		for (int i = 0; i < edgeList.size(); i++) {
 			e = (Edge) edgeList.get(i);
@@ -303,7 +311,7 @@ public class Node extends Constants {
 
 		// Sort vectors in ccw order starting with v0.
 		// Uses the fact that elem initially is the element ccw to v0 around this Node.
-		ArrayList VS = new ArrayList();
+		ArrayList<MyVector> VS = new ArrayList<MyVector>();
 		e = v0.edge;
 
 		start = elem;
@@ -363,10 +371,10 @@ public class Node extends Constants {
 	 * @param b1 First boundary edge
 	 * @param b2 Second boundary edge
 	 */
-	public ArrayList calcCCWSortedEdgeList(Edge b0, Edge b1) {
+	public ArrayList<Edge> calcCCWSortedEdgeList(Edge b0, Edge b1) {
 		MyVector v, v0, v1;
 		Edge e;
-		ArrayList vectors = new ArrayList();
+		ArrayList<MyVector> vectors = new ArrayList<MyVector>();
 
 		for (int i = 0; i < edgeList.size(); i++) {
 			e = (Edge) edgeList.get(i);
@@ -380,7 +388,7 @@ public class Node extends Constants {
 		// Initially put the two vectors of b0 and b1 in list.
 		// Select the most CW boundary edge to be first in list.
 
-		ArrayList VS = new ArrayList();
+		ArrayList<MyVector> VS = new ArrayList<MyVector>();
 		v0 = b0.getVector(this);
 		v0.edge = b0;
 		v1 = b1.getVector(this);
@@ -424,7 +432,7 @@ public class Node extends Constants {
 			}
 		}
 
-		ArrayList edges = new ArrayList(VS.size());
+		ArrayList<Edge> edges = new ArrayList<Edge>(VS.size());
 		for (int i = 0; i < VS.size(); i++) {
 			v = (MyVector) VS.get(i);
 			edges.add(v.edge);
@@ -535,13 +543,13 @@ public class Node extends Constants {
 	}
 
 	public int nrOfAdjElements() {
-		ArrayList list = adjElements();
+		ArrayList<Element> list = adjElements();
 		return list.size();
 	}
 
-	public ArrayList adjElements() {
+	public ArrayList<Element> adjElements() {
 		Edge e;
-		ArrayList list = new ArrayList();
+		ArrayList<Element> list = new ArrayList<Element>();
 
 		for (int i = 0; i < edgeList.size(); i++) {
 			e = (Edge) edgeList.get(i);
@@ -556,13 +564,13 @@ public class Node extends Constants {
 	}
 
 	public int nrOfAdjQuads() {
-		ArrayList list = adjQuads();
+		ArrayList<Element> list = adjQuads();
 		return list.size();
 	}
 
-	public ArrayList adjQuads() {
+	public ArrayList<Element> adjQuads() {
 		Edge e;
-		ArrayList list = new ArrayList();
+		ArrayList<Element> list = new ArrayList<Element>();
 
 		for (int i = 0; i < edgeList.size(); i++) {
 			e = (Edge) edgeList.get(i);
@@ -576,14 +584,14 @@ public class Node extends Constants {
 	}
 
 	public int nrOfAdjTriangles() {
-		ArrayList list = adjTriangles();
+		ArrayList<Element> list = adjTriangles();
 		return list.size();
 	}
 
 	// Hmm. Should I include fake quads as well?
-	public ArrayList adjTriangles() {
+	public ArrayList<Element> adjTriangles() {
 		Edge e;
-		ArrayList list = new ArrayList();
+		ArrayList<Element> list = new ArrayList<Element>();
 
 		for (int i = 0; i < edgeList.size(); i++) {
 			e = (Edge) edgeList.get(i);
@@ -752,7 +760,7 @@ public class Node extends Constants {
 		Node origin = new Node(0, 0);
 		Node n1, n2, n3, n4;
 		Quad q;
-		ArrayList adjQuads = adjQuads();
+		ArrayList<Element> adjQuads = adjQuads();
 
 		// Step 1, the isoparametric smooth:
 		Msg.debug("...step 1...");
@@ -978,7 +986,7 @@ public class Node extends Constants {
 	 * @return true if the movement of a node has caused any of it's adjacent
 	 *         elements to become inverted or get an area of size zero.
 	 */
-	public boolean invertedOrZeroAreaElements(ArrayList elements) {
+	public boolean invertedOrZeroAreaElements(ArrayList<?> elements) {
 		Element elem;
 
 		for (Object element : elements) {
@@ -1001,7 +1009,7 @@ public class Node extends Constants {
 	 *
 	 * @return true on success else false.
 	 */
-	public boolean incrAdjustUntilNotInvertedOrZeroArea(Node old, ArrayList elements) {
+	public boolean incrAdjustUntilNotInvertedOrZeroArea(Node old, ArrayList<?> elements) {
 		Msg.debug("Entering incrAdjustUntilNotInvertedOrZeroArea(..)");
 		Msg.debug("..this: " + descr());
 		Msg.debug("..old: " + old.descr());
@@ -1338,8 +1346,8 @@ public class Node extends Constants {
 		n.setXY(oldN);
 	}
 
-	public ArrayList frontEdgeList() {
-		ArrayList list = new ArrayList();
+	public ArrayList<Edge> frontEdgeList() {
+		ArrayList<Edge> list = new ArrayList<Edge>();
 		Edge e;
 		for (int i = 0; i < edgeList.size(); i++) {
 			e = (Edge) edgeList.get(i);

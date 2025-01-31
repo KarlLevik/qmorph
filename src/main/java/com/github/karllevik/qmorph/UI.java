@@ -1,5 +1,7 @@
 package com.github.karllevik.qmorph;
 
+import com.github.karllevik.qmorph.geom.Edge;
+
 /**
  * This class implements the command-line user interface. It reads and
  * interprets command line parameters, sets the corresponding globally available

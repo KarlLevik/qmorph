@@ -1,4 +1,6 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.geom;
+
+import com.github.karllevik.qmorph.Node;
 
 /** A very simple implementation of a dart. */
 public class Dart {

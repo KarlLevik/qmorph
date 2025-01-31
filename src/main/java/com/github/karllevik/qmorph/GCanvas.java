@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import com.github.karllevik.qmorph.geom.Edge;
+
 /**
  * The Canvas class which paints the background grid, the nodes, the edges etc.
  */

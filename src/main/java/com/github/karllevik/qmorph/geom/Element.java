@@ -1,4 +1,7 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.geom;
+
+import com.github.karllevik.qmorph.Constants;
+import com.github.karllevik.qmorph.Node;
 
 /**
  * This class declares methods and variables that are common to quads and
@@ -6,6 +9,20 @@ package com.github.karllevik.qmorph;
  */
 
 public abstract class Element extends Constants {
+	
+	/** An array of interior angles */
+	public double[] ang;
+	/** An array of edges */
+	public Edge[] edgeList;
+	/** Node used for determining inversion, amonst other things. */
+	public Node firstNode;
+	/**
+	 * Doubles to hold the cur. distortion metric & the metric after perturbation
+	 */
+	public double distortionMetric, newDistortionMetric;
+	/** Doubles to hold the gradient vector */
+	public double gX, gY;
+	
 	/** @return neighbor element sharing edge e */
 	public abstract Element neighbor(Edge e);
 
@@ -87,13 +104,6 @@ public abstract class Element extends Constants {
 	 */
 	public abstract void updateDistortionMetric();
 
-	/**
-	 * Doubles to hold the cur. distortion metric & the metric after perturbation
-	 */
-	double distortionMetric, newDistortionMetric;
-	/** Doubles to hold the gradient vector */
-	double gX, gY;
-
 	/** Return the length of the longest Edge. */
 	public abstract double longestEdgeLength();
 
@@ -125,11 +135,4 @@ public abstract class Element extends Constants {
 		double y2 = p2.y - o2.y;
 		return x1 * y2 - x2 * y1;
 	}
-
-	/** An array of interior angles */
-	public double[] ang;
-	/** An array of edges */
-	Edge[] edgeList;
-	/** Node used for determining inversion, amonst other things. */
-	Node firstNode;
 }

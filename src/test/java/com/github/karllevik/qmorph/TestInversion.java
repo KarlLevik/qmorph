@@ -1,5 +1,9 @@
 package com.github.karllevik.qmorph;
 
+import com.github.karllevik.qmorph.geom.Edge;
+import com.github.karllevik.qmorph.geom.Quad;
+import com.github.karllevik.qmorph.geom.Triangle;
+
 class TestInversion {
 
 	public static void main(String[] args) {

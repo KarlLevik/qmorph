@@ -19,6 +19,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import com.github.karllevik.qmorph.geom.Edge;
+import com.github.karllevik.qmorph.geom.Element;
+import com.github.karllevik.qmorph.geom.Quad;
+import com.github.karllevik.qmorph.geom.Triangle;
+
 /** This class implements the graphical user interface. */
 public class GUI extends Constants implements ActionListener, ItemListener {
 

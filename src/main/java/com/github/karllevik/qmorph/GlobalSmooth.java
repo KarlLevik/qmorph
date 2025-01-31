@@ -2,6 +2,11 @@ package com.github.karllevik.qmorph;
 
 import java.util.ArrayList;
 
+import com.github.karllevik.qmorph.geom.Edge;
+import com.github.karllevik.qmorph.geom.Element;
+import com.github.karllevik.qmorph.geom.MyVector;
+import com.github.karllevik.qmorph.geom.Triangle;
+
 // ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ----
 /**
  * This class is an implementation of the algorithm described in the paper "An

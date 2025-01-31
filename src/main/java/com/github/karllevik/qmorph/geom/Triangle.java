@@ -1,4 +1,7 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.geom;
+
+import com.github.karllevik.qmorph.Msg;
+import com.github.karllevik.qmorph.Node;
 
 /**
  * A class holding information for triangles, and with methods for the handling

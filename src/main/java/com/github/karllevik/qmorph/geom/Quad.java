@@ -1,6 +1,9 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.geom;
 
 import java.util.ArrayList;
+
+import com.github.karllevik.qmorph.Msg;
+import com.github.karllevik.qmorph.Node;
 
 /**
  * A class holding information for quadrilaterals, and with methods for the

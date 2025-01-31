@@ -1,4 +1,7 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.geom;
+
+import com.github.karllevik.qmorph.Msg;
+import com.github.karllevik.qmorph.Node;
 
 /**
  * This class holds information for lines, and has methods for dealing with
