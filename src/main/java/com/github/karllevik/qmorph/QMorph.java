@@ -376,11 +376,11 @@ public class QMorph extends GeomBasics {
 
 		// Get nr of fronts at the lowest level:
 		if (frontList2.size() > 0) {
-			cur = (Edge) frontList2.get(0);
+			cur = frontList2.get(0);
 			lowestLevel = cur.level;
 			count = 1;
 			for (int i = 1; i < frontList2.size(); i++) {
-				cur = (Edge) frontList2.get(i);
+				cur = frontList2.get(i);
 				if (cur.level < lowestLevel) {
 					lowestLevel = cur.level;
 					count = 1;
@@ -527,7 +527,6 @@ public class QMorph extends GeomBasics {
 		Msg.debug("Entering smoothFrontNode(..)...");
 		ArrayList<?> adjQuads = nK.adjQuads();
 		double tr, ld = 0;
-		Edge e;
 		Quad q;
 		Node newNode;
 		int n = 0, seqQuads = myQ.nrOfQuadsSharingAnEdgeAt(nK) + 1;
@@ -544,7 +543,7 @@ public class QMorph extends GeomBasics {
 
 		Edge eD = new Edge(nK, nJ);
 		if (nK.edgeList.contains(eD)) {
-			eD = (Edge) nK.edgeList.get(nK.edgeList.indexOf(eD));
+			eD = nK.edgeList.get(nK.edgeList.indexOf(eD));
 		}
 
 		if (seqQuads == 2) { // || nK.nrOfFrontEdges()> 2) {
@@ -563,8 +562,7 @@ public class QMorph extends GeomBasics {
 				// The mean of (some of) the other edges in all the adjacent elements
 				ld = 0;
 				// First add the lengths of edges from Triangles ahead of the front
-				for (Object element : nK.edgeList) {
-					e = (Edge) element;
+				for (Edge e : nK.edgeList) {
 					if (e != eD && e != front1 && e != front2) {
 						ld += e.length();
 						Msg.debug("from edge ahead of the front adding " + e.length());
@@ -729,7 +727,7 @@ public class QMorph extends GeomBasics {
 		Node n, nNew, nOld;
 		Edge e, fe1, fe2;
 		Node bottomLeft, bottomRight, bottomLeftNew, bottomRightNew, bottomLeftOld, bottomRightOld;
-		ArrayList<Node> adjNodes, adjNodesNew;
+		List<Node> adjNodes, adjNodesNew;
 
 		if (q.isFake) {
 
@@ -1131,7 +1129,7 @@ public class QMorph extends GeomBasics {
 
 		// Set new front neighbors when necessary:
 		for (int i = 0; i < needsNewFN.size(); i++) {
-			e = (Edge) needsNewFN.get(i);
+			e = needsNewFN.get(i);
 			if (e.frontEdge) {
 				if (e.setFrontNeighbors(frontList2)) {
 					if (e.hasFalseFrontNeighbor()) {
@@ -1150,7 +1148,7 @@ public class QMorph extends GeomBasics {
 		// if they need to have their frontNeighbor set again.
 		Edge l, r;
 		for (int i = 0; i < lostFNList.size(); i++) {
-			e = (Edge) lostFNList.get(i);
+			e = lostFNList.get(i);
 
 			Msg.debug("...Checking Edge " + e.descr() + " in lostFNList");
 			if (e.isFrontEdge() && e.hasFalseFrontNeighbor()) {
@@ -1167,10 +1165,9 @@ public class QMorph extends GeomBasics {
 		}
 
 		// Reclassify front edges when necessary:
-		for (Object element : needsReclassification) {
-			e = (Edge) element;
-			e.removeFromStateList();
-			e.classifyStateOfFrontEdge();
+		for (Edge edge : needsReclassification) {
+			edge.removeFromStateList();
+			edge.classifyStateOfFrontEdge();
 		}
 
 		Msg.debug("Leaving localFakeUpdateFronts()...");
@@ -1178,7 +1175,7 @@ public class QMorph extends GeomBasics {
 	}
 
 	// Do some neccessary updating of the fronts before localSmooth(..) is run
-	private void preSmoothUpdateFronts(Quad q, ArrayList<Edge> frontList) {
+	private void preSmoothUpdateFronts(Quad q, List<Edge> frontList) {
 		Msg.debug("Entering preSmoothUpdateFronts()...");
 		q.edgeList[top].setFrontNeighbors(frontList);
 		Msg.debug("Leaving preSmoothUpdateFronts()...");
@@ -1296,7 +1293,7 @@ public class QMorph extends GeomBasics {
 
 			// Set new front neighbors when necessary:
 			for (int i = 0; i < needsNewFN.size(); i++) {
-				e = (Edge) needsNewFN.get(i);
+				e = needsNewFN.get(i);
 				if (e.setFrontNeighbors(frontList2)) {
 					if (e.hasFalseFrontNeighbor()) {
 						Msg.debug("localUpdateFronts(..):copying e last (1st loop)");
@@ -1311,7 +1308,7 @@ public class QMorph extends GeomBasics {
 			// if they need to have their frontNeighbor set again.
 			Edge l, r;
 			for (int i = 0; i < lostFNList.size(); i++) {
-				e = (Edge) lostFNList.get(i);
+				e = lostFNList.get(i);
 
 				if (e.isFrontEdge() && e.hasFalseFrontNeighbor()) {
 					if (e.setFrontNeighbors(frontList2)) {
@@ -1327,7 +1324,7 @@ public class QMorph extends GeomBasics {
 
 			// Reclassify front edges when necessary:
 			for (int i = 0; i < needsReclassification.size(); i++) {
-				e = (Edge) needsReclassification.get(i);
+				e = needsReclassification.get(i);
 
 				if (needsNewFN.contains(e)) {
 					Msg.debug("e from needsNewFN");
@@ -1350,8 +1347,8 @@ public class QMorph extends GeomBasics {
 		}
 	}
 
-	private ArrayList<Edge> defineInitFronts(List<Edge> edgeList) {
-		ArrayList<Edge> frontList = new ArrayList<Edge>();
+	private List<Edge> defineInitFronts(List<Edge> edgeList) {
+		List<Edge> frontList = new ArrayList<Edge>();
 		for (Edge e : edgeList) {
 			if (e.hasElement(null)) {
 				e.promoteToFront(0, frontList);
@@ -1381,9 +1378,7 @@ public class QMorph extends GeomBasics {
 	}
 
 	private void classifyStateOfAllFronts(List<Edge> frontList2) {
-		Edge e;
-		for (Object element : frontList2) {
-			e = (Edge) element;
+		for (Edge e : frontList2) {
 			e.classifyStateOfFrontEdge();
 		}
 	}
@@ -2038,8 +2033,8 @@ public class QMorph extends GeomBasics {
 	private Edge[] makeSideEdges(Edge e) {
 		Msg.debug("Entering makeSideEdges(..)");
 		Edge[] sideEdges = new Edge[2];
-		ArrayList<Edge> altLSE;
-		ArrayList<Edge> altRSE;
+		List<Edge> altLSE;
+		List<Edge> altRSE;
 
 		int lState = 0, rState = 0;
 		if (e.leftSide) {
@@ -2065,7 +2060,7 @@ public class QMorph extends GeomBasics {
 			if (altRSE.size() > 1) {
 				sideEdges[1] = defineSideEdge(e, e.rightNode, sideEdges[0], null, altRSE);
 			} else {
-				sideEdges[1] = (Edge) altRSE.get(0);
+				sideEdges[1] = altRSE.get(0);
 			}
 			sideEdges[0].swappable = true;
 		} else if (lState == 0 && rState == 1) {
@@ -2075,7 +2070,7 @@ public class QMorph extends GeomBasics {
 			if (altLSE.size() > 1) {
 				sideEdges[0] = defineSideEdge(e, e.leftNode, null, sideEdges[1], altLSE);
 			} else {
-				sideEdges[0] = (Edge) altLSE.get(0);
+				sideEdges[0] = altLSE.get(0);
 			}
 			sideEdges[1].swappable = true;
 		} else if (lState == 0 && rState == 0) {
@@ -2083,7 +2078,7 @@ public class QMorph extends GeomBasics {
 			if (altLSE.size() > 1) {
 				sideEdges[0] = defineSideEdge(e, e.leftNode, null, null, altLSE);
 			} else {
-				sideEdges[0] = (Edge) altLSE.get(0);
+				sideEdges[0] = altLSE.get(0);
 			}
 
 			sideEdges[0].swappable = false;
@@ -2091,7 +2086,7 @@ public class QMorph extends GeomBasics {
 			if (altRSE.size() > 1) {
 				sideEdges[1] = defineSideEdge(e, e.rightNode, sideEdges[0], null, altRSE);
 			} else {
-				sideEdges[1] = (Edge) altRSE.get(0);
+				sideEdges[1] = altRSE.get(0);
 			}
 			sideEdges[0].swappable = true;
 		}
@@ -2164,12 +2159,12 @@ public class QMorph extends GeomBasics {
 	}
 
 	/** @return a list of potential side edges for this base edge at node n */
-	private ArrayList<Edge> getPotSideEdges(Edge baseEdge, Node n) {
+	private List<Edge> getPotSideEdges(Edge baseEdge, Node n) {
 		Edge cur;
-		ArrayList<Edge> list = new ArrayList<Edge>();
+		List<Edge> list = new ArrayList<Edge>();
 
 		for (int i = 0; i < n.edgeList.size(); i++) {
-			cur = (Edge) n.edgeList.get(i);
+			cur = n.edgeList.get(i);
 			if (cur != baseEdge && cur.bordersToTriangle()) {
 				list.add(cur);
 			}
@@ -2187,11 +2182,11 @@ public class QMorph extends GeomBasics {
 	/**
 	 * @param eF1  the base edge of the quad to be created
 	 * @param nK   the node at eF1 that the side edge will be connected to
-	 * @param list list of candidate edges from which we might select a side edge
+	 * @param altRSE list of candidate edges from which we might select a side edge
 	 * @return A side edge: a reused edge OR one created in a swap/split operation
 	 */
-	private Edge defineSideEdge(Edge eF1, Node nK, Edge leftSide, Edge rightSide, ArrayList<Edge> list) {
-		Edge current, selected = null, closest, eF2;
+	private Edge defineSideEdge(Edge eF1, Node nK, Edge leftSide, Edge rightSide, List<Edge> altRSE) {
+		Edge selected = null, closest, eF2;
 		Node noNode = null;
 		double curAng, selAng, closestAng;
 		Element curElement, curElement2;
@@ -2255,8 +2250,7 @@ public class QMorph extends GeomBasics {
 		if (!eF2.hasNode(noNode)) {
 			selected = eF2;
 		} else {
-			for (Object element : list) {
-				current = (Edge) element;
+			for (Edge current : altRSE) {
 				if (current != selected && current != eF2 && !current.hasNode(noNode)) {
 					selected = current;
 					break;
@@ -2276,8 +2270,7 @@ public class QMorph extends GeomBasics {
 			closest = selected;
 			closestAng = selAng;
 
-			for (Object element : list) {
-				current = (Edge) element;
+			for (Edge current : altRSE) {
 				if (current != selected && current != eF2) {
 					curAng = Math.abs(bisected - eF1.sumAngle(curElement, nK, current));
 
@@ -2531,7 +2524,7 @@ public class QMorph extends GeomBasics {
 		printEdgeList(nC.edgeList);
 
 		if (nC.edgeList.contains(S)) {
-			Edge edge = (Edge) nC.edgeList.get(nC.edgeList.indexOf(S));
+			Edge edge = nC.edgeList.get(nC.edgeList.indexOf(S));
 			Msg.debug("recoverEdge returns edge " + edge.descr() + " (shortcut)");
 			return edge;
 		}
@@ -2664,7 +2657,7 @@ public class QMorph extends GeomBasics {
 		} else if (intersectedEdges.size() == 1) {
 			// According to alg. 2 in Owen, intersectedEdges always contains at least
 			// one edge.
-			eI = (Edge) intersectedEdges.get(0);
+			eI = intersectedEdges.get(0);
 			if (eI.equals(S)) {
 				Msg.debug("Leaving recoverEdge: returns edge " + eI.descr());
 				return eI;
@@ -2686,7 +2679,7 @@ public class QMorph extends GeomBasics {
 		Edge qe1, qe2;
 
 		while (intersectedEdges.size() > 0) {
-			eI = (Edge) intersectedEdges.get(0);
+			eI = intersectedEdges.get(0);
 			Msg.debug("eI= " + eI.descr());
 
 			// We must avoid creating inverted or degenerate triangles.
@@ -2768,8 +2761,8 @@ public class QMorph extends GeomBasics {
 				// We have to give up
 				Msg.warning("Leaving recoverEdge: Cannot swap edge - non-convex quad.");
 
-				for (Object intersectedEdge : intersectedEdges) {
-					eI = (Edge) intersectedEdge;
+				for (Edge intersectedEdge : intersectedEdges) {
+					eI = intersectedEdge;
 					eI.swappable = true;
 				}
 				// Remove all triangles found in the removeList from triangleList:

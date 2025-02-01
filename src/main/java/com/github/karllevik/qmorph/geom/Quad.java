@@ -431,22 +431,21 @@ public class Quad extends Element {
 		Msg.debug("Entering Quad.closeQuad(..)");
 		Node nK = e1.commonNode(e2);
 		Node nKp1 = e1.otherNode(nK), nKm1 = e2.otherNode(nK), other;
-		Quad q;
 		boolean found = false;
 		Edge e, eI, eJ;
-		ArrayList addList = new ArrayList();
-		ArrayList quadList = new ArrayList();
+		List<Edge> addList = new ArrayList<>();
+		List<Quad> quadList = new ArrayList<>();
 
 		Msg.debug("...nKp1: " + nKp1.descr());
 		Msg.debug("...nKm1: " + nKm1.descr());
 
 		for (int i = 0; i < nKm1.edgeList.size(); i++) {
-			eI = (Edge) nKm1.edgeList.get(i);
+			eI = nKm1.edgeList.get(i);
 			other = eI.otherNode(nKm1);
 			Msg.debug("...eI== " + eI.descr());
 
 			for (int j = 0; j < nKp1.edgeList.size(); j++) {
-				eJ = (Edge) nKp1.edgeList.get(j);
+				eJ = nKp1.edgeList.get(j);
 
 				if (other == eJ.otherNode(nKp1)) {
 					found = true;
@@ -463,7 +462,7 @@ public class Quad extends Element {
 						eI.element1.replaceEdge(eI, eJ);
 						eJ.connectToElement(eI.element1);
 						if (eI.element1 instanceof Quad) { // Then LR might need updating
-							quadList.add(eI.element1); // but that must be done later
+							quadList.add((Quad) eI.element1); // but that must be done later
 						}
 					}
 					break;
@@ -490,12 +489,11 @@ public class Quad extends Element {
 		}
 
 		for (int i = 0; i < addList.size(); i++) {
-			e = (Edge) addList.get(i);
+			e = addList.get(i);
 			nKp1.edgeList.add(e);
 		}
 
-		for (Object element : quadList) {
-			q = (Quad) element;
+		for (Quad q : quadList) {
 			q.updateLR();
 		}
 
@@ -1431,8 +1429,8 @@ public class Quad extends Element {
 	}
 
 	/** @return a list of all triangles adjacent to this quad. */
-	public ArrayList getAdjTriangles() {
-		ArrayList triangleList;
+	public List<Triangle> getAdjTriangles() {
+		List<Triangle> triangleList;
 		Node uLNode = edgeList[left].otherNode(edgeList[base].leftNode);
 		Node uRNode = edgeList[right].otherNode(edgeList[base].rightNode);
 		Node bLNode = edgeList[base].leftNode;
@@ -1450,7 +1448,7 @@ public class Quad extends Element {
 
 			while (curElem != null && curEdge != edgeList[top]) {
 				if (curElem instanceof Triangle) {
-					triangleList.add(curElem);
+					triangleList.add((Triangle) curElem);
 				}
 				curEdge = curElem.neighborEdge(uLNode, curEdge);
 				curElem = curElem.neighbor(curEdge);
@@ -1462,7 +1460,7 @@ public class Quad extends Element {
 		curEdge = edgeList[top];
 		while (curElem != null && curEdge != edgeList[right]) {
 			if (curElem instanceof Triangle && !triangleList.contains(curElem)) {
-				triangleList.add(curElem);
+				triangleList.add((Triangle) curElem);
 			}
 			curEdge = curElem.neighborEdge(uRNode, curEdge);
 			curElem = curElem.neighbor(curEdge);
@@ -1474,8 +1472,8 @@ public class Quad extends Element {
 	}
 
 	/** @return a list of all nodes adjacent to this quad. */
-	public ArrayList getAdjNodes() {
-		ArrayList nodeList = new ArrayList();
+	public List<Node> getAdjNodes() {
+		List<Node> nodeList = new ArrayList<>();
 		Edge e;
 		Node n;
 		Node bLNode = edgeList[base].leftNode;
@@ -1485,14 +1483,14 @@ public class Quad extends Element {
 		int i;
 
 		for (i = 0; i < bLNode.edgeList.size(); i++) {
-			e = (Edge) bLNode.edgeList.get(i);
+			e = bLNode.edgeList.get(i);
 			if (e != edgeList[base] && e != edgeList[left] && e != edgeList[right] && e != edgeList[top]) {
 				nodeList.add(e.otherNode(bLNode));
 			}
 		}
 
 		for (i = 0; i < bRNode.edgeList.size(); i++) {
-			e = (Edge) bRNode.edgeList.get(i);
+			e = bRNode.edgeList.get(i);
 			if (e != edgeList[base] && e != edgeList[left] && e != edgeList[right] && e != edgeList[top]) {
 				n = e.otherNode(bRNode);
 				if (!nodeList.contains(n)) {
@@ -1502,7 +1500,7 @@ public class Quad extends Element {
 		}
 
 		for (i = 0; i < uLNode.edgeList.size(); i++) {
-			e = (Edge) uLNode.edgeList.get(i);
+			e = uLNode.edgeList.get(i);
 			if (e != edgeList[base] && e != edgeList[left] && e != edgeList[right] && e != edgeList[top]) {
 				n = e.otherNode(uLNode);
 				if (!nodeList.contains(n)) {
@@ -1514,7 +1512,7 @@ public class Quad extends Element {
 		if (!isFake) {
 			Node uRNode = edgeList[right].otherNode(bRNode);
 			for (i = 0; i < uRNode.edgeList.size(); i++) {
-				e = (Edge) uRNode.edgeList.get(i);
+				e = uRNode.edgeList.get(i);
 				if (e != edgeList[base] && e != edgeList[left] && e != edgeList[right] && e != edgeList[top]) {
 					n = e.otherNode(uRNode);
 					if (!nodeList.contains(n)) {
@@ -1564,9 +1562,7 @@ public class Quad extends Element {
 	 *         null if none exists.
 	 */
 	public Edge commonEdgeAt(Node n, Quad q) {
-		Edge e;
-		for (Object element : n.edgeList) {
-			e = (Edge) element;
+		for (Edge e : n.edgeList) {
 			if (hasEdge(e) && q.hasEdge(e)) {
 				return e;
 			}

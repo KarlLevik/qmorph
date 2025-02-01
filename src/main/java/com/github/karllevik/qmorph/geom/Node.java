@@ -3,6 +3,7 @@ package com.github.karllevik.qmorph.geom;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.github.karllevik.qmorph.Constants;
 import com.github.karllevik.qmorph.Msg;
@@ -580,21 +581,21 @@ public class Node extends Constants {
 	}
 
 	public int nrOfAdjTriangles() {
-		ArrayList<Element> list = adjTriangles();
+		List<Triangle> list = adjTriangles();
 		return list.size();
 	}
 
 	// Hmm. Should I include fake quads as well?
-	public ArrayList<Element> adjTriangles() {
+	public List<Triangle> adjTriangles() {
 		Edge e;
-		ArrayList<Element> list = new ArrayList<Element>();
+		List<Triangle> list = new ArrayList<>();
 
 		for (int i = 0; i < edgeList.size(); i++) {
 			e = (Edge) edgeList.get(i);
 			if (e.element1 instanceof Triangle && !list.contains(e.element1)) {
-				list.add(e.element1);
+				list.add((Triangle) e.element1);
 			} else if (e.element2 != null && e.element2 instanceof Triangle && !list.contains(e.element2)) {
-				list.add(e.element2);
+				list.add((Triangle) e.element2);
 			}
 		}
 		return list;
