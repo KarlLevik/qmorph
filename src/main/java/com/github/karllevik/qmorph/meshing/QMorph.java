@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.meshing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,7 @@ import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Ray;
 import com.github.karllevik.qmorph.geom.Triangle;
-import com.github.karllevik.qmorph.meshing.GlobalSmooth;
-import com.github.karllevik.qmorph.meshing.TopoCleanup;
+import com.github.karllevik.qmorph.viewer.Msg;
 
 // ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ----
 /**

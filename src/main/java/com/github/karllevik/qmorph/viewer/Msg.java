@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.viewer;
 
 import java.awt.Frame;
 

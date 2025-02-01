@@ -1,8 +1,11 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.viewer;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+
+import com.github.karllevik.qmorph.meshing.GeomBasics;
+import com.github.karllevik.qmorph.meshing.QMorph;
 
 /**
  * This is the executable class. It has methods for outputting version and help

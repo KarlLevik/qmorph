@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.meshing;
 
 import com.github.karllevik.qmorph.geom.Node;
 

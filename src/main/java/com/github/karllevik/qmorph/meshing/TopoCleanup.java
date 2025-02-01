@@ -3,14 +3,13 @@ package com.github.karllevik.qmorph.meshing;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.karllevik.qmorph.GeomBasics;
-import com.github.karllevik.qmorph.Msg;
 import com.github.karllevik.qmorph.geom.Dart;
 import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.Element;
 import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Triangle;
+import com.github.karllevik.qmorph.viewer.Msg;
 
 // ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ----
 /**

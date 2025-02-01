@@ -1,12 +1,14 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.meshing;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.MyVector;
 import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Triangle;
+import com.github.karllevik.qmorph.viewer.Msg;
 
 /**
  * This class offers methods for incrementally constructing Delaunay triangle
@@ -14,6 +16,10 @@ import com.github.karllevik.qmorph.geom.Triangle;
  */
 
 public class DelaunayMeshGen extends GeomBasics {
+	
+	private boolean inside = false;
+	private List<Node> irNodes = new ArrayList<>();
+	
 	public DelaunayMeshGen() {
 	}
 
@@ -32,8 +38,8 @@ public class DelaunayMeshGen extends GeomBasics {
 		// Perform the steps necessary before inserting the Nodes in incrDelaunay():
 		// Create the two initial Delaunay triangles from the four most extreme Nodes.
 
-		triangleList = new ArrayList();
-		edgeList = new ArrayList();
+		triangleList = new ArrayList<Triangle>();
+		edgeList = new ArrayList<Edge>();
 		findExtremeNodes();
 
 		Msg.debug("uppermost= " + uppermost.descr());
@@ -476,9 +482,6 @@ public class DelaunayMeshGen extends GeomBasics {
 		}
 	}
 
-	private boolean inside = false;
-	private ArrayList irNodes = new ArrayList();
-
 	/**
 	 * Insert a interior/ exterior Node and update mesh to remain Delaunay
 	 * compliant.
@@ -488,7 +491,7 @@ public class DelaunayMeshGen extends GeomBasics {
 		Object o;
 		Edge e, e1 = null, e2, e3, e4 = null, e12, e22 = null, e32, e42 = null, eOld, b0 = null, b1 = null;
 		Node node, nNode, pNode, other, other2, n0, n1;
-		ArrayList boundaryEdges = new ArrayList();
+		List<Edge> boundaryEdges = new ArrayList<>();
 		int i, j;
 		boolean loop = true;
 
@@ -555,7 +558,7 @@ public class DelaunayMeshGen extends GeomBasics {
 			// Also create the list of nodes in the influence region
 			// makeDelaunayTriangle does the job.
 			for (i = 0; i < boundaryEdges.size(); i++) {
-				e = (Edge) boundaryEdges.get(i);
+				e = boundaryEdges.get(i);
 				t = e.getTriangleElement();
 				if (t != null) { // (The triangle may have been deleted already)
 					makeDelaunayTriangle(t, e, n);
@@ -588,14 +591,14 @@ public class DelaunayMeshGen extends GeomBasics {
 			// Create each triangle
 			printEdgeList(n.edgeList);
 			for (i = 0; i < n.edgeList.size() - 1; i++) {
-				e1 = (Edge) n.edgeList.get(i);
-				e2 = (Edge) n.edgeList.get(i + 1);
+				e1 = n.edgeList.get(i);
+				e2 = n.edgeList.get(i + 1);
 				other = e1.otherNode(n);
 				other2 = e2.otherNode(n);
 				e = new Edge(other, other2);
 				j = other.edgeList.indexOf(e);
 				if (j != -1) {
-					e = (Edge) other.edgeList.get(j);
+					e = other.edgeList.get(j);
 				} else {
 					e.connectNodes();
 					edgeList.add(e);

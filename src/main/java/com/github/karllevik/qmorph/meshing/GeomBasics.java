@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.meshing;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,8 +15,7 @@ import com.github.karllevik.qmorph.geom.MyVector;
 import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Triangle;
-import com.github.karllevik.qmorph.meshing.GlobalSmooth;
-import com.github.karllevik.qmorph.meshing.TopoCleanup;
+import com.github.karllevik.qmorph.viewer.Msg;
 
 /**
  * This is a basic geometry class with methods for reading and writing meshes,
@@ -30,15 +29,15 @@ public class GeomBasics extends Constants {
 	public static List<Node> nodeList;
 	public static List<Edge> edgeList;
 
-	protected static Node leftmost = null, rightmost = null, uppermost = null, lowermost = null;
+	public static Node leftmost = null, rightmost = null, uppermost = null, lowermost = null;
 
-	protected static boolean step = false;
+	public static boolean step = false;
 
-	protected static TopoCleanup topoCleanup;
-	protected static GlobalSmooth globalSmooth;
+	public static TopoCleanup topoCleanup;
+	public static GlobalSmooth globalSmooth;
 
-	static String meshFilename;
-	static String meshDirectory = ".";
+	public static String meshFilename;
+	public static String meshDirectory = ".";
 	static boolean meshLenOpt;
 	static boolean meshAngOpt;
 

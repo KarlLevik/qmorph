@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.viewer;
 
 import java.awt.Button;
 import java.awt.Color;
@@ -13,15 +13,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-/** A class which opens an "mesh metrics report" dialog window. */
+/** A class which opens an "about" dialog window. */
 
-public class ReportDialog extends Dialog implements ItemListener {
+public class AboutDialog extends Dialog implements ItemListener {
 	Button ok;
 	TextArea textArea;
+	String text = "" + "                           -=<#[ MeshDitor ]#>=-\n" + "\n" + "             The Q-Morph algorithm was developed by\n"
+			+ "    Steven J. Owen, Mathew L. Staten, Scott A. Canann, and Sunil Saigal.\n" + "\n" + "             The Clean-Up algorithm was developed by\n"
+			+ "                Paul Kinney of Ford Motor Company.\n" + "\n" + "          The global smoothing algorithm was developed by\n"
+			+ "     Scott A. Canann, Joseph R. Tristano, and Matthew L. Staten.\n" + "\n"
+			+ "    This implementation is based on these algorithms as outlined in the\n"
+			+ "    corresponding papers. It was developed as a part of my thesis for\n"
+			+ "    the siv.ing. degree at Dept. of Informatics, Univ. of Oslo, Norway.\n" + "\n" + "            Karl Erik Levik <karll@ifi.uio.no>\n";
 	GridBagLayout gridbag;
 
-	public ReportDialog(Frame f, String text) {
-		super(f, "Mesh Metrics Report", true);
+	public AboutDialog(Frame f) {
+		super(f, "About MeshDitor", true);
 
 		gridbag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();

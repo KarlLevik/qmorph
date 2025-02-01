@@ -1,6 +1,6 @@
 package com.github.karllevik.qmorph.geom;
 
-import com.github.karllevik.qmorph.Msg;
+import com.github.karllevik.qmorph.viewer.Msg;
 
 /**
  * This class holds information for rays, and has methods for dealing with

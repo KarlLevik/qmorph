@@ -4,6 +4,7 @@ import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Triangle;
+import com.github.karllevik.qmorph.viewer.Msg;
 
 class TestInversion {
 

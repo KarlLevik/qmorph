@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.karllevik.qmorph.Constants;
-import com.github.karllevik.qmorph.Msg;
+import com.github.karllevik.qmorph.meshing.Constants;
+import com.github.karllevik.qmorph.viewer.Msg;
 
 /**
  * This class holds information for edges, and has methods for handling issues

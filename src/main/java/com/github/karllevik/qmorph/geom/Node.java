@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.karllevik.qmorph.Constants;
-import com.github.karllevik.qmorph.Msg;
+import com.github.karllevik.qmorph.meshing.Constants;
+import com.github.karllevik.qmorph.viewer.Msg;
 
 /**
  * This class holds information for nodes, and has methods for the management of

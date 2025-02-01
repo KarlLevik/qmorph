@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.viewer;
 
 /**
  * Unfinished class for creating the icon to display whenever the application is

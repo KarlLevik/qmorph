@@ -7,8 +7,8 @@ import Msg;
 */
 import java.math.BigDecimal;
 
-import com.github.karllevik.qmorph.Constants;
-import com.github.karllevik.qmorph.Msg;
+import com.github.karllevik.qmorph.meshing.Constants;
+import com.github.karllevik.qmorph.viewer.Msg;
 
 /**
  * This class holds information for vectors, and has methods for dealing with

@@ -3,7 +3,7 @@ package com.github.karllevik.qmorph.geom;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.karllevik.qmorph.Msg;
+import com.github.karllevik.qmorph.viewer.Msg;
 
 /**
  * A class holding information for quadrilaterals, and with methods for the

@@ -1,6 +1,6 @@
 package com.github.karllevik.qmorph.geom;
 
-import com.github.karllevik.qmorph.Constants;
+import com.github.karllevik.qmorph.meshing.Constants;
 
 /**
  * This class declares methods and variables that are common to quads and

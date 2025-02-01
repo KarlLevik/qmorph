@@ -1,6 +1,8 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.viewer;
 
 import com.github.karllevik.qmorph.geom.Edge;
+import com.github.karllevik.qmorph.meshing.GeomBasics;
+import com.github.karllevik.qmorph.meshing.QMorph;
 
 /**
  * This class implements the command-line user interface. It reads and

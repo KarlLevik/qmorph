@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.viewer;
 
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
+import com.github.karllevik.qmorph.meshing.GeomBasics;
 
 /**
  * The Panel class with step button, zoom menu, and axis and grid toggle buttons

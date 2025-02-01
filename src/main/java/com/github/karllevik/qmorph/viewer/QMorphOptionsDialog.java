@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.viewer;
 
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
+import com.github.karllevik.qmorph.meshing.Constants;
 
 /**
  * A class for an options dialog for supplying parameters to the Q-Morph

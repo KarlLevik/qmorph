@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.viewer;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.Node;
+import com.github.karllevik.qmorph.meshing.GeomBasics;
 
 /**
  * The Canvas class which paints the background grid, the nodes, the edges etc.

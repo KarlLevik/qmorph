@@ -1,4 +1,4 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.viewer;
 
 import java.awt.CheckboxMenuItem;
 import java.awt.Color;
@@ -24,7 +24,11 @@ import com.github.karllevik.qmorph.geom.Element;
 import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Triangle;
+import com.github.karllevik.qmorph.meshing.Constants;
+import com.github.karllevik.qmorph.meshing.DelaunayMeshGen;
+import com.github.karllevik.qmorph.meshing.GeomBasics;
 import com.github.karllevik.qmorph.meshing.GlobalSmooth;
+import com.github.karllevik.qmorph.meshing.QMorph;
 import com.github.karllevik.qmorph.meshing.TopoCleanup;
 
 /** This class implements the graphical user interface. */
