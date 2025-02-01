@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Triangle;
 import com.github.karllevik.qmorph.meshing.GeomBasics;
+import com.github.karllevik.qmorph.meshing.MeshLoader;
 import com.github.karllevik.qmorph.meshing.QMorph;
 
 class TestMeshing {
@@ -45,8 +46,11 @@ class TestMeshing {
 	void testComplex() {
 		GeomBasics.meshDirectory = "src/test/resources/";
 		GeomBasics.meshFilename = "difficult.mesh";
-
-		List<Triangle> triangles = GeomBasics.loadTriangleMesh();
+		
+		List<Triangle> triangles = MeshLoader.loadTriangleMesh("src/test/resources/", "difficult.mesh");
+		GeomBasics.edgeList = MeshLoader.edgeList;
+		GeomBasics.nodeList = MeshLoader.nodeList;
+		GeomBasics.triangleList = MeshLoader.triangleList;
 
 		assertEquals(206, GeomBasics.triangleList.size());
 		assertEquals(206, triangles.size());

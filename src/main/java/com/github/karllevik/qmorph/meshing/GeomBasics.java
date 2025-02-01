@@ -580,7 +580,6 @@ public class GeomBasics extends Constants {
 			fis = new FileInputStream(meshDirectory + meshFilename);
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 			double x1, x2, x3, y1, y2, y3, len1 = 0, len2 = 0, len3 = 0, ang1 = 0, ang2 = 0, ang3 = 0;
-			int i = 0;
 
 			try {
 				String inputLine;
