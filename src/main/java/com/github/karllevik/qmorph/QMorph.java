@@ -31,7 +31,7 @@ public class QMorph extends GeomBasics {
 	public QMorph() {
 	}
 
-	private ArrayList<Edge> frontList;
+	private List<Edge> frontList;
 	private boolean finished = false;
 	private int level = 0;
 	private int nrOfFronts = 0;
@@ -196,7 +196,7 @@ public class QMorph extends GeomBasics {
 	}
 
 	/** @return the frontList, that is, the list of front edges */
-	public ArrayList<Edge> getFrontList() {
+	public List<Edge> getFrontList() {
 		return frontList;
 	}
 
@@ -368,19 +368,19 @@ public class QMorph extends GeomBasics {
 	}
 
 	/** Returns the number of front edges at the currently lowest level loop(s). */
-	private int countNOFrontsAtCurLowestLevel(ArrayList<Edge> frontList) {
+	private int countNOFrontsAtCurLowestLevel(List<Edge> frontList2) {
 		Msg.debug("Entering countNOFrontsAtCurLowestLevel(..)");
 
 		Edge cur;
 		int lowestLevel, count = 0;
 
 		// Get nr of fronts at the lowest level:
-		if (frontList.size() > 0) {
-			cur = (Edge) frontList.get(0);
+		if (frontList2.size() > 0) {
+			cur = (Edge) frontList2.get(0);
 			lowestLevel = cur.level;
 			count = 1;
-			for (int i = 1; i < frontList.size(); i++) {
-				cur = (Edge) frontList.get(i);
+			for (int i = 1; i < frontList2.size(); i++) {
+				cur = (Edge) frontList2.get(i);
 				if (cur.level < lowestLevel) {
 					lowestLevel = cur.level;
 					count = 1;
@@ -723,7 +723,7 @@ public class QMorph extends GeomBasics {
 	 * Smooth as explained in Owen's paper Each node in the newly formed quad is
 	 * smoothed. So is every node directly connected to these.
 	 */
-	private void localSmooth(Quad q, ArrayList<Edge> frontList) {
+	private void localSmooth(Quad q, List<Edge> frontList2) {
 		Msg.debug("Entering localSmooth(..)");
 		Quad tempQ1, tempQ2;
 		Node n, nNew, nOld;
@@ -1055,14 +1055,14 @@ public class QMorph extends GeomBasics {
 	}
 
 	/** Updates fronts in fake quads (which are triangles, really) */
-	private int localFakeUpdateFronts(Quad q, int lowestLevel, ArrayList<Edge> frontList) {
+	private int localFakeUpdateFronts(Quad q, int lowestLevel, List<Edge> frontList2) {
 		Msg.debug("Entering localFakeUpdateFronts()...");
 		int curLevelEdgesRemoved = 0;
 		Edge e;
 		Element neighbor;
-		ArrayList<Edge> needsNewFN = new ArrayList<Edge>();
-		ArrayList<Edge> lostFNList = new ArrayList<Edge>();
-		ArrayList<Edge> needsReclassification = new ArrayList<Edge>();
+		List<Edge> needsNewFN = new ArrayList<Edge>();
+		List<Edge> lostFNList = new ArrayList<Edge>();
+		List<Edge> needsReclassification = new ArrayList<Edge>();
 
 		Msg.debug("...State of the stateLists before updateFake..:");
 		Edge.printStateLists();
@@ -1070,11 +1070,11 @@ public class QMorph extends GeomBasics {
 		// Decide whether the base edge belongs in the frontlist, and act accordingly
 		e = q.edgeList[base];
 		if (!e.frontEdge && e.isFrontEdge()) {
-			e.promoteToFront(q.edgeList[base].level + 1, frontList);
+			e.promoteToFront(q.edgeList[base].level + 1, frontList2);
 			needsNewFN.add(e);
 		} else if (e.frontEdge && !e.isFrontEdge()) {
 			Msg.debug("...removing base edge");
-			if (e.removeFromFront(frontList) && e.level == lowestLevel) {
+			if (e.removeFromFront(frontList2) && e.level == lowestLevel) {
 				curLevelEdgesRemoved++;
 			}
 			e.removeFromStateList();
@@ -1089,11 +1089,11 @@ public class QMorph extends GeomBasics {
 		// Decide whether the left edge belongs in the frontlist, and act accordingly
 		e = q.edgeList[left];
 		if (!e.frontEdge && e.isFrontEdge()) {
-			e.promoteToFront(q.edgeList[base].level + 1, frontList);
+			e.promoteToFront(q.edgeList[base].level + 1, frontList2);
 			needsNewFN.add(e);
 		} else if (e.frontEdge && !e.isFrontEdge()) {
 			Msg.debug("...removing left edge");
-			if (e.removeFromFront(frontList) && e.level == lowestLevel) {
+			if (e.removeFromFront(frontList2) && e.level == lowestLevel) {
 				curLevelEdgesRemoved++;
 			}
 			e.removeFromStateList();
@@ -1111,11 +1111,11 @@ public class QMorph extends GeomBasics {
 		// Decide whether the right edge belongs in the frontlist, and act accordingly
 		e = q.edgeList[right];
 		if (!e.frontEdge && e.isFrontEdge()) {
-			e.promoteToFront(q.edgeList[base].level + 1, frontList);
+			e.promoteToFront(q.edgeList[base].level + 1, frontList2);
 			needsNewFN.add(e);
 		} else if (e.frontEdge && !e.isFrontEdge()) {
 			Msg.debug("...removing right edge: " + e.descr());
-			if (e.removeFromFront(frontList) && e.level == lowestLevel) {
+			if (e.removeFromFront(frontList2) && e.level == lowestLevel) {
 				curLevelEdgesRemoved++;
 			}
 			Msg.debug("...removeFromStateList(..) returns " + e.removeFromStateList());
@@ -1133,7 +1133,7 @@ public class QMorph extends GeomBasics {
 		for (int i = 0; i < needsNewFN.size(); i++) {
 			e = (Edge) needsNewFN.get(i);
 			if (e.frontEdge) {
-				if (e.setFrontNeighbors(frontList)) {
+				if (e.setFrontNeighbors(frontList2)) {
 					if (e.hasFalseFrontNeighbor()) {
 						Msg.debug("...copying e last (1st loop)");
 						needsNewFN.add(e);
@@ -1155,7 +1155,7 @@ public class QMorph extends GeomBasics {
 			Msg.debug("...Checking Edge " + e.descr() + " in lostFNList");
 			if (e.isFrontEdge() && e.hasFalseFrontNeighbor()) {
 				Msg.debug("...Edge " + e.descr() + " has a false frontNeighbor, correcting");
-				if (e.setFrontNeighbors(frontList)) {
+				if (e.setFrontNeighbors(frontList2)) {
 					if (e.hasFalseFrontNeighbor()) {
 						Msg.debug("...copying e last");
 						lostFNList.add(e);
@@ -1190,9 +1190,9 @@ public class QMorph extends GeomBasics {
 	 *
 	 * @return nr of edges removed that belonged to the currently lowest level.
 	 */
-	private int localUpdateFronts(Quad q, int lowestLevel, ArrayList<Edge> frontList) {
+	private int localUpdateFronts(Quad q, int lowestLevel, List<Edge> frontList2) {
 		if (q.isFake) {
-			return localFakeUpdateFronts(q, lowestLevel, frontList);
+			return localFakeUpdateFronts(q, lowestLevel, frontList2);
 		} else {
 			Msg.debug("Entering localUpdateFronts()...");
 			int curLevelEdgesRemoved = 0;
@@ -1209,7 +1209,7 @@ public class QMorph extends GeomBasics {
 			Msg.debug("localUpdateFronts(..): base edge " + e.descr());
 			if (e.frontEdge && !e.isFrontEdge()) {
 				Msg.debug("...removing from front");
-				if (e.removeFromFront(frontList) && e.level == lowestLevel) {
+				if (e.removeFromFront(frontList2) && e.level == lowestLevel) {
 					curLevelEdgesRemoved++;
 				}
 				e.removeFromStateList();
@@ -1229,11 +1229,11 @@ public class QMorph extends GeomBasics {
 			}
 			if (!e.frontEdge && e.isFrontEdge()) {
 				Msg.debug("...promoting to front edge");
-				e.promoteToFront(q.edgeList[base].level + 1, frontList);
+				e.promoteToFront(q.edgeList[base].level + 1, frontList2);
 				needsNewFN.add(e);
 			} else if (e.frontEdge && !e.isFrontEdge()) {
 				Msg.debug("...removing from front");
-				if (e.removeFromFront(frontList) && e.level == lowestLevel) {
+				if (e.removeFromFront(frontList2) && e.level == lowestLevel) {
 					curLevelEdgesRemoved++;
 				}
 				e.removeFromStateList();
@@ -1253,11 +1253,11 @@ public class QMorph extends GeomBasics {
 			}
 			if (!e.frontEdge && e.isFrontEdge()) {
 				Msg.debug("...promoting to front edge");
-				e.promoteToFront(q.edgeList[base].level + 1, frontList);
+				e.promoteToFront(q.edgeList[base].level + 1, frontList2);
 				needsNewFN.add(e);
 			} else if (e.frontEdge && !e.isFrontEdge()) {
 				Msg.debug("...removing from front");
-				if (e.removeFromFront(frontList) && e.level == lowestLevel) {
+				if (e.removeFromFront(frontList2) && e.level == lowestLevel) {
 					curLevelEdgesRemoved++;
 				}
 				e.removeFromStateList();
@@ -1278,11 +1278,11 @@ public class QMorph extends GeomBasics {
 
 			if (!e.frontEdge && e.isFrontEdge()) {
 				Msg.debug("...promoting to front edge");
-				e.promoteToFront(q.edgeList[base].level + 1, frontList);
+				e.promoteToFront(q.edgeList[base].level + 1, frontList2);
 				needsNewFN.add(e);
 			} else if (e.frontEdge && !e.isFrontEdge()) {
 				Msg.debug("...removing from front");
-				if (e.removeFromFront(frontList) && e.level == lowestLevel) {
+				if (e.removeFromFront(frontList2) && e.level == lowestLevel) {
 					curLevelEdgesRemoved++;
 				}
 				e.removeFromStateList();
@@ -1297,7 +1297,7 @@ public class QMorph extends GeomBasics {
 			// Set new front neighbors when necessary:
 			for (int i = 0; i < needsNewFN.size(); i++) {
 				e = (Edge) needsNewFN.get(i);
-				if (e.setFrontNeighbors(frontList)) {
+				if (e.setFrontNeighbors(frontList2)) {
 					if (e.hasFalseFrontNeighbor()) {
 						Msg.debug("localUpdateFronts(..):copying e last (1st loop)");
 						needsNewFN.add(e);
@@ -1314,7 +1314,7 @@ public class QMorph extends GeomBasics {
 				e = (Edge) lostFNList.get(i);
 
 				if (e.isFrontEdge() && e.hasFalseFrontNeighbor()) {
-					if (e.setFrontNeighbors(frontList)) {
+					if (e.setFrontNeighbors(frontList2)) {
 						if (e.hasFalseFrontNeighbor()) {
 							Msg.debug("localUpdateFronts(..): copying e last");
 							lostFNList.add(e);
@@ -1352,23 +1352,19 @@ public class QMorph extends GeomBasics {
 
 	private ArrayList<Edge> defineInitFronts(List<Edge> edgeList) {
 		ArrayList<Edge> frontList = new ArrayList<Edge>();
-		Edge e, leftEdge, rightEdge;
-		for (Edge element : edgeList) {
-			e = element;
+		for (Edge e : edgeList) {
 			if (e.hasElement(null)) {
 				e.promoteToFront(0, frontList);
 				e.swappable = false;
 			}
 		}
 
-		for (Object element : frontList) {
-			e = (Edge) element;
+		for (Edge e : frontList) {
 			e.setFrontNeighbors(frontList);
 		}
 
 		// for safety...
-		for (Object element : frontList) {
-			e = (Edge) element;
+		for (Edge e: frontList) {
 			if (e.leftFrontNeighbor == null) {
 				Msg.warning("e.leftFrontNeighbor is null.");
 			} else if (e.leftFrontNeighbor == e) {
@@ -1384,9 +1380,9 @@ public class QMorph extends GeomBasics {
 		return frontList;
 	}
 
-	private void classifyStateOfAllFronts(ArrayList<Edge> frontList) {
+	private void classifyStateOfAllFronts(List<Edge> frontList2) {
 		Edge e;
-		for (Object element : frontList) {
+		for (Object element : frontList2) {
 			e = (Edge) element;
 			e.classifyStateOfFrontEdge();
 		}
@@ -1904,7 +1900,7 @@ public class QMorph extends GeomBasics {
 
 		eF.leftSide = true; // Edge eF is classified as a state 1-1 edge, regardless..
 		eF.rightSide = true;
-		Edge.stateList[2].add(eF);
+		Edge.stateList.get(0).add(eF);
 
 		eMidKm1.classifyStateOfFrontEdge();
 		eFL.classifyStateOfFrontEdge();

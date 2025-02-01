@@ -48,8 +48,8 @@ public class TopoCleanup extends GeomBasics {
 	/** A dart used when traversing the mesh in cleanup operations. */
 	private Dart d;
 	int count = 0;
-	ArrayList deleteList;
-	ArrayList<Node> nodes;
+	List<Element> deleteList;
+	List<Node> nodes;
 
 	/** Initialize the object */
 	public void init() {
@@ -220,7 +220,7 @@ public class TopoCleanup extends GeomBasics {
 		int i, j;
 
 		while (count < elementList.size()) {
-			elem = (Element) elementList.get(count);
+			elem = elementList.get(count);
 
 			if (elem == null || !(elem instanceof Quad)) {
 				count++;
@@ -244,7 +244,7 @@ public class TopoCleanup extends GeomBasics {
 		}
 
 		for (i = 0; i < deleteList.size(); i++) {
-			elem = (Element) deleteList.get(i);
+			elem = deleteList.get(i);
 			elementList.remove(elementList.indexOf(elem));
 		}
 		deleteList.clear();
@@ -1561,7 +1561,7 @@ public class TopoCleanup extends GeomBasics {
 		}
 
 		for (i = 0; i < deleteList.size(); i++) {
-			elem = (Element) deleteList.get(i);
+			elem = deleteList.get(i);
 			elementList.remove(elementList.indexOf(elem));
 		}
 		deleteList.clear();

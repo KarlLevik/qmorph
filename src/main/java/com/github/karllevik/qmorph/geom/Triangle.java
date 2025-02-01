@@ -6,22 +6,10 @@ import com.github.karllevik.qmorph.Msg;
  * A class holding information for triangles, and with methods for the handling
  * of issues regarding triangles.
  */
-
 public class Triangle extends Element {
-	
+
 	/**
 	 * Creates a triangle (vertices are orientated CCW).
-	 * @param edge1
-	 * @param edge2
-	 * @param edge3
-	 * @param len1
-	 * @param len2
-	 * @param len3
-	 * @param ang1
-	 * @param ang2
-	 * @param ang3
-	 * @param lengthsOpt
-	 * @param anglesOpt
 	 */
 	public Triangle(Edge edge1, Edge edge2, Edge edge3, double len1, double len2, double len3, double ang1, double ang2, double ang3, boolean lengthsOpt,
 			boolean anglesOpt) {
@@ -63,6 +51,9 @@ public class Triangle extends Element {
 		}
 	}
 
+	/**
+	 * Creates a triangle (vertices are orientated CCW).
+	 */
 	public Triangle(Edge edge1, Edge edge2, Edge edge3) {
 		edgeList = new Edge[3];
 
@@ -619,7 +610,6 @@ public class Triangle extends Element {
 	@Override
 	public boolean inverted() {
 		Node a, b, c;
-		MyVector ac, bc;
 		a = firstNode;
 		b = edgeList[0].otherNode(a);
 		c = edgeList[1].rightNode;
@@ -639,7 +629,6 @@ public class Triangle extends Element {
 	@Override
 	public boolean invertedOrZeroArea() {
 		Node a, b, c;
-		MyVector ac, bc;
 		a = firstNode;
 		b = edgeList[0].otherNode(a);
 		c = edgeList[1].rightNode;
@@ -658,7 +647,6 @@ public class Triangle extends Element {
 	// Return true if the triangle area is zero.
 	public boolean zeroArea() {
 		Node a, b, c;
-		MyVector ac, bc;
 		a = firstNode;
 		b = edgeList[0].otherNode(a);
 		c = edgeList[1].rightNode;
@@ -822,7 +810,7 @@ public class Triangle extends Element {
 		}
 
 	}
-	
+
 	@Override
 	public String toString() {
 		return descr();

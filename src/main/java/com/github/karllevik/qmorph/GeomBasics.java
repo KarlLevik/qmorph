@@ -577,7 +577,7 @@ public class GeomBasics extends Constants {
 
 		triangleList = new ArrayList<Triangle>();
 		edgeList = new ArrayList<Edge>();
-		ArrayList<Node> usNodeList = new ArrayList<Node>();
+		List<Node> usNodeList = new ArrayList<Node>();
 
 		try {
 			fis = new FileInputStream(meshDirectory + meshFilename);
@@ -654,7 +654,6 @@ public class GeomBasics extends Constants {
 						ang2 = nextDouble(inputLine);
 						ang3 = nextDouble(inputLine);
 					}
-
 					t = new Triangle(edge1, edge2, edge3, len1, len2, len3, ang1, ang2, ang3, meshLenOpt, meshAngOpt);
 					t.connectEdges();
 					triangleList.add(t);
@@ -1058,8 +1057,8 @@ public class GeomBasics extends Constants {
 	}
 
 	/** Sort nodes left to right. Higher y-values are preferred to lower ones. */
-	public static List<Node> sortNodes(ArrayList<Node> unsortedNodes) {
-		ArrayList<Node> sortedNodes = new ArrayList<Node>();
+	public static List<Node> sortNodes(List<Node> unsortedNodes) {
+		List<Node> sortedNodes = new ArrayList<Node>();
 		Node curNode, candNode;
 		while (unsortedNodes.size() > 0) {
 			curNode = (Node) unsortedNodes.get(0);
@@ -1116,11 +1115,9 @@ public class GeomBasics extends Constants {
 		return Double.valueOf(ndouble).doubleValue();
 	}
 
-	public static void printVectors(ArrayList<?> vectorList) {
+	public static void printVectors(List<MyVector> vectorList) {
 		if (Msg.debugMode) {
-			MyVector v;
-			for (Object element : vectorList) {
-				v = (MyVector) element;
+			for (MyVector v : vectorList) {
 				v.printMe();
 			}
 		}

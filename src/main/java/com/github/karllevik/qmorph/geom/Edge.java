@@ -19,7 +19,7 @@ public class Edge extends Constants {
 	public Edge leftFrontNeighbor, rightFrontNeighbor;
 	public int level;
 	
-	public static ArrayList[] stateList = new ArrayList[3];
+	public static List<List<Edge>> stateList = new ArrayList<>(3);
 
 	public boolean frontEdge = false;
 	public boolean swappable = true;
@@ -68,9 +68,9 @@ public class Edge extends Constants {
 	}
 
 	public static void clearStateList() {
-		stateList[0] = new ArrayList<>();
-		stateList[1] = new ArrayList<>();
-		stateList[2] = new ArrayList<>();
+		stateList.add(new ArrayList<>());
+		stateList.add(new ArrayList<>());
+		stateList.add(new ArrayList<>());
 	}
 
 	// Removes an Edge from the stateLists
@@ -78,11 +78,11 @@ public class Edge extends Constants {
 	public boolean removeFromStateList() {
 		int i;
 		int state = getState();
-		i = stateList[state].indexOf(this);
+		i = stateList.get(state).indexOf(this);
 		if (i == -1) {
 			return false;
 		}
-		stateList[state].remove(i);
+		stateList.get(state).remove(i);
 		return true;
 	}
 
@@ -90,11 +90,11 @@ public class Edge extends Constants {
 	// Returns true if the Edge was successfully removed, else false.
 	public boolean removeFromStateList(int state) {
 		int i;
-		i = stateList[state].indexOf(this);
+		i = stateList.get(state).indexOf(this);
 		if (i == -1) {
 			return false;
 		}
-		stateList[state].remove(i);
+		stateList.get(state).remove(i);
 		return true;
 	}
 
@@ -115,30 +115,30 @@ public class Edge extends Constants {
 
 	public boolean alterLeftState(boolean newLeftState) {
 		int state = getState();
-		int i = stateList[state].indexOf(this);
+		int i = stateList.get(state).indexOf(this);
 		if (i == -1) {
 			return false;
 		}
 		leftSide = newLeftState;
 		int newState = getState();
 		if (state != newState) {
-			stateList[state].remove(i);
-			stateList[newState].add(this);
+			stateList.get(state).remove(i);
+			stateList.get(newState).add(this);
 		}
 		return true;
 	}
 
 	public boolean alterRightState(boolean newRightState) {
 		int state = getState();
-		int i = stateList[state].indexOf(this);
+		int i = stateList.get(state).indexOf(this);
 		if (i == -1) {
 			return false;
 		}
 		rightSide = newRightState;
 		int newState = getState();
 		if (state != newState) {
-			stateList[state].remove(i);
-			stateList[newState].add(this);
+			stateList.get(state).remove(i);
+			stateList.get(newState).add(this);
 		}
 		return true;
 	}
@@ -219,7 +219,7 @@ public class Edge extends Constants {
 		}
 
 		// Add this to a stateList:
-		stateList[getState()].add(this);
+		stateList.get(getState()).add(this);
 		Msg.debug("Leaving Edge.classifyStateOfFrontEdge()");
 	}
 
@@ -254,8 +254,8 @@ public class Edge extends Constants {
 		// Select a front preferrably in stateList[2]
 
 		while (curState >= 0 && selected == null) {
-			for (i = 0; i < stateList[curState].size(); i++) {
-				current = (Edge) stateList[curState].get(i);
+			for (i = 0; i < stateList.get(curState).size(); i++) {
+				current = (Edge) stateList.get(curState).get(i);
 				if (current.selectable) {
 					selected = current;
 					break;
@@ -270,8 +270,8 @@ public class Edge extends Constants {
 
 		selState = selected.getState();
 
-		for (i = 0; i < stateList[selState].size(); i++) {
-			current = (Edge) stateList[selState].get(i);
+		for (i = 0; i < stateList.get(selState).size(); i++) {
+			current = (Edge) stateList.get(selState).get(i);
 
 			if (current.selectable && (current.level < selected.level || (current.level == selected.level && current.length() < selected.length()))) {
 				selected = current;
@@ -295,30 +295,25 @@ public class Edge extends Constants {
 	}
 
 	public static void markAllSelectable() {
-		Edge e;
-		for (int i = 0; i < 3; i++) {
-			for (Object element : stateList[i]) {
-				e = (Edge) element;
+		stateList.forEach(l ->{
+			l.forEach(e -> {
 				e.selectable = true;
-			}
-		}
+			});
+		});
 	}
 
 	public static void printStateLists() {
 		if (Msg.debugMode) {
 			System.out.println("frontsInState 1-1:");
-			for (Object element : stateList[2]) {
-				Edge edge = (Edge) element;
+			for (Edge edge : stateList.get(2)) {
 				System.out.println("" + edge.descr() + ", (" + edge.getState() + ")");
 			}
 			System.out.println("frontsInState 0-1 and 1-0:");
-			for (Object element : stateList[1]) {
-				Edge edge = (Edge) element;
+			for (Edge edge : stateList.get(1)) {
 				System.out.println("" + edge.descr() + ", (" + edge.getState() + ")");
 			}
 			System.out.println("frontsInState 0-0:");
-			for (Object element : stateList[0]) {
-				Edge edge = (Edge) element;
+			for (Edge edge : stateList.get(0)) {
 				System.out.println("" + edge.descr() + ", (" + edge.getState() + ")");
 			}
 		}
@@ -846,8 +841,6 @@ public class Edge extends Constants {
 		Msg.debug("element2: " + element2.descr());
 
 		Msg.debug("...this: " + descr());
-		// extract the outer edges
-		ArrayList edges = new ArrayList();
 
 		Edge e1 = element1.neighborEdge(leftNode, this);
 		Edge e2 = element1.neighborEdge(e1.otherNode(leftNode), e1);
@@ -1029,28 +1022,26 @@ public class Edge extends Constants {
 		return true;
 	}
 
-	public Edge findLeftFrontNeighbor(ArrayList frontList) {
-		ArrayList list = new ArrayList();
-		Edge leftEdge;
+	public Edge findLeftFrontNeighbor(List<Edge> frontList2) {
+		List<Edge> list = new ArrayList<>();
 		Edge candidate = null;
 		double candAng = Double.POSITIVE_INFINITY, curAng;
 		Triangle t;
 
 		for (int j = 0; j < leftNode.edgeList.size(); j++) {
-			leftEdge = (Edge) leftNode.edgeList.get(j);
+			Edge leftEdge = leftNode.edgeList.get(j);
 			if (leftEdge != this && leftEdge.isFrontEdge() /* leftEdge.frontEdge */) {
 				list.add(leftEdge);
 			}
 		}
 		if (list.size() == 1) {
-			return (Edge) list.get(0);
+			return list.get(0);
 		} else if (list.size() > 0) {
 
 			// Choose the front edge with the smallest angle
 			t = getTriangleElement();
 
-			for (Object element : list) {
-				leftEdge = (Edge) element;
+			for (Edge leftEdge: list) {
 				curAng = sumAngle(t, leftNode, leftEdge);
 				if (curAng < candAng) {
 					candAng = curAng;
@@ -1066,25 +1057,23 @@ public class Edge extends Constants {
 		return null;
 	}
 
-	public Edge findRightFrontNeighbor(ArrayList frontList) {
-		ArrayList list = new ArrayList();
-		Edge rightEdge;
+	public Edge findRightFrontNeighbor(List<Edge> frontList2) {
+		List<Edge> list = new ArrayList<>();
 		Edge candidate = null;
 		double candAng = Double.POSITIVE_INFINITY, curAng;
 		Triangle t;
 
 		for (int j = 0; j < rightNode.edgeList.size(); j++) {
-			rightEdge = (Edge) rightNode.edgeList.get(j);
+			Edge rightEdge =  rightNode.edgeList.get(j);
 			if (rightEdge != this && rightEdge.isFrontEdge()/* frontList.contains(rightEdge) */) {
 				list.add(rightEdge);
 			}
 		}
 		if (list.size() == 1) {
-			return (Edge) list.get(0);
+			return list.get(0);
 		} else if (list.size() > 0) {
 			t = getTriangleElement();
-			for (Object element : list) {
-				rightEdge = (Edge) element;
+			for (Edge rightEdge : list) {
 				curAng = sumAngle(t, rightNode, rightEdge);
 
 				Msg.debug("findRightFrontNeighbor(): Angle between edge this: " + descr() + " and edge " + rightEdge.descr() + ": " + curAng);
@@ -1115,9 +1104,9 @@ public class Edge extends Constants {
 	}
 
 	/** Returns true if the frontEdgeNeighbors are changed. */
-	public boolean setFrontNeighbors(ArrayList frontList) {
-		Edge lFront = findLeftFrontNeighbor(frontList);
-		Edge rFront = findRightFrontNeighbor(frontList);
+	public boolean setFrontNeighbors(List<Edge> frontList2) {
+		Edge lFront = findLeftFrontNeighbor(frontList2);
+		Edge rFront = findRightFrontNeighbor(frontList2);
 		boolean res = false;
 		if (lFront != leftFrontNeighbor || rFront != rightFrontNeighbor) {
 			res = true;
@@ -1136,7 +1125,7 @@ public class Edge extends Constants {
 		return res;
 	}
 
-	public void promoteToFront(int level, ArrayList frontList) {
+	public void promoteToFront(int level, List<Edge> frontList) {
 		if (!frontEdge) {
 			frontList.add(this);
 			this.level = level;
@@ -1144,11 +1133,11 @@ public class Edge extends Constants {
 		}
 	}
 
-	public boolean removeFromFront(ArrayList frontList) {
-		int i = frontList.indexOf(this);
+	public boolean removeFromFront(List<Edge> frontList2) {
+		int i = frontList2.indexOf(this);
 		frontEdge = false;
 		if (i != -1) {
-			frontList.remove(i);
+			frontList2.remove(i);
 			return true;
 		} else {
 			return false;
