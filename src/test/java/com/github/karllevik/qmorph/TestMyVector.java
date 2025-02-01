@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.github.karllevik.qmorph.geom.MyVector;
+import com.github.karllevik.qmorph.geom.Node;
 
 class TestMyVector {
 

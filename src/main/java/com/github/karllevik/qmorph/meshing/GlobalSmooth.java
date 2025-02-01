@@ -1,10 +1,14 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.meshing;
 
 import java.util.ArrayList;
 
+import com.github.karllevik.qmorph.Constants;
+import com.github.karllevik.qmorph.GeomBasics;
+import com.github.karllevik.qmorph.Msg;
 import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.Element;
 import com.github.karllevik.qmorph.geom.MyVector;
+import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Triangle;
 
 // ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ----
@@ -36,7 +40,7 @@ public class GlobalSmooth extends GeomBasics {
 	 */
 	private Node constrainedLaplacianSmooth(Node n) {
 		Msg.debug("Entering constrainedLaplacianSmooth(..)");
-		ArrayList elements = n.adjElements();
+		ArrayList<Element> elements = n.adjElements();
 		Element oElem, sElem;
 		MyVector vL = n.laplacianMoveVector();
 		double deltaMy = 0, theta = 0, temp;
@@ -56,7 +60,7 @@ public class GlobalSmooth extends GeomBasics {
 
 			// Update the adjacent Elements' distortion metrics
 			for (int i = 0; i < N; i++) {
-				oElem = (Element) elements.get(i);
+				oElem = elements.get(i);
 
 				sElem = oElem.elementWithExchangedNodes(n, nLPos);
 				sElem.updateDistortionMetric();
@@ -140,7 +144,7 @@ public class GlobalSmooth extends GeomBasics {
 	 * @return a node with a position that is the optimaization-based smoothed
 	 *         position of node n.
 	 */
-	private Node optBasedSmooth(Node x, ArrayList elements) {
+	private Node optBasedSmooth(Node x, ArrayList<Element> elements) {
 		Msg.debug("Entering optBasedSmooth(..)");
 		Element oElem, sElem;
 		double delta = Constants.DELTAFACTOR * maxModDim;
@@ -158,8 +162,8 @@ public class GlobalSmooth extends GeomBasics {
 			xPY.setXY(x.x, x.y + delta);
 
 			// Estimate the gradient vector g for each element:
-			for (Object element : elements) {
-				oElem = (Element) element;
+			for (Element element : elements) {
+				oElem = element;
 
 				sElem = oElem.elementWithExchangedNodes(x, xPX);
 				sElem.updateDistortionMetric();
@@ -187,8 +191,8 @@ public class GlobalSmooth extends GeomBasics {
 			boolean flag = false;
 			double gamma = java.lang.Double.MAX_VALUE, gammaI = 0, gdotgi, gdotg = gX * gX + gY * gY;
 
-			for (Object element : elements) {
-				oElem = (Element) element;
+			for (Element element : elements) {
+				oElem = element;
 
 				gdotgi = g.dot(oElem.gX, oElem.gY); // gX * oElem.gX + gY * oElem.gY;
 				if (gdotgi < 0) {
@@ -212,8 +216,8 @@ public class GlobalSmooth extends GeomBasics {
 			for (int j = 0; j < 4; j++) {
 				newMinDM = java.lang.Double.MAX_VALUE;
 
-				for (Object element : elements) {
-					oElem = (Element) element;
+				for (Element element : elements) {
+					oElem =  element;
 					sElem = oElem.elementWithExchangedNodes(x, xNew);
 					sElem.updateDistortionMetric();
 					oElem.newDistortionMetric = sElem.distortionMetric;
@@ -237,8 +241,8 @@ public class GlobalSmooth extends GeomBasics {
 				minDM = newMinDM;
 
 				// Update the adjacent Elements' distortion metrics
-				for (Object element : elements) {
-					oElem = (Element) element;
+				for (Element element : elements) {
+					oElem = element;
 					oElem.distortionMetric = oElem.newDistortionMetric;
 				}
 			} else {
@@ -274,8 +278,8 @@ public class GlobalSmooth extends GeomBasics {
 		Msg.debug("Entering GlobalSmooth.run()");
 		// Variables
 		int i, j;
-		ArrayList nodes = new ArrayList();
-		ArrayList elements = new ArrayList();
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		ArrayList<Element> elements = new ArrayList<Element>();
 		Element elem;
 		Triangle t;
 		double curLen, oldX, oldY;

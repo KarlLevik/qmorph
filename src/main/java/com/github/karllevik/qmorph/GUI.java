@@ -21,8 +21,11 @@ import java.util.ArrayList;
 
 import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.Element;
+import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Triangle;
+import com.github.karllevik.qmorph.meshing.GlobalSmooth;
+import com.github.karllevik.qmorph.meshing.TopoCleanup;
 
 /** This class implements the graphical user interface. */
 public class GUI extends Constants implements ActionListener, ItemListener {

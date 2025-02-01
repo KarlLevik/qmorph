@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.Test;
 
 import com.github.karllevik.qmorph.geom.Edge;
+import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Triangle;
 
 class TestTriangle {

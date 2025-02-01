@@ -2,10 +2,10 @@ package com.github.karllevik.qmorph.geom;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.github.karllevik.qmorph.Constants;
 import com.github.karllevik.qmorph.Msg;
-import com.github.karllevik.qmorph.Node;
 
 /**
  * This class holds information for edges, and has methods for handling issues
@@ -1164,7 +1164,7 @@ public class Edge extends Constants {
 	 *
 	 * @return the new Edge incident with Node ben.
 	 */
-	public Edge splitTrianglesAt(Node nN, Node ben, ArrayList triangleList, ArrayList edgeList, ArrayList nodeList) {
+	public Edge splitTrianglesAt(Node nN, Node ben, List<Triangle> triangleList, List<Edge> edgeList, List<Node> nodeList) {
 		Msg.debug("Entering Edge.splitTrianglesAt(..)");
 		Edge eK1 = new Edge(leftNode, nN);
 		Edge eK2 = new Edge(rightNode, nN);
@@ -1240,7 +1240,7 @@ public class Edge extends Constants {
 	 * @return the "lower" (the one incident with the baseEdge) of the two edges
 	 *         created from splitting this edge.
 	 */
-	public Edge splitTrianglesAtMyMidPoint(ArrayList triangleList, ArrayList edgeList, ArrayList nodeList, Edge baseEdge) {
+	public Edge splitTrianglesAtMyMidPoint(List<Triangle> triangleList, List<Edge> edgeList, List<Node> nodeList, Edge baseEdge) {
 		Msg.debug("Entering Edge.splitTrianglesAtMyMidPoint(..).");
 
 		Edge lowerEdge;

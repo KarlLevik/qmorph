@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.MyVector;
+import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Triangle;
 

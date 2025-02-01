@@ -1,10 +1,14 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.meshing;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.github.karllevik.qmorph.GeomBasics;
+import com.github.karllevik.qmorph.Msg;
 import com.github.karllevik.qmorph.geom.Dart;
 import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.Element;
+import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Triangle;
 
@@ -43,6 +47,9 @@ public class TopoCleanup extends GeomBasics {
 
 	/** A dart used when traversing the mesh in cleanup operations. */
 	private Dart d;
+	int count = 0;
+	ArrayList deleteList;
+	ArrayList<Node> nodes;
 
 	/** Initialize the object */
 	public void init() {
@@ -80,8 +87,8 @@ public class TopoCleanup extends GeomBasics {
 			}
 		}
 
-		deleteList = new ArrayList();
-		nodes = (ArrayList) nodeList.clone();
+		deleteList = new ArrayList<>();
+		nodes = new ArrayList<>(nodeList);
 		d = new Dart();
 	}
 
@@ -203,10 +210,6 @@ public class TopoCleanup extends GeomBasics {
 		}
 		Msg.debug("Leaving TopoCleanup.step()");
 	}
-
-	int count = 0;
-	ArrayList deleteList;
-	ArrayList nodes;
 
 	/** Initial pass to detect and cleanup chevrons. */
 	private void elimChevsStep() {
@@ -994,7 +997,7 @@ public class TopoCleanup extends GeomBasics {
 			}
 		}
 
-		nodes = (ArrayList) nodeList.clone();
+		nodes = new ArrayList<>(nodeList);
 		connCleanupFinished = true;
 		count = 0;
 		Msg.debug("Leaving TopoCleanup.connCleanupStep(), all is well");
@@ -1375,7 +1378,7 @@ public class TopoCleanup extends GeomBasics {
 			Msg.debug("Leaving boundaryCleanupStep(): Done removing diamonds.");
 			return;
 		} else {
-			nodes = (ArrayList) nodeList.clone();
+			nodes = new ArrayList<>(nodeList);
 			boundaryCleanupFinished = true;
 			count = 0;
 			Msg.debug("Leaving TopoCleanup.boundaryCleanupStep(), all is well.");
@@ -1563,7 +1566,7 @@ public class TopoCleanup extends GeomBasics {
 		}
 		deleteList.clear();
 
-		nodes = (ArrayList) nodeList.clone();
+		nodes = new ArrayList<>(nodeList);
 		shapeCleanupFinished = true;
 		count = 0;
 		Msg.debug("Leaving TopoCleanup.shapeCleanupStep(), all elements ok.");
@@ -1618,7 +1621,7 @@ public class TopoCleanup extends GeomBasics {
 		Node nKp1 = e1.otherNode(nK); // , nKm1= eKm1.otherNode(nK);
 		Edge e2 = q.neighborEdge(nKp1, e1), e4 = q.neighborEdge(nK, e1);
 
-		ArrayList lK = nK.adjElements(), lKOpp = nKOpp.adjElements();
+		List<Element> lK = nK.adjElements(), lKOpp = nKOpp.adjElements();
 		Node n = null;
 		int i;
 

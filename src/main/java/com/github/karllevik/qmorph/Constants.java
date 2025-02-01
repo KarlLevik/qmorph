@@ -1,5 +1,7 @@
 package com.github.karllevik.qmorph;
 
+import com.github.karllevik.qmorph.geom.Node;
+
 /**
  * This class holds the program "constants". That is, they are given as
  * parameters to the Q-Morph implementation.
@@ -94,5 +96,5 @@ public class Constants {
 	public static final int defaultMAXITER = 5;
 
 	/** The origin, only used as a reference. */
-	static final Node origin = new Node(0, 0);
+	public static final Node origin = new Node(0, 0);
 }

@@ -1,13 +1,17 @@
 package com.github.karllevik.qmorph;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.Element;
 import com.github.karllevik.qmorph.geom.MyVector;
+import com.github.karllevik.qmorph.geom.Node;
 import com.github.karllevik.qmorph.geom.Quad;
 import com.github.karllevik.qmorph.geom.Ray;
 import com.github.karllevik.qmorph.geom.Triangle;
+import com.github.karllevik.qmorph.meshing.GlobalSmooth;
+import com.github.karllevik.qmorph.meshing.TopoCleanup;
 
 // ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ----
 /**
@@ -27,7 +31,7 @@ public class QMorph extends GeomBasics {
 	public QMorph() {
 	}
 
-	private ArrayList frontList;
+	private ArrayList<Edge> frontList;
 	private boolean finished = false;
 	private int level = 0;
 	private int nrOfFronts = 0;
@@ -50,7 +54,7 @@ public class QMorph extends GeomBasics {
 
 		if (doTri2QuadConversion) {
 			setCurMethod(this);
-			elementList = new ArrayList();
+			elementList = new ArrayList<Element>();
 			finished = false;
 			level = 0;
 
@@ -192,7 +196,7 @@ public class QMorph extends GeomBasics {
 	}
 
 	/** @return the frontList, that is, the list of front edges */
-	public ArrayList getFrontList() {
+	public ArrayList<Edge> getFrontList() {
 		return frontList;
 	}
 
@@ -364,7 +368,7 @@ public class QMorph extends GeomBasics {
 	}
 
 	/** Returns the number of front edges at the currently lowest level loop(s). */
-	private int countNOFrontsAtCurLowestLevel(ArrayList frontList) {
+	private int countNOFrontsAtCurLowestLevel(ArrayList<Edge> frontList) {
 		Msg.debug("Entering countNOFrontsAtCurLowestLevel(..)");
 
 		Edge cur;
@@ -390,14 +394,14 @@ public class QMorph extends GeomBasics {
 	}
 
 	/** Make sure the triangle mesh consists exclusively of triangles */
-	private boolean verifyTriangleMesh(ArrayList triangleList) {
-		Object o;
-		for (Object element : triangleList) {
-			o = element;
-			if (!(o instanceof Triangle)) {
-				return false;
-			}
-		}
+	private boolean verifyTriangleMesh(List<Triangle> triangleList) {
+//		Object o;
+//		for (Object element : triangleList) {
+//			o = element;
+//			if (!(o instanceof Triangle)) {
+//				return false;
+//			}
+//		}
 		return true;
 	}
 
@@ -417,7 +421,7 @@ public class QMorph extends GeomBasics {
 		boolean initL = false, initR = false;
 		Edge[] sideEdges = new Edge[2];
 		Edge leftSide, rightSide;
-		ArrayList tris;
+		ArrayList<?> tris;
 
 		if (e.leftSide) {
 			initL = true;
@@ -521,7 +525,7 @@ public class QMorph extends GeomBasics {
 	 */
 	private Node smoothFrontNode(Node nK, Node nJ, Quad myQ, Edge front1, Edge front2) {
 		Msg.debug("Entering smoothFrontNode(..)...");
-		ArrayList adjQuads = nK.adjQuads();
+		ArrayList<?> adjQuads = nK.adjQuads();
 		double tr, ld = 0;
 		Edge e;
 		Quad q;
@@ -719,13 +723,13 @@ public class QMorph extends GeomBasics {
 	 * Smooth as explained in Owen's paper Each node in the newly formed quad is
 	 * smoothed. So is every node directly connected to these.
 	 */
-	private void localSmooth(Quad q, ArrayList frontList) {
+	private void localSmooth(Quad q, ArrayList<Edge> frontList) {
 		Msg.debug("Entering localSmooth(..)");
 		Quad tempQ1, tempQ2;
 		Node n, nNew, nOld;
 		Edge e, fe1, fe2;
 		Node bottomLeft, bottomRight, bottomLeftNew, bottomRightNew, bottomLeftOld, bottomRightOld;
-		ArrayList adjNodes, adjNodesNew;
+		ArrayList<Node> adjNodes, adjNodesNew;
 
 		if (q.isFake) {
 
@@ -740,7 +744,7 @@ public class QMorph extends GeomBasics {
 			bottomRightOld = bottomRight.copyXY();
 
 			adjNodes = q.getAdjNodes();
-			adjNodesNew = new ArrayList(adjNodes.size());
+			adjNodesNew = new ArrayList<Node>(adjNodes.size());
 
 			// Calculate smoothed pos for each element node and those nodes connected to
 			// the element. If the element has become inverted, then repair it.
@@ -831,7 +835,7 @@ public class QMorph extends GeomBasics {
 			bottomRightOld = bottomRight.copyXY();
 
 			adjNodes = q.getAdjNodes();
-			adjNodesNew = new ArrayList(adjNodes.size());
+			adjNodesNew = new ArrayList<Node>(adjNodes.size());
 
 			// Calculate smoothed pos for each element node and those nodes connected to
 			// the element. If the element has become inverted, then repair it.
@@ -926,7 +930,7 @@ public class QMorph extends GeomBasics {
 	 * @param q    the quad
 	 * @param tris the list of triangles to be deleted
 	 */
-	private void clearQuad(Quad q, ArrayList tris) {
+	private void clearQuad(Quad q, ArrayList<?> tris) {
 		Msg.debug("Entering clearQuad(Quad q)...");
 		int nodeInd, edgeInd, triInd;
 		Node node;
@@ -988,7 +992,7 @@ public class QMorph extends GeomBasics {
 		Msg.debug("Entering clearQuad(Quad q)...");
 		Element neighbor;
 		Triangle cur;
-		ArrayList n = new ArrayList();
+		ArrayList<Element> n = new ArrayList<Element>();
 		Edge e;
 		int nodeInd, edgeInd, triInd;
 		Edge lEdge, rEdge;
@@ -1051,14 +1055,14 @@ public class QMorph extends GeomBasics {
 	}
 
 	/** Updates fronts in fake quads (which are triangles, really) */
-	private int localFakeUpdateFronts(Quad q, int lowestLevel, ArrayList frontList) {
+	private int localFakeUpdateFronts(Quad q, int lowestLevel, ArrayList<Edge> frontList) {
 		Msg.debug("Entering localFakeUpdateFronts()...");
 		int curLevelEdgesRemoved = 0;
 		Edge e;
 		Element neighbor;
-		ArrayList needsNewFN = new ArrayList();
-		ArrayList lostFNList = new ArrayList();
-		ArrayList needsReclassification = new ArrayList();
+		ArrayList<Edge> needsNewFN = new ArrayList<Edge>();
+		ArrayList<Edge> lostFNList = new ArrayList<Edge>();
+		ArrayList<Edge> needsReclassification = new ArrayList<Edge>();
 
 		Msg.debug("...State of the stateLists before updateFake..:");
 		Edge.printStateLists();
@@ -1174,7 +1178,7 @@ public class QMorph extends GeomBasics {
 	}
 
 	// Do some neccessary updating of the fronts before localSmooth(..) is run
-	private void preSmoothUpdateFronts(Quad q, ArrayList frontList) {
+	private void preSmoothUpdateFronts(Quad q, ArrayList<Edge> frontList) {
 		Msg.debug("Entering preSmoothUpdateFronts()...");
 		q.edgeList[top].setFrontNeighbors(frontList);
 		Msg.debug("Leaving preSmoothUpdateFronts()...");
@@ -1186,16 +1190,16 @@ public class QMorph extends GeomBasics {
 	 *
 	 * @return nr of edges removed that belonged to the currently lowest level.
 	 */
-	private int localUpdateFronts(Quad q, int lowestLevel, ArrayList frontList) {
+	private int localUpdateFronts(Quad q, int lowestLevel, ArrayList<Edge> frontList) {
 		if (q.isFake) {
 			return localFakeUpdateFronts(q, lowestLevel, frontList);
 		} else {
 			Msg.debug("Entering localUpdateFronts()...");
 			int curLevelEdgesRemoved = 0;
 			Edge e;
-			ArrayList lostFNList = new ArrayList();
-			ArrayList needsNewFN = new ArrayList();
-			ArrayList needsReclassification = new ArrayList();
+			ArrayList<Edge> lostFNList = new ArrayList<Edge>();
+			ArrayList<Edge> needsNewFN = new ArrayList<Edge>();
+			ArrayList<Edge> needsReclassification = new ArrayList<Edge>();
 
 			Msg.debug("front edges connected to node " + q.edgeList[top].rightNode.descr());
 			printEdgeList(q.edgeList[top].rightNode.frontEdgeList());
@@ -1346,11 +1350,11 @@ public class QMorph extends GeomBasics {
 		}
 	}
 
-	private ArrayList defineInitFronts(ArrayList edgeList) {
-		ArrayList frontList = new ArrayList();
+	private ArrayList<Edge> defineInitFronts(List<Edge> edgeList) {
+		ArrayList<Edge> frontList = new ArrayList<Edge>();
 		Edge e, leftEdge, rightEdge;
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge element : edgeList) {
+			e = element;
 			if (e.hasElement(null)) {
 				e.promoteToFront(0, frontList);
 				e.swappable = false;
@@ -1380,7 +1384,7 @@ public class QMorph extends GeomBasics {
 		return frontList;
 	}
 
-	private void classifyStateOfAllFronts(ArrayList frontList) {
+	private void classifyStateOfAllFronts(ArrayList<Edge> frontList) {
 		Edge e;
 		for (Object element : frontList) {
 			e = (Edge) element;
@@ -2038,8 +2042,8 @@ public class QMorph extends GeomBasics {
 	private Edge[] makeSideEdges(Edge e) {
 		Msg.debug("Entering makeSideEdges(..)");
 		Edge[] sideEdges = new Edge[2];
-		ArrayList altLSE;
-		ArrayList altRSE;
+		ArrayList<Edge> altLSE;
+		ArrayList<Edge> altRSE;
 
 		int lState = 0, rState = 0;
 		if (e.leftSide) {
@@ -2164,9 +2168,9 @@ public class QMorph extends GeomBasics {
 	}
 
 	/** @return a list of potential side edges for this base edge at node n */
-	private ArrayList getPotSideEdges(Edge baseEdge, Node n) {
+	private ArrayList<Edge> getPotSideEdges(Edge baseEdge, Node n) {
 		Edge cur;
-		ArrayList list = new ArrayList();
+		ArrayList<Edge> list = new ArrayList<Edge>();
 
 		for (int i = 0; i < n.edgeList.size(); i++) {
 			cur = (Edge) n.edgeList.get(i);
@@ -2190,7 +2194,7 @@ public class QMorph extends GeomBasics {
 	 * @param list list of candidate edges from which we might select a side edge
 	 * @return A side edge: a reused edge OR one created in a swap/split operation
 	 */
-	private Edge defineSideEdge(Edge eF1, Node nK, Edge leftSide, Edge rightSide, ArrayList list) {
+	private Edge defineSideEdge(Edge eF1, Node nK, Edge leftSide, Edge rightSide, ArrayList<Edge> list) {
 		Edge current, selected = null, closest, eF2;
 		Node noNode = null;
 		double curAng, selAng, closestAng;
@@ -2402,8 +2406,8 @@ public class QMorph extends GeomBasics {
 			e0.swapToAndSetElementsFor(eK);
 
 			// ... and replace with new ones:
-			triangleList.add(eK.element1);
-			triangleList.add(eK.element2);
+			triangleList.add((Triangle)eK.element1);
+			triangleList.add((Triangle)eK.element2);
 
 			// Update "global" edge list
 			edgeList.remove(edgeList.indexOf(e0));
@@ -2537,7 +2541,7 @@ public class QMorph extends GeomBasics {
 		}
 		/* ---- First find the edges connecting nodes nC and nD: ---- */
 		/* (Implementation of algorithm 2 in Owen) */
-		ArrayList intersectedEdges = new ArrayList();
+		ArrayList<Edge> intersectedEdges = new ArrayList<Edge>();
 		Edge eK, eKp1, eI = null, eJ = null, eN, eNp1;
 		Element tK = null;
 		Triangle tI = null, tIp1;
@@ -2545,14 +2549,14 @@ public class QMorph extends GeomBasics {
 		MyVector vS = new MyVector(nC, nD);
 		Node nI;
 
-		ArrayList V = nC.ccwSortedVectorList();
+		ArrayList<MyVector> V = nC.ccwSortedVectorList();
 		V.add(V.get(0)); // First add first edge to end of list to avoid crash in loops
 		Msg.debug("V.size()==" + V.size());
 		printVectors(V);
 
 		// Aided by V, fill T with elements adjacent nC, in
 		// ccw order (should work even for nodes with only two edges in their list):
-		ArrayList T = new ArrayList();
+		ArrayList<Element> T = new ArrayList<Element>();
 
 		for (int k = 0; k < V.size() - 1; k++) {
 			vK = (MyVector) V.get(k);
@@ -2675,7 +2679,7 @@ public class QMorph extends GeomBasics {
 
 		// When this loop is done, the edge should be recovered
 		Element oldEIElement1, oldEIElement2;
-		ArrayList removeList = new ArrayList();
+		ArrayList<Element> removeList = new ArrayList<Element>();
 		Triangle t;
 		Quad q;
 		int index;
@@ -2740,9 +2744,9 @@ public class QMorph extends GeomBasics {
 				}
 
 				// ... and replace with new ones:
-				triangleList.add(eJ.element1);
+				triangleList.add((Triangle)eJ.element1);
 				Msg.debug("Added element: " + eJ.element1.descr());
-				triangleList.add(eJ.element2);
+				triangleList.add((Triangle)eJ.element2);
 				Msg.debug("Added element: " + eJ.element2.descr());
 
 				// Update "global" edge list

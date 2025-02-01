@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 
 import com.github.karllevik.qmorph.Constants;
 import com.github.karllevik.qmorph.Msg;
-import com.github.karllevik.qmorph.Node;
 
 /**
  * This class holds information for vectors, and has methods for dealing with

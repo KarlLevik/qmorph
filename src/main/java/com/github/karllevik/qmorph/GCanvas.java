@@ -4,8 +4,10 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.github.karllevik.qmorph.geom.Edge;
+import com.github.karllevik.qmorph.geom.Node;
 
 /**
  * The Canvas class which paints the background grid, the nodes, the edges etc.
@@ -150,8 +152,8 @@ class GCanvas extends Canvas {
 	public void paint(Graphics g) {
 		Edge e;
 		Node n;
-		ArrayList nodeList = GeomBasics.getNodeList();
-		ArrayList edgeList = GeomBasics.getEdgeList();
+		List<Node> nodeList = GeomBasics.getNodeList();
+		List<Edge> edgeList = GeomBasics.getEdgeList();
 		int halfGridIncr = gridIncr / 2;
 
 		g.clearRect(0, 0, getWidth(), getHeight());

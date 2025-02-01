@@ -1,15 +1,11 @@
-package com.github.karllevik.qmorph;
+package com.github.karllevik.qmorph.geom;
 
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import com.github.karllevik.qmorph.geom.Edge;
-import com.github.karllevik.qmorph.geom.Element;
-import com.github.karllevik.qmorph.geom.MyVector;
-import com.github.karllevik.qmorph.geom.Quad;
-import com.github.karllevik.qmorph.geom.Ray;
-import com.github.karllevik.qmorph.geom.Triangle;
+import com.github.karllevik.qmorph.Constants;
+import com.github.karllevik.qmorph.Msg;
 
 /**
  * This class holds information for nodes, and has methods for the management of
@@ -72,7 +68,7 @@ public class Node extends Constants {
 		this.y = y;
 	}
 
-	void update() {
+	public void update() {
 		updateLRinEdgeList();
 		updateEdgeLengths();
 		updateAngles();
