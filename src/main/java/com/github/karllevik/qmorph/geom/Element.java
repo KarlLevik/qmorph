@@ -8,7 +8,7 @@ import com.github.karllevik.qmorph.meshing.Constants;
  */
 
 public abstract class Element extends Constants {
-	
+
 	/** An array of interior angles */
 	public double[] ang;
 	/** An array of edges */
@@ -21,7 +21,7 @@ public abstract class Element extends Constants {
 	public double distortionMetric, newDistortionMetric;
 	/** Doubles to hold the gradient vector */
 	public double gX, gY;
-	
+
 	/** @return neighbor element sharing edge e */
 	public abstract Element neighbor(Edge e);
 

@@ -3,7 +3,6 @@ package com.github.karllevik.qmorph.viewer;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.github.karllevik.qmorph.geom.Edge;
@@ -201,7 +200,7 @@ class GCanvas extends Canvas {
 		// Draw mesh
 		if (edgeList != null) {
 			for (int i = 0; i < edgeList.size(); i++) {
-				e = (Edge) edgeList.get(i);
+				e = edgeList.get(i);
 
 				if (e.color == java.awt.Color.red) {
 					g.setColor(e.color);

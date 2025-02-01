@@ -37,7 +37,7 @@ public class MsgDialog extends Dialog implements ItemListener {
 		textArea.setEditable(false);
 		textArea.setBackground(Color.black);
 		textArea.setForeground(Color.yellow);
-		textArea.setFont(new Font("Monospaced", Font.PLAIN, 10));
+		textArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		c.gridwidth = GridBagConstraints.REMAINDER; // end row
 		gridbag.setConstraints(textArea, c);
 

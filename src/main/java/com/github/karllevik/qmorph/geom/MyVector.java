@@ -16,11 +16,11 @@ import com.github.karllevik.qmorph.viewer.Msg;
  */
 
 public class MyVector extends Constants {
-	
+
 	public final Node origin;
 	public double x, y;
 	public Edge edge;
-	
+
 	/**
 	 * @param origin the origin of the vector
 	 * @param x      the x component
@@ -277,9 +277,9 @@ public class MyVector extends Constants {
 	 * @return a boolean indicating whether this vector is clockwise (cw) to v
 	 */
 	public boolean isCWto(MyVector v) {
-	    if (this.equals(v)) {
-	        return false; // A vector cannot be CW to itself
-	    }
+		if (this.equals(v)) {
+			return false; // A vector cannot be CW to itself
+		}
 		double thisR, vR;
 
 		if (x != 0) {
@@ -519,7 +519,7 @@ public class MyVector extends Constants {
 	 * (that is, a point that is not an endpoint, ) // else return false. public
 	 * boolean innerpointIntersects(MyVector d1) { Node p0= origin, p1= d1.origin;
 	 * MyVector delta= new MyVector(p0, p1.x- p0.x, p1.y- p0.y); MyVector d0= this;
-	 * 
+	 *
 	 * BigDecimal d0x= new BigDecimal(d0.x), d0y= new BigDecimal(d0.y), d1x= new
 	 * BigDecimal(d1.x), d1y= new BigDecimal(d1.y); BigDecimal d0Xd1=
 	 * d0x.multiply(d1y).subtract(d1x.multiply(d0y)); if (d0Xd1.compareTo(zero)== 0)
@@ -529,13 +529,13 @@ public class MyVector extends Constants {
 	 * deltay= new BigDecimal(delta.y); BigDecimal deltaXd1=
 	 * deltax.multiply(d1y).subtract(d1x.multiply(deltay)); BigDecimal deltaXd0=
 	 * deltax.multiply(d0y).subtract(d0x.multiply(deltay));
-	 * 
+	 *
 	 * BigDecimal s= deltaXd1.divide(d0Xd1, BigDecimal.ROUND_UP); BigDecimal t=
 	 * deltaXd0.divide(d0Xd1, BigDecimal.ROUND_UP);
-	 * 
+	 *
 	 * Msg.debug("innerpointIntersects(..): s: "+s.toString());
 	 * Msg.debug("innerpointIntersects(..): t: "+t.toString());
-	 * 
+	 *
 	 * if (t.compareTo(zero)<=0 || t.compareTo(one)>=0 || s.compareTo(zero)<=0 ||
 	 * s.compareTo(one)>=0) {
 	 * Msg.debug(this.descr()+" doesn't innerintersect "+d1.descr()+" (2)"); return

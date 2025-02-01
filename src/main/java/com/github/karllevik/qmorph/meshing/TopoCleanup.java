@@ -846,7 +846,7 @@ public class TopoCleanup extends GeomBasics {
 
 		// First check for the standard patterns:
 		for (i = 0; i < nodes.size(); i++) {
-			c = (Node) nodes.get(i);
+			c = nodes.get(i);
 			if (c == null || c.boundaryOrTriangleNode()) {
 				continue;
 			}
@@ -914,7 +914,7 @@ public class TopoCleanup extends GeomBasics {
 
 		// Then check for the other patterns:
 		for (i = 0; i < nodes.size(); i++) {
-			c = (Node) nodes.get(i);
+			c = nodes.get(i);
 			if (c == null || c.boundaryOrTriangleNode()) {
 				continue;
 			}
@@ -1060,7 +1060,7 @@ public class TopoCleanup extends GeomBasics {
 		if (!bcaseValPat1Fin) {
 
 			for (i = 0; i < nodes.size(); i++) {
-				n1 = (Node) nodes.get(i);
+				n1 = nodes.get(i);
 				if (n1 == null) {
 					continue;
 				}
@@ -1099,7 +1099,7 @@ public class TopoCleanup extends GeomBasics {
 		} else if (!bcaseValPat2Fin) {
 
 			for (i = 0; i < nodes.size(); i++) {
-				n1 = (Node) nodes.get(i);
+				n1 = nodes.get(i);
 				if (n1 == null) {
 					continue;
 				}
@@ -1138,7 +1138,7 @@ public class TopoCleanup extends GeomBasics {
 		} else if (!bcaseValPat3Fin) {
 
 			for (i = 0; i < nodes.size(); i++) {
-				n1 = (Node) nodes.get(i);
+				n1 = nodes.get(i);
 				if (n1 == null) {
 					continue;
 				}
@@ -1171,7 +1171,7 @@ public class TopoCleanup extends GeomBasics {
 			return;
 		} else if (!bcaseValPat4Fin) {
 			for (i = 0; i < nodes.size(); i++) {
-				n1 = (Node) nodes.get(i);
+				n1 = nodes.get(i);
 				if (n1 == null) {
 					continue;
 				}
@@ -1199,7 +1199,7 @@ public class TopoCleanup extends GeomBasics {
 			return;
 		} else if (!bcaseTriQFin) {
 			for (i = 0; i < nodes.size(); i++) {
-				n1 = (Node) nodes.get(i);
+				n1 = nodes.get(i);
 
 				if (n1 == null) {
 					continue;
@@ -1208,7 +1208,7 @@ public class TopoCleanup extends GeomBasics {
 				if (n1.boundaryNode()) {
 
 					Msg.debug("...testing node " + n1.descr());
-					e1 = (Edge) n1.edgeList.get(0);
+					e1 = n1.edgeList.get(0);
 					elem = e1.element1;
 					if (!(elem instanceof Quad)) { // Must be quad
 						continue;
@@ -1304,7 +1304,7 @@ public class TopoCleanup extends GeomBasics {
 		} else if (!bcaseDiamondFin) {
 
 			for (i = 0; i < nodes.size(); i++) {
-				n1 = (Node) nodes.get(i);
+				n1 = nodes.get(i);
 
 				if (n1 == null) {
 					continue;
@@ -1401,7 +1401,7 @@ public class TopoCleanup extends GeomBasics {
 		if (!shape1stTypeFin) {
 			Msg.debug("...hallo???");
 			for (i = 0; i < nodes.size(); i++) {
-				n = (Node) nodes.get(i);
+				n = nodes.get(i);
 
 				if (n == null) {
 					continue;
@@ -1538,7 +1538,7 @@ public class TopoCleanup extends GeomBasics {
 		}
 
 		while (count < elementList.size()) {
-			elem = (Element) elementList.get(count);
+			elem = elementList.get(count);
 
 			if (elem == null || !(elem instanceof Quad)) {
 				count++;

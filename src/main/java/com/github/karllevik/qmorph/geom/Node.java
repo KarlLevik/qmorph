@@ -22,7 +22,7 @@ public class Node extends Constants {
 	/** A valence pattern for this node */
 	public byte[] pattern;
 	// byte state= 0; // For front Nodes only
-	public ArrayList<Edge> edgeList;
+	public List<Edge> edgeList;
 	public Color color = Color.cyan;
 
 	/** Create new node with position (x,y). */
@@ -48,7 +48,7 @@ public class Node extends Constants {
 	/** @return a "real" copy of this node with a shallow copy of its edgeList. */
 	public Node copy() {
 		Node n = new Node(x, y);
-		n.edgeList = (ArrayList<Edge>) edgeList.clone();
+		n.edgeList = new ArrayList<>(edgeList);
 		return n;
 	}
 
@@ -77,11 +77,10 @@ public class Node extends Constants {
 
 	public void updateLRinEdgeList() {
 		boolean btemp;
-		Edge e, temp;
+		Edge temp;
 		Node node;
 		Quad q;
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
 			if ((e.leftNode.x > e.rightNode.x) || (e.leftNode.x == e.rightNode.x && e.leftNode.y < e.rightNode.y)) {
 				node = e.leftNode;
 				e.leftNode = e.rightNode;
@@ -131,9 +130,7 @@ public class Node extends Constants {
 
 	/** Update all lengths of edges around this Node */
 	public void updateEdgeLengths() {
-		Edge e;
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
 			e.len = e.computeLength();
 		}
 	}
@@ -151,10 +148,10 @@ public class Node extends Constants {
 		Edge e, ne;
 		Node other1, other2;
 		Quad q;
-		ArrayList<Element> list = new ArrayList<Element>();
+		ArrayList<Element> list = new ArrayList<>();
 
-		for (int i = 0; i < edgeList.size(); i++) {
-			e = (Edge) edgeList.get(i);
+		for (Edge element : edgeList) {
+			e = element;
 			Msg.debug("...e: " + e.descr());
 			if (!list.contains(e.element1)) {
 				Msg.debug("...e.element1: " + e.element1.descr());
@@ -200,7 +197,7 @@ public class Node extends Constants {
 	 */
 	@Deprecated
 	public void oldupdateEdgeLengthsAndAngles() {
-		Edge curEdge = (Edge) edgeList.get(0);
+		Edge curEdge = edgeList.get(0);
 		Element curElem = curEdge.element1;
 		Edge nextEdge = curElem.neighborEdge(this, curEdge);
 		Edge otherEdge;
@@ -228,7 +225,7 @@ public class Node extends Constants {
 			curElem = curElem.neighbor(nextEdge);
 			curEdge = nextEdge;
 			nextEdge = curElem.neighborEdge(this, curEdge);
-		} while (curElem != null && curEdge != (Edge) edgeList.get(0));
+		} while (curElem != null && curEdge != edgeList.get(0));
 	}
 
 	public double cross(Node n) {
@@ -247,11 +244,11 @@ public class Node extends Constants {
 		Element elem, start;
 		MyVector v, v0, v1;
 		Edge e;
-		ArrayList<MyVector> boundaryVectors = new ArrayList<MyVector>();
-		ArrayList<MyVector> vectors = new ArrayList<MyVector>();
+		ArrayList<MyVector> boundaryVectors = new ArrayList<>();
+		ArrayList<MyVector> vectors = new ArrayList<>();
 		double ang;
-		for (int i = 0; i < edgeList.size(); i++) {
-			e = (Edge) edgeList.get(i);
+		for (Edge element : edgeList) {
+			e = element;
 			v = e.getVector(this);
 			v.edge = e;
 
@@ -270,8 +267,8 @@ public class Node extends Constants {
 
 		if (boundaryVectors.size() > 0) { // this size is always 0 or 2
 			Msg.debug("...boundaryVectors yeah!");
-			v0 = (MyVector) boundaryVectors.get(0);
-			v1 = (MyVector) boundaryVectors.get(1);
+			v0 = boundaryVectors.get(0);
+			v1 = boundaryVectors.get(1);
 
 			elem = v0.edge.element1;
 			e = elem.neighborEdge(this, v0.edge);
@@ -289,7 +286,7 @@ public class Node extends Constants {
 			}
 		} else {
 			Msg.debug("...boundaryVectors noooo!");
-			v0 = (MyVector) vectors.get(0);
+			v0 = vectors.get(0);
 			elem = v0.edge.element1;
 			e = elem.neighborEdge(this, v0.edge);
 			v1 = e.getVector(this);
@@ -308,7 +305,7 @@ public class Node extends Constants {
 
 		// Sort vectors in ccw order starting with v0.
 		// Uses the fact that elem initially is the element ccw to v0 around this Node.
-		ArrayList<MyVector> VS = new ArrayList<MyVector>();
+		ArrayList<MyVector> VS = new ArrayList<>();
 		e = v0.edge;
 
 		start = elem;
@@ -337,27 +334,27 @@ public class Node extends Constants {
 	 * Msg.debug("Entering Node.ccwSortedVectorList(Edge b0, Edge b1)");
 	 * Msg.debug("b0: "+b0.descr()); Msg.debug("b1: "+b1.descr()); Element elem,
 	 * start; MyVector v, v0, v1; Edge e; ArrayList vectors= new ArrayList();
-	 * 
+	 *
 	 * for (int i= 0; i< edgeList.size(); i++) { e= (Edge)edgeList.get(i); if (e!=
 	 * b0 && e!= b1) { v= e.getVector(this); v.edge= e; vectors.add(v); } }
-	 * 
+	 *
 	 * v0= b0.getVector(this); v0.edge= b0; v1= b1.getVector(this); v1.edge= b1;
-	 * 
+	 *
 	 * elem= b0.element1; if (v0.isCWto(v1)) { if (elem.concavityAt(this)) { v0= v1;
 	 * elem= b1.element1; } } else if (!elem.concavityAt(this)) { v0= v1; elem=
 	 * b1.element1; }
 	 * Msg.debug("Node.ccwSortedVectorList(Edge, Edge): 0: "+v0.edge.descr());
-	 * 
+	 *
 	 * // Sort vectors in ccw order starting with v0. // Uses the fact that elem
 	 * initially is the element ccw to v0 around this Node. ArrayList VS= new
 	 * ArrayList(); e= v0.edge;
-	 * 
+	 *
 	 * start= elem; do { v= e.getVector(this); v.edge= e;
 	 * Msg.debug("... VS.add("+v.descr()+")"); VS.add(v);
-	 * 
+	 *
 	 * e= elem.neighborEdge(this, e); elem= elem.neighbor(e); } while (elem!= start
 	 * && elem!= null);
-	 * 
+	 *
 	 * return VS; }
 	 */
 
@@ -368,13 +365,13 @@ public class Node extends Constants {
 	 * @param b1 First boundary edge
 	 * @param b2 Second boundary edge
 	 */
-	public ArrayList<Edge> calcCCWSortedEdgeList(Edge b0, Edge b1) {
+	public List<Edge> calcCCWSortedEdgeList(Edge b0, Edge b1) {
 		MyVector v, v0, v1;
 		Edge e;
-		ArrayList<MyVector> vectors = new ArrayList<MyVector>();
+		ArrayList<MyVector> vectors = new ArrayList<>();
 
-		for (int i = 0; i < edgeList.size(); i++) {
-			e = (Edge) edgeList.get(i);
+		for (Edge element : edgeList) {
+			e = element;
 			if (e != b0 && e != b1) {
 				v = e.getVector(this);
 				v.edge = e;
@@ -385,14 +382,14 @@ public class Node extends Constants {
 		// Initially put the two vectors of b0 and b1 in list.
 		// Select the most CW boundary edge to be first in list.
 
-		ArrayList<MyVector> VS = new ArrayList<MyVector>();
+		List<MyVector> VS = new ArrayList<>();
 		v0 = b0.getVector(this);
 		v0.edge = b0;
 		v1 = b1.getVector(this);
 		v1.edge = b1;
 
 		if (vectors.size() > 0) {
-			v = (MyVector) vectors.get(0);
+			v = vectors.get(0);
 		} else {
 			v = v1;
 		}
@@ -410,15 +407,15 @@ public class Node extends Constants {
 
 		// Sort vectors in ccw order. I will not move the vector that lies first in VS.
 		Msg.debug("...vectors.size()= " + vectors.size());
-		for (int i = 0; i < vectors.size(); i++) {
-			v = (MyVector) vectors.get(i);
+		for (MyVector vector : vectors) {
+			v = vector;
 
 			for (int j = 0; j < VS.size(); j++) {
-				v0 = (MyVector) VS.get(j);
+				v0 = VS.get(j);
 				if (j + 1 == VS.size()) {
-					v1 = (MyVector) VS.get(0);
+					v1 = VS.get(0);
 				} else {
-					v1 = (MyVector) VS.get(j + 1);
+					v1 = VS.get(j + 1);
 				}
 
 				if (!v.isCWto(v0) && v.isCWto(v1)) {
@@ -429,9 +426,9 @@ public class Node extends Constants {
 			}
 		}
 
-		ArrayList<Edge> edges = new ArrayList<Edge>(VS.size());
+		List<Edge> edges = new ArrayList<>(VS.size());
 		for (int i = 0; i < VS.size(); i++) {
-			v = (MyVector) VS.get(i);
+			v = VS.get(i);
 			edges.add(v.edge);
 		}
 		return edges;
@@ -448,13 +445,11 @@ public class Node extends Constants {
 		Msg.debug("Entering Node.ccwSortedNeighbors(..)");
 		Element elem;
 		MyVector v, v0, v1;
-		Edge e;
 
 		// First try to find two boundary edges
 		int j = 0;
 		MyVector[] b = new MyVector[2];
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
 			if (e.boundaryEdge()) {
 				b[j] = e.getVector(this);
 				b[j++].edge = e;
@@ -464,6 +459,7 @@ public class Node extends Constants {
 			}
 		}
 
+		Edge e;
 		// If these are found, then v0 is the vector of the most cw edge.
 		if (j == 2) {
 			elem = b[0].edge.element1;
@@ -481,7 +477,7 @@ public class Node extends Constants {
 			// Failing to find any boundary edges, we
 			// select the vector of an arbitrary edge to be v0.
 			// Sets elem to the element that is ccw to v0 around this Node
-			e = (Edge) edgeList.get(0);
+			e = edgeList.get(0);
 			v0 = e.getVector(this);
 			v0.edge = e;
 			elem = e.element1;
@@ -525,11 +521,10 @@ public class Node extends Constants {
 	}
 
 	public double meanNeighborEdgeLength() {
-		Edge e;
 		double sumLengths = 0.0, len, j = 0;
 
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
+
 			len = e.length();
 			if (len != 0) {
 				j++;
@@ -540,16 +535,16 @@ public class Node extends Constants {
 	}
 
 	public int nrOfAdjElements() {
-		ArrayList<Element> list = adjElements();
+		List<Element> list = adjElements();
 		return list.size();
 	}
 
-	public ArrayList<Element> adjElements() {
+	public List<Element> adjElements() {
 		Edge e;
-		ArrayList<Element> list = new ArrayList<Element>();
+		ArrayList<Element> list = new ArrayList<>();
 
-		for (int i = 0; i < edgeList.size(); i++) {
-			e = (Edge) edgeList.get(i);
+		for (Edge element : edgeList) {
+			e = element;
 			if (!list.contains(e.element1)) {
 				list.add(e.element1);
 			}
@@ -561,16 +556,16 @@ public class Node extends Constants {
 	}
 
 	public int nrOfAdjQuads() {
-		ArrayList<Element> list = adjQuads();
+		List<Element> list = adjQuads();
 		return list.size();
 	}
 
-	public ArrayList<Element> adjQuads() {
+	public List<Element> adjQuads() {
 		Edge e;
-		ArrayList<Element> list = new ArrayList<Element>();
+		ArrayList<Element> list = new ArrayList<>();
 
-		for (int i = 0; i < edgeList.size(); i++) {
-			e = (Edge) edgeList.get(i);
+		for (Edge element : edgeList) {
+			e = element;
 			if (e.element1 instanceof Quad && !list.contains(e.element1)) {
 				list.add(e.element1);
 			} else if (e.element2 != null && e.element2 instanceof Quad && !list.contains(e.element2)) {
@@ -591,7 +586,7 @@ public class Node extends Constants {
 		List<Triangle> list = new ArrayList<>();
 
 		for (int i = 0; i < edgeList.size(); i++) {
-			e = (Edge) edgeList.get(i);
+			e = edgeList.get(i);
 			if (e.element1 instanceof Triangle && !list.contains(e.element1)) {
 				list.add((Triangle) e.element1);
 			} else if (e.element2 != null && e.element2 instanceof Triangle && !list.contains(e.element2)) {
@@ -613,7 +608,7 @@ public class Node extends Constants {
 
 		int n = edgeList.size();
 		for (int i = 0; i < n; i++) {
-			e = (Edge) edgeList.get(i);
+			e = edgeList.get(i);
 			nJ = e.otherNode(this);
 			c = new MyVector(this, nJ);
 			cJSum = cJSum.plus(c);
@@ -634,7 +629,7 @@ public class Node extends Constants {
 
 		int n = edgeList.size();
 		for (int i = 0; i < n; i++) {
-			e = (Edge) edgeList.get(i);
+			e = edgeList.get(i);
 			nJ = e.otherNode(this);
 			c = new MyVector(this, nJ);
 			cJSum = cJSum.plus(c);
@@ -657,7 +652,7 @@ public class Node extends Constants {
 
 		int n = edgeList.size();
 		for (int i = 0; i < n; i++) {
-			e = (Edge) edgeList.get(i);
+			e = edgeList.get(i);
 			nJ = e.otherNode(this);
 			if (nJ != node) {
 				c = new MyVector(this, nJ);
@@ -687,7 +682,7 @@ public class Node extends Constants {
 			Msg.error("...edgeList.size()== 0");
 		}
 		for (int i = 0; i < n; i++) {
-			e = (Edge) edgeList.get(i);
+			e = edgeList.get(i);
 			Msg.debug("e= " + e.descr());
 			nJ = e.otherNode(this);
 			c = new MyVector(this, nJ);
@@ -728,10 +723,8 @@ public class Node extends Constants {
 	}
 
 	public int nrOfFrontEdges() {
-		Edge e;
 		int fronts = 0;
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
 			if (e.frontEdge) {
 				fronts++;
 			}
@@ -757,7 +750,7 @@ public class Node extends Constants {
 		Node origin = new Node(0, 0);
 		Node n1, n2, n3, n4;
 		Quad q;
-		ArrayList<Element> adjQuads = adjQuads();
+		List<Element> adjQuads = adjQuads();
 
 		// Step 1, the isoparametric smooth:
 		Msg.debug("...step 1...");
@@ -767,7 +760,7 @@ public class Node extends Constants {
 		MyVector vMK;
 		MyVector vML;
 
-		for (Object adjQuad : adjQuads) {
+		for (Element adjQuad : adjQuads) {
 			q = (Quad) adjQuad;
 
 			n1 = q.edgeList[base].leftNode;
@@ -983,11 +976,8 @@ public class Node extends Constants {
 	 * @return true if the movement of a node has caused any of it's adjacent
 	 *         elements to become inverted or get an area of size zero.
 	 */
-	public boolean invertedOrZeroAreaElements(ArrayList<?> elements) {
-		Element elem;
-
-		for (Object element : elements) {
-			elem = (Element) element;
+	public boolean invertedOrZeroAreaElements(List<Element> elements) {
+		for (Element elem : elements) {
 			if (elem.invertedOrZeroArea()) {
 				Msg.debug("Node.invertedOrZeroAreaElements(..): invertedOrZeroArea: " + elem.descr());
 				return true;
@@ -1006,7 +996,7 @@ public class Node extends Constants {
 	 *
 	 * @return true on success else false.
 	 */
-	public boolean incrAdjustUntilNotInvertedOrZeroArea(Node old, ArrayList<?> elements) {
+	public boolean incrAdjustUntilNotInvertedOrZeroArea(Node old, List<Element> elements) {
 		Msg.debug("Entering incrAdjustUntilNotInvertedOrZeroArea(..)");
 		Msg.debug("..this: " + descr());
 		Msg.debug("..old: " + old.descr());
@@ -1090,9 +1080,7 @@ public class Node extends Constants {
 
 	/** @return true if the node is part of the boundary of the mesh. */
 	public boolean boundaryNode() {
-		Edge e;
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
 			if (e.boundaryEdge()) {
 				return true;
 			}
@@ -1104,9 +1092,7 @@ public class Node extends Constants {
 	 * @return true if the node is part of the boundary of the mesh or a triangle.
 	 */
 	public boolean boundaryOrTriangleNode() {
-		Edge e;
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
 			if (e.boundaryOrTriangleEdge()) {
 				return true;
 			}
@@ -1116,9 +1102,7 @@ public class Node extends Constants {
 
 	/** @return true if the node is truely a part of the front. */
 	public boolean frontNode() {
-		Edge e;
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
 			if (e.isFrontEdge()) {
 				return true;
 			}
@@ -1132,9 +1116,7 @@ public class Node extends Constants {
 	 * @return a front edge found in this node's edgelist.
 	 */
 	public Edge anotherFrontEdge(Edge known) {
-		Edge e;
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
 			if (e != known && e.isFrontEdge()) {
 				return e;
 			}
@@ -1148,9 +1130,7 @@ public class Node extends Constants {
 	 * @return a boundary edge found in this node's edgelist.
 	 */
 	public Edge anotherBoundaryEdge(Edge known) {
-		Edge e;
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
 			if (e != known && e.boundaryEdge()) {
 				return e;
 			}
@@ -1284,16 +1264,16 @@ public class Node extends Constants {
 		/*
 		 * a * b = a_1*b_1 + a_2*b_2 Scalar product a x b = (a_1*b_2 - b_1*a_2) Vector
 		 * product
-		 * 
+		 *
 		 * e_3 is the unit vector (0,0,1). All the points are defined in 3D space, with
 		 * z-values equal to 0. The v_i vectors are unit vectors. The points are ccw
 		 * ordered.
-		 * 
+		 *
 		 * sin(alpha) = (v_1 x v_2) * e_3= x3y1 -x3y2 -x2y1 -y3x1 +y3x2 +y2x1 sin(beta)
 		 * = (v_3 x v_4) * e_3= y3x1 -x1y4 -x4y3 -x3y1 +y1x4 +y4x3 cos(alpha) = v_1 *
 		 * v_2 = (x3 -x2)(x1 -x2) +(y3 -y2)(y1 -y2) cos(beta) = v_3 * v_4 = (x1 -x4)(x3
 		 * -x4) +(y1 -y4)(y3 -y4)
-		 * 
+		 *
 		 */
 
 		double cosAlpha = (p3.x - p2.x) * (p1.x - p2.x) + (p3.y - p2.y) * (p1.y - p2.y);
@@ -1329,7 +1309,7 @@ public class Node extends Constants {
 		int ind;
 		n.setXY(this);
 		for (int i = 0; i < n.edgeList.size(); i++) {
-			e = (Edge) n.edgeList.get(i);
+			e = n.edgeList.get(i);
 			ind = edgeList.indexOf(e);
 			if (ind == -1) {
 				e.replaceNode(n, this);
@@ -1343,11 +1323,11 @@ public class Node extends Constants {
 		n.setXY(oldN);
 	}
 
-	public ArrayList<Edge> frontEdgeList() {
-		ArrayList<Edge> list = new ArrayList<Edge>();
+	public List<Edge> frontEdgeList() {
+		List<Edge> list = new ArrayList<>();
 		Edge e;
 		for (int i = 0; i < edgeList.size(); i++) {
-			e = (Edge) edgeList.get(i);
+			e = edgeList.get(i);
 			if (e.frontEdge) {
 				list.add(e);
 			}
@@ -1361,9 +1341,7 @@ public class Node extends Constants {
 	 * @return true if found, else false
 	 */
 	public boolean hasEdge(Edge e) {
-		Edge curEdge;
-		for (Object element : edgeList) {
-			curEdge = (Edge) element;
+		for (Edge curEdge : edgeList) {
 			if (e == curEdge) {
 				return true;
 			}
@@ -1939,9 +1917,7 @@ public class Node extends Constants {
 
 	public Edge commonEdge(Node n) {
 		Node other;
-		Edge e;
-		for (Object element : edgeList) {
-			e = (Edge) element;
+		for (Edge e : edgeList) {
 			other = e.otherNode(this);
 			if (other == n) {
 				return e;
@@ -1978,7 +1954,7 @@ public class Node extends Constants {
 	public void printMe() {
 		System.out.println(descr());
 	}
-	
+
 	@Override
 	public String toString() {
 		return descr();

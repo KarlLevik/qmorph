@@ -1,6 +1,7 @@
 package com.github.karllevik.qmorph.meshing;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.Element;
@@ -38,7 +39,7 @@ public class GlobalSmooth extends GeomBasics {
 	 */
 	private Node constrainedLaplacianSmooth(Node n) {
 		Msg.debug("Entering constrainedLaplacianSmooth(..)");
-		ArrayList<Element> elements = n.adjElements();
+		List<Element> elements = n.adjElements();
 		Element oElem, sElem;
 		MyVector vL = n.laplacianMoveVector();
 		double deltaMy = 0, theta = 0, temp;
@@ -142,7 +143,7 @@ public class GlobalSmooth extends GeomBasics {
 	 * @return a node with a position that is the optimaization-based smoothed
 	 *         position of node n.
 	 */
-	private Node optBasedSmooth(Node x, ArrayList<Element> elements) {
+	private Node optBasedSmooth(Node x, List<Element> elements) {
 		Msg.debug("Entering optBasedSmooth(..)");
 		Element oElem, sElem;
 		double delta = Constants.DELTAFACTOR * maxModDim;
@@ -215,7 +216,7 @@ public class GlobalSmooth extends GeomBasics {
 				newMinDM = java.lang.Double.MAX_VALUE;
 
 				for (Element element : elements) {
-					oElem =  element;
+					oElem = element;
 					sElem = oElem.elementWithExchangedNodes(x, xNew);
 					sElem.updateDistortionMetric();
 					oElem.newDistortionMetric = sElem.distortionMetric;
@@ -276,8 +277,8 @@ public class GlobalSmooth extends GeomBasics {
 		Msg.debug("Entering GlobalSmooth.run()");
 		// Variables
 		int i, j;
-		ArrayList<Node> nodes = new ArrayList<Node>();
-		ArrayList<Element> elements = new ArrayList<Element>();
+		List<Node> nodes = new ArrayList<>();
+		List<Element> elements = new ArrayList<>();
 		Element elem;
 		Triangle t;
 		double curLen, oldX, oldY;
@@ -285,14 +286,14 @@ public class GlobalSmooth extends GeomBasics {
 
 		// Get the internal nodes from nodeList.
 		for (i = 0; i < nodeList.size(); i++) {
-			v = (Node) nodeList.get(i);
+			v = nodeList.get(i);
 			if (!v.boundaryNode()) {
 				nodes.add(v);
 			}
 		}
 
 		for (i = 0; i < triangleList.size(); i++) {
-			t = (Triangle) triangleList.get(i);
+			t = triangleList.get(i);
 			t.updateDistortionMetric();
 			// Find the largest edge length in the mesh
 			curLen = t.longestEdgeLength();
@@ -302,7 +303,7 @@ public class GlobalSmooth extends GeomBasics {
 		}
 
 		for (i = 0; i < elementList.size(); i++) {
-			elem = (Element) elementList.get(i);
+			elem = elementList.get(i);
 			elem.updateDistortionMetric();
 			// Find the largest edge length in the mesh
 			curLen = elem.longestEdgeLength();
@@ -321,7 +322,7 @@ public class GlobalSmooth extends GeomBasics {
 		do {
 			nodeMoved = false;
 			for (i = 0; i < nodes.size(); i++) {
-				v = (Node) nodes.get(i);
+				v = nodes.get(i);
 
 				if (v == null) {
 					Msg.debug("... no, node has been removed from list");
@@ -344,7 +345,7 @@ public class GlobalSmooth extends GeomBasics {
 						Msg.debug("...allowing CLS move of node " + v.descr());
 						// Put neighbor nodes back in list, if they are not already there
 						for (j = 0; j < v.edgeList.size(); j++) {
-							e = (Edge) v.edgeList.get(j);
+							e = v.edgeList.get(j);
 							n = e.otherNode(v);
 							if (!n.boundaryNode() && !nodes.contains(n)) {
 								nodes.add(n);
@@ -357,7 +358,7 @@ public class GlobalSmooth extends GeomBasics {
 						// Update the adjacent Elements' distortion metrics
 						elements = v.adjElements();
 						for (j = 0; j < elements.size(); j++) {
-							elem = (Element) elements.get(j);
+							elem = elements.get(j);
 							elem.updateDistortionMetric();
 						}
 					}
@@ -366,10 +367,10 @@ public class GlobalSmooth extends GeomBasics {
 					Msg.debug("...niter>= 2");
 					// Find minimum distortion metric for the elements adjacent node v
 					elements = v.adjElements();
-					elem = (Element) elements.get(0);
+					elem = elements.get(0);
 					double minDistMetric = elem.distortionMetric;
 					for (j = 1; j < elements.size(); j++) {
-						elem = (Element) elements.get(j);
+						elem = elements.get(j);
 						if (elem.distortionMetric < minDistMetric) {
 							minDistMetric = elem.distortionMetric;
 						}
@@ -382,7 +383,7 @@ public class GlobalSmooth extends GeomBasics {
 						if (v_moved.x != oldX || v_moved.y != oldY) {
 							// Put neighbor nodes back in list, if they're not there
 							for (j = 0; j < v.edgeList.size(); j++) {
-								e = (Edge) v.edgeList.get(j);
+								e = v.edgeList.get(j);
 								n = e.otherNode(v);
 								if (!n.boundaryNode() && !nodes.contains(n)) {
 									nodes.add(n);

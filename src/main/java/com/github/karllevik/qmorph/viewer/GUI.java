@@ -17,7 +17,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.github.karllevik.qmorph.geom.Edge;
 import com.github.karllevik.qmorph.geom.Element;
@@ -39,7 +39,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 		f = new Frame("MeshDitor");
 		// Font font= new Font("SansSerif", Font.PLAIN, 12);
 		// f.setFont(font);
-		f.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		f.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		f.setIconImage(null); // MyIconImage.makeIconImage()
 		GeomBasics.createNewLists();
 	}
@@ -89,7 +89,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 
 	MenuItem mi;
 	Menu fileMenu, editMenu, modeMenu, debugMenu, runMenu, helpMenu;
-	int width = 640, height = 480;
+	int width = 1280, height = 720;
 	int scale = 100;
 	MyMouseListener myMouseListener;
 
@@ -104,6 +104,8 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 	/** Start up the GUI. */
 	public void startGUI() {
 		f.setSize(width, height);
+		f.setLocationRelativeTo(null);
+
 		fileMenu = new Menu("File");
 		newItem = new MenuItem("New");
 		loadMeshItem = new MenuItem("Load mesh");
@@ -603,7 +605,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 			Element elem;
 			int size = GeomBasics.elementList.size();
 			if (size > 0) {
-				elem = (Element) GeomBasics.elementList.get(size - 1);
+				elem = GeomBasics.elementList.get(size - 1);
 				if (elem instanceof Quad) {
 					q = (Quad) elem;
 					n = q.centroid();
@@ -677,7 +679,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 				GeomBasics.nodeList.add(n);
 				lastActionNewNode = true;
 			} else {
-				n = (Node) GeomBasics.nodeList.get(GeomBasics.nodeList.indexOf(n));
+				n = GeomBasics.nodeList.get(GeomBasics.nodeList.indexOf(n));
 			}
 
 			if (!nodeMode) {
@@ -696,7 +698,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 						nONewEdges++;
 						lastActionNewEdge = true;
 					} else {
-						edge1 = (Edge) GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge1));
+						edge1 = GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge1));
 					}
 				} else if (nodeCnt == 3 && triangleMode) {
 
@@ -717,7 +719,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 							lastActionNewEdge = true;
 						}
 					} else {
-						edge2 = (Edge) GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge2));
+						edge2 = GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge2));
 					}
 
 					edge3 = new Edge(myNodeList[0], myNodeList[2]);
@@ -732,7 +734,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 							lastActionNewEdge = true;
 						}
 					} else {
-						edge3 = (Edge) GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge3));
+						edge3 = GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge3));
 					}
 
 					tri = new Triangle(edge1, edge2, edge3);
@@ -756,7 +758,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 						nONewEdges++;
 						lastActionNewEdge = true;
 					} else {
-						edge2 = (Edge) GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge2));
+						edge2 = GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge2));
 					}
 				} else if (nodeCnt == 4 && quadMode) {
 					if (myNodeList[3] == myNodeList[0] || myNodeList[3] == myNodeList[1] || myNodeList[3] == myNodeList[2]) {
@@ -776,7 +778,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 							lastActionNewEdge = true;
 						}
 					} else {
-						edge3 = (Edge) GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge3));
+						edge3 = GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge3));
 					}
 
 					edge4 = new Edge(myNodeList[0], myNodeList[3]);
@@ -791,7 +793,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 							lastActionNewEdge = true;
 						}
 					} else {
-						edge4 = (Edge) GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge4));
+						edge4 = GeomBasics.edgeList.get(GeomBasics.edgeList.indexOf(edge4));
 					}
 
 					// Decide which is base, left, right, and top:
@@ -850,7 +852,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 			movingNode = new Node(x, y);
 			int j = GeomBasics.nodeList.indexOf(movingNode);
 			if (j != -1) {
-				movingNode = (Node) GeomBasics.nodeList.get(j);
+				movingNode = GeomBasics.nodeList.get(j);
 				oldX = movingNode.x;
 				oldY = movingNode.y;
 			} else {
@@ -881,10 +883,10 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 				movingNode.update();
 
 				if (ind != -1) { // We have to merge the nodes
-					n = (Node) GeomBasics.nodeList.get(ind);
+					n = GeomBasics.nodeList.get(ind);
 
 					for (int i = 0; i < n.edgeList.size(); i++) {
-						ei = (Edge) n.edgeList.get(i);
+						ei = n.edgeList.get(i);
 						j = movingNode.edgeList.indexOf(ei);
 						if (j == -1) {
 							ei.replaceNode(n, movingNode);
@@ -892,7 +894,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 							// ei.connectTo()
 						} else { // keep only one copy of each edge
 							// if (ei.leftNode== ei.rightNode) {
-							ej = (Edge) movingNode.edgeList.get(j);
+							ej = movingNode.edgeList.get(j);
 
 							if (ej.element1 != null) {
 								ej.element1.replaceEdge(ej, ei);
@@ -918,7 +920,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 
 							// Remove the correct edge from "global" edgelist
 							k = GeomBasics.edgeList.indexOf(ej);
-							oldE = (Edge) GeomBasics.edgeList.get(k);
+							oldE = GeomBasics.edgeList.get(k);
 							if (oldE == ei) {
 								k = GeomBasics.edgeList.lastIndexOf(oldE);
 							}
@@ -926,7 +928,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 
 							// Remove the correct edge from other's edgelist
 							k = other.edgeList.indexOf(ej);
-							oldE = (Edge) other.edgeList.get(k);
+							oldE = other.edgeList.get(k);
 							if (oldE == ei) {
 								k = other.edgeList.lastIndexOf(oldE);
 							}
@@ -935,10 +937,8 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 						}
 					}
 
-					ArrayList aeList = movingNode.adjElements();
-					Element elem;
-					for (Object element : aeList) {
-						elem = (Element) element;
+					List<Element> aeList = movingNode.adjElements();
+					for (Element elem : aeList) {
 						elem.updateAngles();
 					}
 
@@ -966,7 +966,7 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 			if (lastActionMoveNode) {
 				if (lastActionMergeNodes) {
 					for (int i = 0; i < oldMovingNode.edgeList.size(); i++) {
-						e = (Edge) oldMovingNode.edgeList.get(i);
+						e = oldMovingNode.edgeList.get(i);
 						j = movingNode.edgeList.indexOf(e);
 						if (j != -1) {
 							if (!(e.hasNode(movingNode) && e.hasNode(oldMovingNode))) {
@@ -1005,14 +1005,14 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 				GeomBasics.nodeList.remove(GeomBasics.nodeList.size() - 1);
 			}
 			if (lastActionNewEdge) {
-				e = (Edge) GeomBasics.edgeList.get(GeomBasics.edgeList.size() - 1);
+				e = GeomBasics.edgeList.get(GeomBasics.edgeList.size() - 1);
 				e.disconnectNodes();
 				GeomBasics.edgeList.remove(GeomBasics.edgeList.size() - 1);
 			} else if (lastActionTwoNewEdges) {
-				e = (Edge) GeomBasics.edgeList.get(GeomBasics.edgeList.size() - 1);
+				e = GeomBasics.edgeList.get(GeomBasics.edgeList.size() - 1);
 				e.disconnectNodes();
 				GeomBasics.edgeList.remove(GeomBasics.edgeList.size() - 1);
-				e = (Edge) GeomBasics.edgeList.get(GeomBasics.edgeList.size() - 1);
+				e = GeomBasics.edgeList.get(GeomBasics.edgeList.size() - 1);
 				e.disconnectNodes();
 				GeomBasics.edgeList.remove(GeomBasics.edgeList.size() - 1);
 			}

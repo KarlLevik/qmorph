@@ -18,7 +18,7 @@ public class Edge extends Constants {
 	public Element element1 = null, element2 = null; // Belongs to these Elements (Quads/Triangles)
 	public Edge leftFrontNeighbor, rightFrontNeighbor;
 	public int level;
-	
+
 	public static List<List<Edge>> stateList = new ArrayList<>(3);
 
 	public boolean frontEdge = false;
@@ -26,7 +26,7 @@ public class Edge extends Constants {
 	public boolean selectable = true;
 	// Edge leftSide= null, rightSide= null; // Side edges when building a quad
 	public boolean leftSide = false, rightSide = false; // Indicates if frontNeighbor is
-													// to be used as side edge in quad
+	// to be used as side edge in quad
 	public double len; // length of this edge
 	public Color color = Color.green;
 
@@ -255,7 +255,7 @@ public class Edge extends Constants {
 
 		while (curState >= 0 && selected == null) {
 			for (i = 0; i < stateList.get(curState).size(); i++) {
-				current = (Edge) stateList.get(curState).get(i);
+				current = stateList.get(curState).get(i);
 				if (current.selectable) {
 					selected = current;
 					break;
@@ -271,7 +271,7 @@ public class Edge extends Constants {
 		selState = selected.getState();
 
 		for (i = 0; i < stateList.get(selState).size(); i++) {
-			current = (Edge) stateList.get(selState).get(i);
+			current = stateList.get(selState).get(i);
 
 			if (current.selectable && (current.level < selected.level || (current.level == selected.level && current.length() < selected.length()))) {
 				selected = current;
@@ -295,7 +295,7 @@ public class Edge extends Constants {
 	}
 
 	public static void markAllSelectable() {
-		stateList.forEach(l ->{
+		stateList.forEach(l -> {
 			l.forEach(e -> {
 				e.selectable = true;
 			});
@@ -388,12 +388,12 @@ public class Edge extends Constants {
 		Edge eI, eJ;
 
 		for (int i = 0; i < nKm1.edgeList.size(); i++) {
-			eI = (Edge) nKm1.edgeList.get(i);
+			eI = nKm1.edgeList.get(i);
 			other = eI.otherNode(nKm1);
 
 			if (other != nKp1) {
 				for (int j = 0; j < nKp1.edgeList.size(); j++) {
-					eJ = (Edge) nKp1.edgeList.get(j);
+					eJ = nKp1.edgeList.get(j);
 
 					if (other == eJ.otherNode(nKp1)) {
 						found = true;
@@ -774,9 +774,9 @@ public class Edge extends Constants {
 
 	/*
 	 * C b ____----x ___---- | b=1 ___---- | x----------------------x A c B
-	 * 
+	 *
 	 * angle(B)= PI/2
-	 * 
+	 *
 	 */
 	// xdiff= xB - xA
 	// ydiff= yB - yA
@@ -1041,7 +1041,7 @@ public class Edge extends Constants {
 			// Choose the front edge with the smallest angle
 			t = getTriangleElement();
 
-			for (Edge leftEdge: list) {
+			for (Edge leftEdge : list) {
 				curAng = sumAngle(t, leftNode, leftEdge);
 				if (curAng < candAng) {
 					candAng = curAng;
@@ -1064,7 +1064,7 @@ public class Edge extends Constants {
 		Triangle t;
 
 		for (int j = 0; j < rightNode.edgeList.size(); j++) {
-			Edge rightEdge =  rightNode.edgeList.get(j);
+			Edge rightEdge = rightNode.edgeList.get(j);
 			if (rightEdge != this && rightEdge.isFrontEdge()/* frontList.contains(rightEdge) */) {
 				list.add(rightEdge);
 			}
@@ -1362,7 +1362,7 @@ public class Edge extends Constants {
 
 		return curEdge;
 	}
-	
+
 	@Override
 	public String toString() {
 		return descr();

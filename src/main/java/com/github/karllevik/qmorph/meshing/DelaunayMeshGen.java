@@ -16,10 +16,10 @@ import com.github.karllevik.qmorph.viewer.Msg;
  */
 
 public class DelaunayMeshGen extends GeomBasics {
-	
+
 	private boolean inside = false;
 	private List<Node> irNodes = new ArrayList<>();
-	
+
 	public DelaunayMeshGen() {
 	}
 
@@ -38,8 +38,8 @@ public class DelaunayMeshGen extends GeomBasics {
 		// Perform the steps necessary before inserting the Nodes in incrDelaunay():
 		// Create the two initial Delaunay triangles from the four most extreme Nodes.
 
-		triangleList = new ArrayList<Triangle>();
-		edgeList = new ArrayList<Edge>();
+		triangleList = new ArrayList<>();
+		edgeList = new ArrayList<>();
 		findExtremeNodes();
 
 		Msg.debug("uppermost= " + uppermost.descr());
@@ -119,12 +119,12 @@ public class DelaunayMeshGen extends GeomBasics {
 	public void step() {
 		Node n;
 		if (counter < nodeList.size()) {
-			n = (Node) nodeList.get(counter);
+			n = nodeList.get(counter);
 			counter++;
 			// The extreme nodes have been inserted already, so we skip them here
 			while (n == leftmost || n == rightmost || n == uppermost || n == lowermost) {
 				if (counter < nodeList.size()) {
-					n = (Node) nodeList.get(counter);
+					n = nodeList.get(counter);
 					counter++;
 				} else if (counter == nodeList.size()) {
 					counter++;
@@ -496,7 +496,7 @@ public class DelaunayMeshGen extends GeomBasics {
 		boolean loop = true;
 
 		// Locate the triangle that contains the point
-		o = findTriangleContaining(n, (Triangle) triangleList.get(0));
+		o = findTriangleContaining(n, triangleList.get(0));
 		if (!inside) {
 			// --- the Node is to be inserted outside the current triangulation --- //
 			e = (Edge) o;
@@ -572,7 +572,7 @@ public class DelaunayMeshGen extends GeomBasics {
 
 			// Build initial edgeList for node n
 			for (i = 0; i < irNodes.size(); i++) {
-				other = (Node) irNodes.get(i);
+				other = irNodes.get(i);
 				e = new Edge(n, other);
 				e.connectNodes();
 				edgeList.add(e);

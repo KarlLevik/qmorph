@@ -342,7 +342,7 @@ public class Quad extends Element {
 	 *              located
 	 * @param n1    the node in quad q that is to be joined with opposite node n2
 	 * @param n2    the node in quad q that is to be joined with opposite node n1
-	 * @param lK the list of elements adjacent n1
+	 * @param lK    the list of elements adjacent n1
 	 * @param lKOpp the list of elements adjacent n2
 	 * @return true if any elements adjacent to quad q becomes inverted when
 	 *         collapsing quad q, joining its two opposite nodes n1 and n2 to the
@@ -355,7 +355,7 @@ public class Quad extends Element {
 		int i;
 
 		for (i = 0; i < lK.size(); i++) {
-			elem = (Element) lK.get(i);
+			elem = lK.get(i);
 			if (elem != this && elem.invertedWhenNodeRelocated(n1, n)) {
 				Msg.debug("Leaving Quad.anyInvertedElementsWhenCollapsed(..) ret: true");
 				return true;
@@ -363,7 +363,7 @@ public class Quad extends Element {
 		}
 
 		for (i = 0; i < lKOpp.size(); i++) {
-			elem = (Element) lKOpp.get(i);
+			elem = lKOpp.get(i);
 			if (elem != this && elem.invertedWhenNodeRelocated(n2, n)) {
 				Msg.debug("Leaving Quad.anyInvertedElementsWhenCollapsed(..) ret: true");
 				return true;
