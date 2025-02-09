@@ -17,6 +17,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import com.github.karllevik.qmorph.geom.Edge;
@@ -105,6 +107,13 @@ public class GUI extends Constants implements ActionListener, ItemListener {
 	public void startGUI() {
 		f.setSize(width, height);
 		f.setLocationRelativeTo(null);
+		
+	    f.addWindowListener(new WindowAdapter() {
+	        @Override
+	        public void windowClosing(WindowEvent e) {
+	            System.exit(0); // Exit the application when the window is closed
+	        }
+	    });
 
 		fileMenu = new Menu("File");
 		newItem = new MenuItem("New");
