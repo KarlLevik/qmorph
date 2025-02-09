@@ -22,7 +22,7 @@ class TestMeshing {
 	@Test
 	void testSimple() {
 		GeomBasics.meshDirectory = "src/test/resources/";
-		GeomBasics.meshFilename = "mesh.txt";
+		GeomBasics.meshFilename = "mesh.mesh";
 
 		List<Triangle> triangles = GeomBasics.loadTriangleMesh();
 
