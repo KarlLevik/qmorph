@@ -22,3 +22,8 @@
 hs_err_pid*
 
 srcdoc/
+/target/
+/bin/
+.project
+.classpath
+/.settings/
