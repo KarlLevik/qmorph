@@ -27,7 +27,7 @@ import com.github.karllevik.qmorph.viewer.Msg;
  * case1a og case1b - case2 - case3 - case4 - case5
  *
  * Boundary: - diamond - case1 - case2 - case3 - case4 - boundary angle > 150
- * degrees with one & two row transition
+ * degrees with one and two row transition
  *
  * Shape: - case1 - case2
  *

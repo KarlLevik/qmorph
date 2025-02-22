@@ -24,7 +24,7 @@ public class AboutDialog extends Dialog implements ItemListener {
 			+ "     Scott A. Canann, Joseph R. Tristano, and Matthew L. Staten.\n" + "\n"
 			+ "    This implementation is based on these algorithms as outlined in the\n"
 			+ "    corresponding papers. It was developed as a part of my thesis for\n"
-			+ "    the siv.ing. degree at Dept. of Informatics, Univ. of Oslo, Norway.\n" + "\n" + "            Karl Erik Levik <karll@ifi.uio.no>\n";
+			+ "    the siv.ing. degree at Dept. of Informatics, Univ. of Oslo, Norway.\n" + "\n" + "            Karl Erik Levik\n";
 	GridBagLayout gridbag;
 
 	public AboutDialog(Frame f) {

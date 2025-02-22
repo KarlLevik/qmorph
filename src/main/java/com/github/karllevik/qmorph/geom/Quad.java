@@ -337,7 +337,6 @@ public class Quad extends Element {
 	 * Test whether any neighboring elements becomes inverted if the quad is
 	 * collapsed in a particular manner.
 	 *
-	 * @param q     the quad to be collapsed
 	 * @param n     a node holding the position for where the joined nodes are to be
 	 *              located
 	 * @param n1    the node in quad q that is to be joined with opposite node n2
@@ -1667,7 +1666,7 @@ public class Quad extends Element {
 	 * Laplacian and Optimization-Based Smoothing for Triangular, Quadrilateral and
 	 * Quad-Dominant Meshes" by by Cannan, Tristano, and Staten
 	 *
-	 * @return negative values for inverted quadrilaterals, else positive.
+	 * return negative values for inverted quadrilaterals, else positive.
 	 *         Equilateral quadrilaterals should return the maximum value of 1.
 	 */
 	//

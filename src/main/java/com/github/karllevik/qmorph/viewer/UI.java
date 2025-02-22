@@ -11,7 +11,7 @@ import com.github.karllevik.qmorph.meshing.QMorph;
  *
  * This implementation only supports 2D triangle meshes.
  *
- * @author Karl Erik Levik, karll@ifi.uio.no
+ * @author Karl Erik Levik
  */
 
 public class UI {

@@ -362,8 +362,8 @@ public class Node extends Constants {
 	 * Assumes: b0 and b1 form a convex boundary, but not neccessarily *strictly*
 	 * convex
 	 *
-	 * @param b1 First boundary edge
-	 * @param b2 Second boundary edge
+	 * @param b0 First boundary edge
+	 * @param b1 Second boundary edge
 	 */
 	public List<Edge> calcCCWSortedEdgeList(Edge b0, Edge b1) {
 		MyVector v, v0, v1;
@@ -733,7 +733,7 @@ public class Node extends Constants {
 	}
 
 	/**
-	 * An implementation of an algorithm described in a paper by Blacker &
+	 * An implementation of an algorithm described in a paper by Blacker and
 	 * Stephenson.
 	 *
 	 * @param nJ     the other node that lies behind this node (not on the
@@ -1426,7 +1426,7 @@ public class Node extends Constants {
 	 * Compare the valence pattern of this node to the special pattern in pattern2.
 	 * In pattern2, the following codes apply:<br>
 	 * <ul>
-	 * 14 means 4- (4 or less)
+	 * <li>14 means 4- (4 or less)
 	 * <li>24 means 4+ (4 or more)
 	 * <li>5 means 5 or more
 	 * <li>0 means any number
@@ -1544,7 +1544,7 @@ public class Node extends Constants {
 	 * interior angles must be greater than any other interior angles around this
 	 * node.) In pattern2, the following codes apply:<br>
 	 * <ul>
-	 * 14 means 4- (4 or less)
+	 * <li>14 means 4- (4 or less)
 	 * <li>24 means 4+ (4 or more)
 	 * <li>5 means 5 or more
 	 * <li>0 means any number
@@ -1764,7 +1764,7 @@ public class Node extends Constants {
 	 * Compare the valence pattern of this boundary node to the special pattern in
 	 * pattern2. In pattern2, the following codes apply:<br>
 	 * <ul>
-	 * 14 means 4- (4 or less)
+	 * <li>14 means 4- (4 or less)
 	 * <li>24 means 4+ (4 or more)
 	 * <li>5 means 5 or more
 	 * <li>0 means any number
@@ -1821,7 +1821,7 @@ public class Node extends Constants {
 	 * pattern2. The boundary pattern must also fit. In pattern2, the following
 	 * codes apply:<br>
 	 * <ul>
-	 * 14 means 4- (4 or less)
+	 * <li>14 means 4- (4 or less)
 	 * <li>24 means 4+ (4 or more)
 	 * <li>5 means 5 or more
 	 * <li>0 means any number

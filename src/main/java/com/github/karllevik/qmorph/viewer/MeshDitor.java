@@ -11,7 +11,7 @@ import com.github.karllevik.qmorph.meshing.QMorph;
  * This is the executable class. It has methods for outputting version and help
  * information, and for processing user command line options.
  *
- * @author Karl Erik Levik <karll@ifi.uio.no>
+ * @author Karl Erik Levik
  * @version 1.0
  */
 

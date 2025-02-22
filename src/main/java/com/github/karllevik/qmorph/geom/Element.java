@@ -16,7 +16,7 @@ public abstract class Element extends Constants {
 	/** Node used for determining inversion, amonst other things. */
 	public Node firstNode;
 	/**
-	 * Doubles to hold the cur. distortion metric & the metric after perturbation
+	 * Doubles to hold the cur. distortion metric and the metric after perturbation
 	 */
 	public double distortionMetric, newDistortionMetric;
 	/** Doubles to hold the gradient vector */
@@ -28,11 +28,11 @@ public abstract class Element extends Constants {
 	/** @return local angle inside element at Node n */
 	public abstract double angle(Edge e, Node n);
 
-	/** Compute & set the angles at the nodes of the element. */
+	/** Compute and set the angles at the nodes of the element. */
 	public abstract void updateAngles();
 
 	/**
-	 * Compute & set the angle at this particular Node incident with this Element
+	 * Compute and set the angle at this particular Node incident with this Element
 	 * Edge
 	 */
 	public abstract void updateAngle(Node n);

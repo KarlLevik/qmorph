@@ -21,7 +21,7 @@ import com.github.karllevik.qmorph.viewer.Msg;
  *
  * @see <a href="http://www.andrew.cmu.edu/user/sowen/abstracts/Ow509.html"
  *      TARGET="_top">the abstract of the paper</a>
- * @author Karl Erik Levik, karll@ifi.uio.no
+ * @author Karl Erik Levik
  *
  */
 // ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ---- ==== ----

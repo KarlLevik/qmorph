@@ -690,7 +690,7 @@ public class Triangle extends Element {
 	 * Combined Laplacian and Optimization-Based Smoothing for Triangular,
 	 * Quadrilateral and Quad-Dominant Meshes" by by Cannan, Tristano, and Staten.
 	 *
-	 * @return negative values for inverted triangles, else positive. Equilateral
+	 * return negative values for inverted triangles, else positive. Equilateral
 	 *         triangles will return the maximum value of 1.
 	 */
 	@Override
@@ -701,7 +701,7 @@ public class Triangle extends Element {
 	/**
 	 * See updateDistortionMetric().
 	 *
-	 * @return negative values for inverted triangles, else positive.
+	 * return negative values for inverted triangles, else positive.
 	 */
 	public void updateDistortionMetric(double factor) {
 		Msg.debug("Entering Triangle.updateDistortionMetric(..)");
